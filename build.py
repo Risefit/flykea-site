@@ -298,6 +298,19 @@ for i,n in enumerate(NEWS):
     page("news/%s.html"%slug, "%s — KEA"%title.replace('&amp;','&'), exc.replace('&amp;','&'), art, active="news")
 
 # ---------------- SOLUTION PAGES ----------------
+def gallery(eyebrow,title,imgs):
+    cells="".join(f'<div class="g reveal"><img src="{U}{src}" alt="{alt}" loading="lazy"></div>' for src,alt in imgs)
+    return f'''<section class="gallery-sec"><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">{eyebrow}</span><h2>{title}</h2></div><div class="gallery">{cells}</div></div></section>'''
+
+SOLUTION_GALLERIES={
+ "charter-flights":("In the field","Chartering across the region",[("2019/01/Cargo-Charter.jpg","Cargo charter loading"),("2019/04/Caravan-1.jpg","Cessna Caravan cabin"),("2019/02/Fleet-PC12.jpg","Pilatus PC-12"),("2020/03/Helicopter-Services-In-Uganda-KEA.jpg","Helicopter charter")]),
+ "helicopter-and-fixed-wing":("In the field","Rotary and fixed wing in action",[("2019/01/External-Load-Work.jpg","External load work"),("2019/01/Helicopter-Rear-Door-Open.jpg","Helicopter cargo loading"),("2019/01/Medevac-KEA.jpg","Medevac operations"),("2021/08/Mi8-Helicopter-Kajjansi-KEA-1.jpg","Mi-8 at Kajjansi")]),
+ "medical-division":("In the field","Air ambulance and HEMS",[("2019/04/Air-ambulance-paramedics.jpg","Air ambulance paramedics"),("2019/12/Loading-Stretcher.jpg","Loading a stretcher"),("2019/12/Medevac-Caravan.jpg","Medevac Caravan"),("2019/12/Laughing-CityAmb.jpg","Ground ambulance crew")]),
+ "aerial-and-geophysical-survey":("In the field","Survey operations",[("2015/07/ground-breaking-animal-census.jpg","Wildlife census survey"),("2019/01/Aerial-Survey-KEA.jpg","Aerial survey"),("2019/04/DA42-Camera.jpg","DA42 survey sensor"),("2019/04/DA42-Back.jpg","DA42 MPP Guardian")]),
+ "oil-gas-and-mining":("In the field","Supporting industry operators",[("2015/02/News-Flying-For-Total.jpg","Flying for Total"),("2019/01/Oil-Gas-and-Mining.jpg","Oil and gas support"),("2014/06/baiji-iraq-oil-refinery.jpg","Baiji refinery extraction"),("2019/01/Passenger-and-Cargo-Transportation.jpg","Crew transportation")]),
+ "maintenance-and-hangarage":("Our AMO","Maintenance and hangarage",[("2019/01/1900-Maintenance.jpg","Beechcraft 1900 maintenance"),("2019/01/1900-Maintenance2.jpg","Engine maintenance"),("2019/01/1900-Maintenance3.jpg","Airframe inspection"),("2018/08/maintenance-hangarage.jpg","Hangarage facility")]),
+}
+
 def solution_page(slug,nav_title,hero_eyebrow,hero_title,hero_sub,hero_bg,lead_big,lead_p,cards,extra="",og=""):
     body=f'''{page_hero(hero_eyebrow,hero_title,hero_sub,hero_bg)}
 <section><div class="wrap lead-row">
@@ -307,6 +320,9 @@ def solution_page(slug,nav_title,hero_eyebrow,hero_title,hero_sub,hero_bg,lead_b
     if cards:
         body+=f'<div class="wrap">{feats(cards)}</div>'
     body+='</section>'
+    if slug in SOLUTION_GALLERIES:
+        eb,tt,imgs=SOLUTION_GALLERIES[slug]
+        body+=gallery(eb,tt,imgs)
     body+=extra
     body+=cta_band()
     page("solutions/%s.html"%slug, "%s — KEA"%hero_title, hero_sub, body, active="solutions")
@@ -374,16 +390,16 @@ solution_page("maintenance-and-hangarage","Maintenance &amp; Hangarage","Third-p
 
 # ---------------- FLEET ----------------
 FLEET=[
- ("Rotary Wing","Bell 412","1 / 2","13","360 NM","125 kt"),
- ("Rotary Wing","Bell 206 Jet Ranger","1","4","300 NM","100 kt"),
- ("Fixed Wing","Pilatus PC-12","1 / 2","8","1600 NM","250 kt"),
- ("Fixed Wing","Beechcraft 1900D","2","19","1200 NM","285 kt"),
- ("Fixed Wing","Cessna Caravan C208B","1 / 2","13","900 NM","145 kt"),
- ("Fixed Wing","Cessna 210","1","5","700 NM","145 kt"),
- ("Special Mission","Diamond DA42 MPP Guardian","1 + 1 sensor","2","1050 NM","125 kt"),
+ ("Rotary Wing","Bell 412","1 / 2","13","360 NM","125 kt","2019/02/Fleet-B412.jpg"),
+ ("Rotary Wing","Bell 206 Jet Ranger","1","4","300 NM","100 kt","2019/02/Fleet-B206.jpg"),
+ ("Fixed Wing","Pilatus PC-12","1 / 2","8","1600 NM","250 kt","2019/02/Fleet-PC12.jpg"),
+ ("Fixed Wing","Beechcraft 1900D","2","19","1200 NM","285 kt","2019/02/Fleet-B1900.jpg"),
+ ("Fixed Wing","Cessna Caravan C208B","1 / 2","13","900 NM","145 kt","2019/02/Fleet-C208B.jpg"),
+ ("Fixed Wing","Cessna 210","1","5","700 NM","145 kt","2019/02/Fleet-C210.jpg"),
+ ("Special Mission","Diamond DA42 MPP Guardian","1 + 1 sensor","2","1050 NM","125 kt","2019/02/Fleet-Diamond.jpg"),
 ]
-def ac_card(cat,name,crew,pax,rng,spd):
-    return f'''<div class="ac reveal"><div class="ac-body"><div class="type">{cat}</div><h3>{name}</h3>
+def ac_card(cat,name,crew,pax,rng,spd,img):
+    return f'''<div class="ac reveal"><div class="ph"><img src="{U}{img}" alt="{name}" loading="lazy"></div><div class="ac-body"><div class="type">{cat}</div><h3>{name}</h3>
 <div class="specs"><div class="s"><div class="v">{crew}</div><div class="k">Crew</div></div>
 <div class="s"><div class="v">{pax}</div><div class="k">Passengers</div></div>
 <div class="s"><div class="v">{rng}</div><div class="k">Range</div></div>
@@ -392,6 +408,7 @@ fleet_cards="".join(ac_card(*a) for a in FLEET)
 fleet_body=f'''{page_hero("Uganda’s largest privately owned fleet","Our Fleet","A versatile fixed and rotary wing capability lets us tailor a solution to each client’s unique need.",U+"2020/03/Helicopter-Services-In-Uganda-KEA.jpg")}
 <section><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">Aircraft</span><h2>Fixed wing, rotary wing and special mission</h2></div>
 <div class="fleet-grid">{fleet_cards}</div></div></section>
+{gallery("Inside the fleet","Cabins, cockpits and configurations",[("2019/04/B1900_Interior.jpg","Beechcraft 1900D cabin"),("2019/04/B412_Interior.jpg","Bell 412 cabin"),("2019/04/PC12-Interior.jpg","Pilatus PC-12 cabin"),("2019/04/C208B-Interior.jpg","Caravan cabin"),("2019/04/B1900_Cockpit.jpg","Beechcraft 1900D cockpit"),("2019/04/DA42-Cockpit.jpg","DA42 survey cockpit")])}
 {banner("One operator","The right aircraft for every mission profile.","From single-engine bush operations to multi-engine airliner comfort and sensor-equipped survey platforms — we match the airframe to the task.",U+"2021/08/Mi8-Helicopter-Kajjansi-KEA-1.jpg",("Discuss your requirement","/contact.html"))}'''
 page("fleet.html","Fleet — KEA","KEA operates the largest privately owned fleet in Uganda — fixed wing, rotary wing and special mission aircraft.",fleet_body,active="fleet")
 
@@ -415,6 +432,7 @@ about_body=f'''{page_hero("Who we are","Specialist Aviation Solutions","For over
 <div class="stat"><div class="num" data-target="7800">0</div><div class="lbl">Flights Conducted</div></div>
 <div class="stat"><div class="num" data-target="13">0</div><div class="lbl">Countries Worked In</div></div>
 </div></div></div>
+{gallery("Our people and operations","The team behind every mission",[("2019/02/Our-People.jpg","The KEA team"),("2021/08/Kajjansi_KEA.jpg","Kajjansi base"),("2021/08/Pilots-in-B412-Cockpit.jpg","Flight crew"),("2019/04/Safety-and-Quality.jpg","Safety and quality"),("2020/03/Carousel-1.jpg","Operations"),("2020/03/Carousel-3.jpg","In the field")])}
 {cta_band()}'''
 page("about.html","About — KEA","Kampala Executive Aviation: specialist aviation solutions with an accident-free track record since 2008.",about_body,active="about")
 

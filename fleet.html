@@ -222,6 +222,15 @@ footer{background:var(--dark);color:var(--cloud);padding:80px 0 32px}
 .btn[disabled]{opacity:.6;cursor:progress;pointer-events:none}
 .thanks{max-width:640px;margin:0 auto;text-align:center}
 .thanks .tick{width:74px;height:74px;border-radius:50%;background:rgba(144,184,32,.16);display:flex;align-items:center;justify-content:center;margin:0 auto 1.6rem;color:var(--green-ink);font-size:2rem}
+
+/* ---- image galleries (page enrichment) ---- */
+.gallery-sec{padding:20px 0 0}
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-top:2rem}
+.gallery .g{position:relative;overflow:hidden;border-radius:5px;aspect-ratio:4/3;background:var(--tint);isolation:isolate}
+.gallery .g img{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.16,.84,.44,1)}
+.gallery .g:hover img{transform:scale(1.06)}
+@media(max-width:820px){.gallery{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.gallery{grid-template-columns:1fr}}
 </style></head><body>
 <header id="hdr"><div class="wrap nav">
 <a href="/index.html" class="nav-logo"><img src="/assets/img/2018/07/KEA-Logo.png" alt="KEA — Kampala Executive Aviation"></a>
@@ -241,35 +250,36 @@ footer{background:var(--dark);color:var(--cloud);padding:80px 0 32px}
 <section class="page-hero"><div class="bg" style="background-image:url('/assets/img/2020/03/Helicopter-Services-In-Uganda-KEA.jpg')"></div>
 <div class="inner reveal"><span class="eyebrow on-dark">Uganda’s largest privately owned fleet</span><h1>Our Fleet</h1><p class="sub">A versatile fixed and rotary wing capability lets us tailor a solution to each client’s unique need.</p></div></section>
 <section><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">Aircraft</span><h2>Fixed wing, rotary wing and special mission</h2></div>
-<div class="fleet-grid"><div class="ac reveal"><div class="ac-body"><div class="type">Rotary Wing</div><h3>Bell 412</h3>
+<div class="fleet-grid"><div class="ac reveal"><div class="ph"><img src="/assets/img/2019/02/Fleet-B412.jpg" alt="Bell 412" loading="lazy"></div><div class="ac-body"><div class="type">Rotary Wing</div><h3>Bell 412</h3>
 <div class="specs"><div class="s"><div class="v">1 / 2</div><div class="k">Crew</div></div>
 <div class="s"><div class="v">13</div><div class="k">Passengers</div></div>
 <div class="s"><div class="v">360 NM</div><div class="k">Range</div></div>
-<div class="s"><div class="v">125 kt</div><div class="k">Cruise</div></div></div></div></div><div class="ac reveal"><div class="ac-body"><div class="type">Rotary Wing</div><h3>Bell 206 Jet Ranger</h3>
+<div class="s"><div class="v">125 kt</div><div class="k">Cruise</div></div></div></div></div><div class="ac reveal"><div class="ph"><img src="/assets/img/2019/02/Fleet-B206.jpg" alt="Bell 206 Jet Ranger" loading="lazy"></div><div class="ac-body"><div class="type">Rotary Wing</div><h3>Bell 206 Jet Ranger</h3>
 <div class="specs"><div class="s"><div class="v">1</div><div class="k">Crew</div></div>
 <div class="s"><div class="v">4</div><div class="k">Passengers</div></div>
 <div class="s"><div class="v">300 NM</div><div class="k">Range</div></div>
-<div class="s"><div class="v">100 kt</div><div class="k">Cruise</div></div></div></div></div><div class="ac reveal"><div class="ac-body"><div class="type">Fixed Wing</div><h3>Pilatus PC-12</h3>
+<div class="s"><div class="v">100 kt</div><div class="k">Cruise</div></div></div></div></div><div class="ac reveal"><div class="ph"><img src="/assets/img/2019/02/Fleet-PC12.jpg" alt="Pilatus PC-12" loading="lazy"></div><div class="ac-body"><div class="type">Fixed Wing</div><h3>Pilatus PC-12</h3>
 <div class="specs"><div class="s"><div class="v">1 / 2</div><div class="k">Crew</div></div>
 <div class="s"><div class="v">8</div><div class="k">Passengers</div></div>
 <div class="s"><div class="v">1600 NM</div><div class="k">Range</div></div>
-<div class="s"><div class="v">250 kt</div><div class="k">Cruise</div></div></div></div></div><div class="ac reveal"><div class="ac-body"><div class="type">Fixed Wing</div><h3>Beechcraft 1900D</h3>
+<div class="s"><div class="v">250 kt</div><div class="k">Cruise</div></div></div></div></div><div class="ac reveal"><div class="ph"><img src="/assets/img/2019/02/Fleet-B1900.jpg" alt="Beechcraft 1900D" loading="lazy"></div><div class="ac-body"><div class="type">Fixed Wing</div><h3>Beechcraft 1900D</h3>
 <div class="specs"><div class="s"><div class="v">2</div><div class="k">Crew</div></div>
 <div class="s"><div class="v">19</div><div class="k">Passengers</div></div>
 <div class="s"><div class="v">1200 NM</div><div class="k">Range</div></div>
-<div class="s"><div class="v">285 kt</div><div class="k">Cruise</div></div></div></div></div><div class="ac reveal"><div class="ac-body"><div class="type">Fixed Wing</div><h3>Cessna Caravan C208B</h3>
+<div class="s"><div class="v">285 kt</div><div class="k">Cruise</div></div></div></div></div><div class="ac reveal"><div class="ph"><img src="/assets/img/2019/02/Fleet-C208B.jpg" alt="Cessna Caravan C208B" loading="lazy"></div><div class="ac-body"><div class="type">Fixed Wing</div><h3>Cessna Caravan C208B</h3>
 <div class="specs"><div class="s"><div class="v">1 / 2</div><div class="k">Crew</div></div>
 <div class="s"><div class="v">13</div><div class="k">Passengers</div></div>
 <div class="s"><div class="v">900 NM</div><div class="k">Range</div></div>
-<div class="s"><div class="v">145 kt</div><div class="k">Cruise</div></div></div></div></div><div class="ac reveal"><div class="ac-body"><div class="type">Fixed Wing</div><h3>Cessna 210</h3>
+<div class="s"><div class="v">145 kt</div><div class="k">Cruise</div></div></div></div></div><div class="ac reveal"><div class="ph"><img src="/assets/img/2019/02/Fleet-C210.jpg" alt="Cessna 210" loading="lazy"></div><div class="ac-body"><div class="type">Fixed Wing</div><h3>Cessna 210</h3>
 <div class="specs"><div class="s"><div class="v">1</div><div class="k">Crew</div></div>
 <div class="s"><div class="v">5</div><div class="k">Passengers</div></div>
 <div class="s"><div class="v">700 NM</div><div class="k">Range</div></div>
-<div class="s"><div class="v">145 kt</div><div class="k">Cruise</div></div></div></div></div><div class="ac reveal"><div class="ac-body"><div class="type">Special Mission</div><h3>Diamond DA42 MPP Guardian</h3>
+<div class="s"><div class="v">145 kt</div><div class="k">Cruise</div></div></div></div></div><div class="ac reveal"><div class="ph"><img src="/assets/img/2019/02/Fleet-Diamond.jpg" alt="Diamond DA42 MPP Guardian" loading="lazy"></div><div class="ac-body"><div class="type">Special Mission</div><h3>Diamond DA42 MPP Guardian</h3>
 <div class="specs"><div class="s"><div class="v">1 + 1 sensor</div><div class="k">Crew</div></div>
 <div class="s"><div class="v">2</div><div class="k">Passengers</div></div>
 <div class="s"><div class="v">1050 NM</div><div class="k">Range</div></div>
 <div class="s"><div class="v">125 kt</div><div class="k">Cruise</div></div></div></div></div></div></div></section>
+<section class="gallery-sec"><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">Inside the fleet</span><h2>Cabins, cockpits and configurations</h2></div><div class="gallery"><div class="g reveal"><img src="/assets/img/2019/04/B1900_Interior.jpg" alt="Beechcraft 1900D cabin" loading="lazy"></div><div class="g reveal"><img src="/assets/img/2019/04/B412_Interior.jpg" alt="Bell 412 cabin" loading="lazy"></div><div class="g reveal"><img src="/assets/img/2019/04/PC12-Interior.jpg" alt="Pilatus PC-12 cabin" loading="lazy"></div><div class="g reveal"><img src="/assets/img/2019/04/C208B-Interior.jpg" alt="Caravan cabin" loading="lazy"></div><div class="g reveal"><img src="/assets/img/2019/04/B1900_Cockpit.jpg" alt="Beechcraft 1900D cockpit" loading="lazy"></div><div class="g reveal"><img src="/assets/img/2019/04/DA42-Cockpit.jpg" alt="DA42 survey cockpit" loading="lazy"></div></div></div></section>
 <div class="banner"><div class="bg" style="background-image:url('/assets/img/2021/08/Mi8-Helicopter-Kajjansi-KEA-1.jpg')"></div>
 <div class="banner-inner reveal"><span class="eyebrow on-dark">One operator</span><h2>The right aircraft for every mission profile.</h2><p>From single-engine bush operations to multi-engine airliner comfort and sensor-equipped survey platforms — we match the airframe to the task.</p>
 <a class="btn btn-primary" href="/contact.html">Discuss your requirement <span class="arr">→</span></a></div></div>
