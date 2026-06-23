@@ -207,6 +207,13 @@ def crumbs_html(trail):
         else: parts.append(f'<span>{n}</span>')
     return '<div class="crumb"><div class="wrap">'+' / '.join(parts)+'</div></div>'
 
+def crumbs_inline(trail):
+    parts=[]
+    for i,(n,u) in enumerate(trail):
+        if i<len(trail)-1: parts.append(f'<a href="/{u}">{n}</a>')
+        else: parts.append(f'<span>{n}</span>')
+    return '<div class="crumb-in">'+' / '.join(parts)+'</div>'
+
 # ================= SHARED CONVERSION / TRUST COMPONENTS =================
 def quote_form(source="Website"):
     return f'''<section class="quote" id="quote-form"><div class="wrap"><div class="quote-grid">
@@ -226,6 +233,42 @@ def quote_form(source="Website"):
 <div class="form-status" role="status" aria-live="polite" hidden></div>
 <div><button class="btn btn-primary" type="submit">Send request <span class="arr">→</span></button></div>
 </form></div></div></section>'''
+
+CHARTER_SLUGS={"charter-flights-kampala","helicopter-charter-kampala","services/cargo-charter",
+ "services/vip-corporate-charter","services/private-jet-charter",
+ "services/charter-flights-drc","services/charter-flights-south-sudan"}
+
+def quote_map(variant="full", source="Website"):
+    if variant=="compact":
+        return f'''<section class="qmap-sec compact"><div class="wrap"><div class="qmap compact-tool" data-variant="compact" data-source="{source}">
+<div class="qc-row">
+<div class="qfld"><label>From</label><input class="q-from" list="qports" placeholder="Origin" value="Kajjansi (Kampala)" autocomplete="off"></div>
+<div class="qfld"><label>To</label><input class="q-to" list="qports" placeholder="Destination" autocomplete="off"></div>
+<div class="qfld"><label>Pax</label><input class="q-pax" type="number" min="1" max="19" value="4"></div>
+<button class="q-go">Estimate</button></div>
+<div class="qmap-result qc-result"><span class="qc-line"><b class="q-time">—</b> · <span class="q-ac">—</span> · <span class="q-dist">—</span></span>
+<a class="qbtn qbtn-q q-see" href="/quote/">See route &amp; options →</a>
+<a class="qbtn qbtn-wa q-wa" target="_blank" rel="noopener">WhatsApp</a></div>
+<datalist id="qports"></datalist></div></div></section>
+<script src="/assets/quote-map.js" defer></script>'''
+    return f'''<section class="qmap-sec"><div class="wrap"><div class="qmap" data-variant="full" data-source="{source}">
+<div class="qmap-panel"><span class="eyebrow">Plan your charter</span><h2>Get an instant estimate</h2>
+<div class="qfld"><label>From</label><input class="q-from" list="qports" placeholder="Origin airstrip / town" value="Kajjansi (Kampala)" autocomplete="off"></div>
+<div class="qfld"><label>To</label><input class="q-to" list="qports" placeholder="Destination" autocomplete="off"><button class="q-swap" title="Swap" aria-label="Swap origin and destination">⇅</button></div>
+<div class="qtwo"><div class="qfld"><label>Date</label><input class="q-date" type="date"></div>
+<div class="qfld"><label>Passengers</label><input class="q-pax" type="number" min="1" max="19" value="4"></div></div>
+<div class="qfld"><label>Mission</label><select class="q-mission"><option value="pax">Passengers</option><option value="cargo">Cargo</option><option value="medevac">Medical evacuation</option><option value="site">Remote site access (helicopter)</option></select></div>
+<button class="q-go">Calculate &amp; show route</button>
+<datalist id="qports"></datalist></div>
+<div class="qmap-mapwrap"><svg class="qmap-map" viewBox="0 0 1000 625" preserveAspectRatio="xMidYMid slice" aria-label="Charter route map"></svg>
+<div class="qmap-result"><div class="qr-top">
+<div class="qmetric"><div class="qv q-dist">—</div><div class="qk">Distance</div></div>
+<div class="qmetric"><div class="qv q-time">—</div><div class="qk">Est. flight time</div></div>
+<div class="qreco"><div class="qk2">Recommended aircraft</div><div class="qac q-ac">—</div><div class="qalt q-alt"></div></div>
+<div class="qprice-wrap" style="text-align:right"><div class="qprice">Indicative <span class="q-price">—</span></div><div class="qdisc">estimate · KEA confirms exact quote</div></div>
+</div><div class="qr-cta"><a class="qbtn qbtn-wa q-wa" target="_blank" rel="noopener">Send on WhatsApp</a><a class="qbtn qbtn-q q-rq" href="#quote-form">Request exact quote →</a></div></div></div>
+</div></div></section>
+<script src="/assets/quote-map.js" defer></script>'''
 
 def clients_strip():
     lg="".join(f'<span class="lg">{html.escape(n)}</span>' for n in C.CLIENTS)
@@ -258,9 +301,9 @@ def render_service(s):
     if s.get("gallery"):
         slides=[(g, s["h1"]) for g in s["gallery"]]
         gallery=carousel_section(slides, s["h1"]+" gallery", s["eyebrow"], "In the field")
-    body=f'''{crumbs_html(trail)}
-<section class="svc-hero" style="padding:0"><div class="bg" style="background-image:url('{U}{s["hero"]}')"></div>
-<div class="inner reveal"><span class="eyebrow on-dark">{s["eyebrow"]}</span><h1>{s["h1"]}</h1></div></section>
+    tool = quote_map("full", s["h1"]) if s["slug"] in CHARTER_SLUGS else ""
+    body=f'''<section class="svc-hero"><div class="bg" style="background-image:url('{U}{s["hero"]}')"></div>
+<div class="inner reveal">{crumbs_inline(trail)}<span class="eyebrow on-dark">{s["eyebrow"]}</span><h1>{s["h1"]}</h1></div></section>
 <section style="padding-top:64px"><div class="wrap"><div class="prose reveal"><p>{s["lead"]}</p>{secs}
 <div style="margin:2rem 0"><a class="btn btn-primary" href="#quote-form">Get a quote <span class="arr">→</span></a>
 <a class="btn btn-outline" href="tel:+256776333114" style="margin-left:.6rem">Call {PHONE}</a></div></div></div></section>
@@ -268,6 +311,7 @@ def render_service(s):
 <section style="padding-top:0"><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">Questions</span><h2>Frequently asked questions</h2></div>
 <div class="faq reveal" style="margin-top:1.5rem">{faqhtml}</div>
 <div class="rel-row reveal" style="margin-top:3rem"><h3 style="font-size:1.1rem;margin-bottom:1rem">Related services</h3><div class="rel-grid">{rel}</div></div></div></section>
+{tool}
 {quote_form(s["h1"])}
 <div class="call-band"><div class="wrap"><h2>Talk to operations</h2><p>{PHONE} · {PHONE2} · <a href="mailto:{EMAIL}">{EMAIL}</a></p></div></div>'''
     schema=service_ld(s["h1"],s["desc"],s["stype"],url)+"\n"+faq_ld(s["faqs"])+"\n"+crumb_ld(trail)
@@ -294,9 +338,8 @@ def render_post(n, is_blog=True):
     if len(title)>62: title=n["title"]+" | KEA"
     desc=n.get("desc") or (n["summary"][:150]+" Call +256 776 333 114.")
     bodyhtml=n.get("body","")
-    body=f'''{crumbs_html(trail)}
-<section class="svc-hero" style="padding:0;min-height:42vh"><div class="bg" style="background-image:url('{U}{n["img"]}')"></div>
-<div class="inner reveal"><span class="eyebrow on-dark">{n["date"]}</span><h1 style="max-width:24ch">{html.escape(n["title"])}</h1></div></section>
+    body=f'''<section class="svc-hero" style="min-height:46vh"><div class="bg" style="background-image:url('{U}{n["img"]}')"></div>
+<div class="inner reveal">{crumbs_inline(trail)}<span class="eyebrow on-dark">{n["date"]}</span><h1 style="max-width:26ch">{html.escape(n["title"])}</h1></div></section>
 <section style="padding-top:60px"><div class="wrap"><div class="prose reveal" style="max-width:74ch;margin:0 auto">{bodyhtml}
 <div style="margin-top:2.5rem"><a class="btn btn-primary" href="/quote/">Get a quote <span class="arr">→</span></a>
 <a class="btn btn-outline" href="/blog/" style="margin-left:.6rem">← All posts</a></div></div></div></section>
@@ -318,6 +361,8 @@ home_body=f'''
 <div class="hero-actions"><a class="btn btn-primary" href="/quote/">Get a Quote <span class="arr">→</span></a>
 <a class="btn btn-ghost" href="tel:+256776333114">Call {PHONE}</a></div></div>
 <div class="scroll-hint"><span>Scroll</span><span class="line"></span></div></section>
+
+<div style="background:var(--tint);padding:34px 0 8px"><div class="wrap"><div class="sec-head reveal" style="margin-bottom:1.2rem"><span class="eyebrow">Instant estimate</span><h2 style="font-size:clamp(1.4rem,2.6vw,1.9rem);margin-top:.6rem">Where do you need to fly?</h2></div></div>{quote_map("compact","Homepage")}</div>
 
 <section><div class="wrap lead-row">
 <div class="reveal"><span class="eyebrow">The sky was the limit</span><p class="big" style="margin-top:1.2rem">For over a decade, KEA has supported industry leaders and built a reputation for high-quality, professional service.</p></div>
@@ -810,7 +855,8 @@ page("certifications/index.html","Certifications & Approvals (AOC, AMO, UOC) | K
      cert_body, active="", extra_jsonld=crumb_ld([("Home",""),("Certifications","certifications/")]))
 
 # ---- Quote page ----
-quote_body=f'''{page_hero("Request a quote","Get a Charter Quote","Tell us the route, dates and passenger or cargo load and our operations team will respond with options.",U+"2019/04/Caravan-1.jpg")}
+quote_body=f'''{page_hero("Request a quote","Get a Charter Quote","Estimate your route and aircraft instantly, then send it to us on WhatsApp or request an exact quote below.",U+"2019/04/Caravan-1.jpg")}
+{quote_map("full","Quote page")}
 {quote_form("Quote page")}'''
 page("quote/index.html","Get a Charter Quote | KEA Aviation",
      "Request a charter, cargo, medevac or UAV quote from KEA — CAA-licensed aviation from Kajjansi Airstrip, Kampala. Call +256 776 333 114.",

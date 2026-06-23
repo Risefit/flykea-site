@@ -319,11 +319,13 @@ main:focus{outline:none}
 .crumb{background:#fff;padding:1.4rem 0 0}
 .crumb .wrap{font-family:var(--mono);font-size:.74rem;letter-spacing:.04em;color:var(--slate)}
 .crumb a{color:var(--green-ink)}
-.svc-hero{position:relative;min-height:48vh;display:flex;align-items:flex-end;color:#fff;overflow:hidden;background:#10210f;padding-bottom:48px}
+.svc-hero{position:relative;min-height:52vh;display:flex;align-items:flex-end;color:#fff;overflow:hidden;background:#10210f;padding:116px 0 58px}
 .svc-hero .bg{position:absolute;inset:0;background-size:cover;background-position:center;z-index:0}
 .svc-hero::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(to top,rgba(8,16,10,.92),rgba(8,16,10,.4))}
 .svc-hero .inner{position:relative;z-index:2;max-width:var(--maxw);margin:0 auto;padding:0 28px;width:100%}
 .svc-hero h1{font-size:clamp(2rem,4.2vw,3.1rem);max-width:22ch;margin-top:.6rem}
+.svc-hero .crumb-in{font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;color:#d3ddd0;margin-bottom:.2rem}
+.svc-hero .crumb-in a{color:#B6E04A}
 .prose h2{font-size:1.55rem;margin:2rem 0 1rem}
 
 /* FAQ */
@@ -376,6 +378,54 @@ main:focus{outline:none}
   .sticky-quote{right:14px;bottom:14px;padding:.8rem 1.1rem}
   .wa-float{left:14px;bottom:14px}
 }
+
+/* ===== instant quote + route map ===== */
+.qmap-sec{padding:96px 0}
+.qmap-sec.compact{padding:0}
+.qmap{background:#fff;border:1px solid var(--line-dark);border-radius:14px;overflow:hidden;display:grid;grid-template-columns:380px 1fr;box-shadow:0 30px 80px rgba(15,26,18,.10)}
+.qmap-panel{padding:30px 28px}
+.qmap-panel h2{font-size:1.7rem;margin:.7rem 0 1.4rem}
+.qfld{margin-bottom:1rem;position:relative}
+.qfld label{font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--slate);display:block;margin-bottom:.32rem}
+.qfld input,.qfld select{width:100%;border:1px solid var(--line-dark);border-radius:6px;padding:.7rem .8rem;font-family:var(--body);font-size:.95rem;color:var(--ink);background:#fff}
+.qfld input:focus,.qfld select:focus{outline:2px solid var(--lime);border-color:var(--lime)}
+.qtwo{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.q-swap{position:absolute;right:-13px;top:30px;z-index:5;width:28px;height:28px;border-radius:50%;border:1px solid var(--line-dark);background:#fff;cursor:pointer;color:var(--green-ink)}
+.q-go{width:100%;margin-top:.4rem;background:var(--lime);color:var(--ink);border:0;border-radius:6px;padding:.95rem;font-family:var(--mono);font-size:.76rem;letter-spacing:.12em;text-transform:uppercase;font-weight:500;cursor:pointer;transition:.2s}
+.q-go:hover{background:var(--lime-dark)}
+.qmap-mapwrap{position:relative;background:linear-gradient(160deg,#0F1A12,#16271A);min-height:560px}
+.qmap-map{width:100%;height:100%;display:block}
+.qcountry{fill:#1b2a1c;stroke:#2f4a32;stroke-width:.6;vector-effect:non-scaling-stroke}
+.qgrat{stroke:rgba(144,184,32,.10);stroke-width:.5;vector-effect:non-scaling-stroke}
+.qnode{fill:#7c8a78}
+.qroute{fill:none;stroke:#B6E04A;stroke-width:2.4;vector-effect:non-scaling-stroke;filter:drop-shadow(0 0 6px rgba(182,224,74,.6))}
+.qpt{fill:#B6E04A;stroke:#0F1A12;stroke-width:1.5}.qpulse{fill:rgba(182,224,74,.35)}
+.qlbl{font-family:var(--mono);font-size:11px;fill:#fff;paint-order:stroke;stroke:rgba(8,16,10,.8);stroke-width:3px}
+.qplane{fill:#fff}
+.qmap-result{position:absolute;left:18px;right:18px;bottom:18px;background:rgba(255,255,255,.97);border-radius:12px;padding:18px 20px;box-shadow:0 20px 50px rgba(0,0,0,.35);display:none}
+.qmap-result.show{display:block;animation:qrise .4s ease}
+@keyframes qrise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.qr-top{display:flex;flex-wrap:wrap;gap:14px 26px;align-items:flex-end;border-bottom:1px solid var(--line-dark);padding-bottom:14px;margin-bottom:14px}
+.qmetric .qv{font-family:var(--mono);font-size:1.45rem;font-weight:600;color:var(--ink)}
+.qmetric .qk,.qreco .qk2{font-family:var(--mono);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--slate);margin-top:.15rem}
+.qreco{flex:1;min-width:170px}.qreco .qk2{color:var(--green-ink)}
+.qreco .qac{font-family:var(--display);font-weight:600;font-size:1.12rem;margin-top:.1rem}
+.qreco .qalt{font-size:.78rem;color:var(--slate)}
+.qprice{font-family:var(--mono);font-size:.9rem}.qdisc{font-family:var(--mono);font-size:.6rem;color:var(--slate);margin-top:.25rem}
+.qr-cta{display:flex;gap:.7rem;flex-wrap:wrap}
+.qbtn{flex:1;min-width:150px;text-align:center;border-radius:6px;padding:.78rem;font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;font-weight:500;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:.4rem;border:1px solid transparent}
+.qbtn-wa{background:#25D366;color:#fff}.qbtn-q{background:var(--lime);color:var(--ink)}.qbtn-q:hover{background:var(--lime-dark)}
+/* compact (homepage band) */
+.qmap.compact-tool{grid-template-columns:1fr;box-shadow:0 18px 50px rgba(15,26,18,.08)}
+.qc-row{display:grid;grid-template-columns:1fr 1fr 90px auto;gap:.8rem;align-items:end;padding:22px 24px}
+.qc-row .q-go{width:auto;margin-top:0;white-space:nowrap;padding:.7rem 1.4rem}
+.qc-result{position:static;box-shadow:none;border-top:1px solid var(--line-dark);border-radius:0;display:none;align-items:center;gap:1rem;flex-wrap:wrap;padding:16px 24px}
+.qc-result.show{display:flex}
+.qc-line{font-family:var(--mono);font-size:.92rem;color:var(--ink);flex:1;min-width:200px}
+.qc-line b{color:var(--green-ink)}
+.qc-result .qbtn{flex:0 0 auto;min-width:0;padding:.6rem 1rem}
+@media(max-width:860px){.qmap{grid-template-columns:1fr}.qmap-mapwrap{min-height:380px}
+ .qc-row{grid-template-columns:1fr 1fr;}.qc-row .q-go{grid-column:1/-1}}
 </style></head><body>
 <a class="skip" href="#main">Skip to content</a>
 <header id="hdr"><div class="wrap nav">
@@ -396,9 +446,8 @@ main:focus{outline:none}
 <a href="/services/">Services</a><a href="/services/aircraft-leasing/">Aircraft Leasing</a><a href="/services/uav-drone-operations/">UAV Operations</a><a href="/fleet.html">Fleet</a><a href="/about.html">About</a><a href="/blog/">Blog</a><a href="/contact.html">Contact</a><a href="/quote/">Get a Quote</a>
 </div></header>
 <main id="main" tabindex="-1">
-<div class="crumb"><div class="wrap"><a href="/">Home</a> / <a href="/services/">Services</a> / <span>Underslung & External Load Helicopter in Uganda</span></div></div>
-<section class="svc-hero" style="padding:0"><div class="bg" style="background-image:url('/assets/img/2019/01/External-Load-Work.jpg')"></div>
-<div class="inner reveal"><span class="eyebrow on-dark">Specialist Ops</span><h1>Underslung & External Load Helicopter in Uganda</h1></div></section>
+<section class="svc-hero"><div class="bg" style="background-image:url('/assets/img/2019/01/External-Load-Work.jpg')"></div>
+<div class="inner reveal"><div class="crumb-in"><a href="/">Home</a> / <a href="/services/">Services</a> / <span>Underslung & External Load Helicopter in Uganda</span></div><span class="eyebrow on-dark">Specialist Ops</span><h1>Underslung & External Load Helicopter in Uganda</h1></div></section>
 <section style="padding-top:64px"><div class="wrap"><div class="prose reveal"><p>KEA flies <b>underslung load helicopter operations in Uganda</b> from <b>Kajjansi Airstrip, Kampala</b> — precision external-load lifts for construction, energy, telecoms and remote projects.</p><h2>Precision lifting, anywhere</h2><p>Our Bell 412 and heavy-lift capacity place equipment, materials, towers and supplies exactly where roads can't reach — on ridgelines, islands, rigs and project sites.</p><h2>Planned and flown safely</h2><p>Every lift is planned for load, weather and terrain by experienced crews, with rigging and ground-team coordination built into the operation.</p>
 <div style="margin:2rem 0"><a class="btn btn-primary" href="#quote-form">Get a quote <span class="arr">→</span></a>
 <a class="btn btn-outline" href="tel:+256776333114" style="margin-left:.6rem">Call +256 776 333 114</a></div></div></div></section>
@@ -406,6 +455,7 @@ main:focus{outline:none}
 <section style="padding-top:0"><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">Questions</span><h2>Frequently asked questions</h2></div>
 <div class="faq reveal" style="margin-top:1.5rem"><details open><summary>What loads can you lift externally?</summary><p>Equipment, building materials, tower sections and supplies within the aircraft's certified limits.</p></details><details><summary>Where can you deliver underslung loads?</summary><p>Remote ridgelines, islands, rigs and sites unreachable by road across the region.</p></details><details><summary>Which helicopter is used?</summary><p>Primarily the Bell 412, with heavy-lift capacity for larger loads.</p></details></div>
 <div class="rel-row reveal" style="margin-top:3rem"><h3 style="font-size:1.1rem;margin-bottom:1rem">Related services</h3><div class="rel-grid"><a class="rel-card" href="/helicopter-charter-kampala/">Helicopter Charter Kampala <span class="arr">→</span></a><a class="rel-card" href="/services/remote-site-operations/">Remote Site Operations <span class="arr">→</span></a><a class="rel-card" href="/services/oil-gas-aviation/">Oil & Gas Aviation <span class="arr">→</span></a></div></div></div></section>
+
 <section class="quote" id="quote-form"><div class="wrap"><div class="quote-grid">
 <div class="reveal"><span class="eyebrow">Request a quote</span><h2 style="font-size:clamp(1.8rem,3.6vw,2.6rem);margin:1rem 0">Get a charter quote</h2>
 <p style="color:var(--slate);max-width:44ch">Tell us the route, dates and load — we’ll come back with options. For urgent requests call <a href="tel:+256776333114" style="color:var(--green-ink)">+256 776 333 114</a>.</p>
