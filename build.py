@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 # KEA static site generator. Edit content below, then: python3 build.py
-import os, html
+import os, html, re
 ROOT = os.path.dirname(os.path.abspath(__file__))
+# Production base URL — change to "https://flykea.com" once the custom domain is live on Vercel.
+BASE_URL   = "https://flykea-site-z8af.vercel.app"
+PAGES      = []                                   # collected for sitemap.xml
 CSS = open(os.path.join(ROOT,'assets','styles.css')).read()
 JS  = open(os.path.join(ROOT,'assets','main.js')).read()
 
@@ -14,6 +17,23 @@ FORM_EMAIL = "reservations@flykea.com"          # where form submissions are ema
 FORM_ACTION= "https://formsubmit.co/"+FORM_EMAIL # no API key needed (one-time activation on first submit)
 PHONE="+256 776 333 114"; PHONE2="+256 772 712 554"; EMAIL="reservations@flykea.com"
 PAY="https://www.paybills.ug/index.php/Kampala-Executive-Aviation-Limited"
+OG_DEFAULT = U+"2020/03/Helicopter-Services-In-Uganda-KEA.jpg"   # default social-share image
+JSONLD = ('{"@context":"https://schema.org","@graph":['
+  '{"@type":"Organization","name":"Kampala Executive Aviation","alternateName":"KEA",'
+  '"url":"'+BASE_URL+'/","logo":"'+BASE_URL+LOGO_GREEN+'","email":"'+EMAIL+'","telephone":"+256776333114",'
+  '"address":{"@type":"PostalAddress","streetAddress":"Gate 1, Kajjansi Airstrip","addressLocality":"Kajjansi","addressCountry":"UG"},'
+  '"areaServed":["Uganda","Nigeria","DR Congo","Niger","Chad","Kenya","South Sudan"],'
+  '"sameAs":["https://www.facebook.com/KampalaExecutiveAviation/","https://www.linkedin.com/company/18443655/","https://twitter.com/fly_kea","https://www.instagram.com/kampalaexecutiveaviation/"]},'
+  '{"@type":"WebSite","name":"Kampala Executive Aviation","url":"'+BASE_URL+'/"}]}')
+
+def lazyify(h):
+    # add loading=lazy + decoding=async to any <img> in page body that lacks it (header logo stays eager)
+    parts=re.split(r'(<img\b[^>]*>)', h); out=[]
+    for seg in parts:
+        if seg.startswith('<img') and 'loading=' not in seg:
+            seg=seg.replace('<img','<img loading="lazy" decoding="async"',1)
+        out.append(seg)
+    return ''.join(out)
 
 SOL = [
  ("charter-flights","Charter Flights"),
@@ -29,7 +49,7 @@ def nav(active=""):
     def cls(k): return ' class="active"' if k==active else ''
     return f'''<header id="hdr"><div class="wrap nav">
 <a href="/index.html" class="nav-logo"><img src="{LOGO_GREEN}" alt="KEA — Kampala Executive Aviation"></a>
-<nav><ul class="nav-links">
+<nav aria-label="Primary"><ul class="nav-links">
 <li class="has-sub"><a href="/solutions/charter-flights.html"{cls('solutions')}>Solutions</a><div class="submenu">{sub}</div></li>
 <li><a href="/fleet.html"{cls('fleet')}>Fleet</a></li>
 <li><a href="/about.html"{cls('about')}>About</a></li>
@@ -37,9 +57,9 @@ def nav(active=""):
 <li><a href="/careers.html"{cls('careers')}>Careers</a></li>
 <li><a href="/contact.html"{cls('contact')}>Contact</a></li>
 </ul></nav>
-<button class="burger" aria-label="Open menu"><span></span><span></span><span></span></button>
+<button class="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobilemenu"><span></span><span></span><span></span></button>
 </div>
-<div class="mobile-menu">
+<div class="mobile-menu" id="mobilemenu">
 <a href="/solutions/charter-flights.html">Solutions</a><a href="/fleet.html">Fleet</a><a href="/about.html">About</a><a href="/news.html">News</a><a href="/careers.html">Careers</a><a href="/contact.html">Contact</a>
 </div></header>'''
 
@@ -61,20 +81,42 @@ FOOT=f'''<footer><div class="wrap">
 <div class="foot-bottom"><span class="mono">© 2026 KEA — Kampala Executive Aviation</span><span class="mono">Specialist Aviation Solutions · Kajjansi, Uganda</span></div>
 </div></footer>'''
 
-def page(path, title, desc, body, active=""):
+def page(path, title, desc, body, active="", og_image=None, noindex=False):
+    canon = BASE_URL + "/" + path
+    ogimg = BASE_URL + (og_image or OG_DEFAULT)
+    desc_e, title_e = html.escape(desc), html.escape(title)
+    robots = '<meta name="robots" content="noindex,follow">' if noindex else ''
+    if not noindex: PAGES.append(path)
     doc=f'''<!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{title}</title><meta name="description" content="{html.escape(desc)}">
+<title>{title}</title><meta name="description" content="{desc_e}">
+<link rel="canonical" href="{canon}">{robots}
+<meta property="og:type" content="website"><meta property="og:site_name" content="Kampala Executive Aviation">
+<meta property="og:title" content="{title_e}"><meta property="og:description" content="{desc_e}">
+<meta property="og:url" content="{canon}"><meta property="og:image" content="{ogimg}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{title_e}"><meta name="twitter:description" content="{desc_e}"><meta name="twitter:image" content="{ogimg}">
 <link rel="icon" href="{FAVICON}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script type="application/ld+json">{JSONLD}</script>
 <style>{CSS}</style></head><body>
+<a class="skip" href="#main">Skip to content</a>
 {nav(active)}
-{body}
+<main id="main" tabindex="-1">
+{lazyify(body)}
+</main>
 {FOOT}
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer" hidden>
+<button class="lb-close" aria-label="Close viewer">\u2715</button>
+<button class="lb-prev" aria-label="Previous image">\u2039</button>
+<img class="lb-img" alt="">
+<button class="lb-next" aria-label="Next image">\u203a</button>
+<div class="lb-cap" aria-live="polite"></div>
+</div>
 <script>{JS}</script></body></html>'''
     full=os.path.join(ROOT,path)
-    os.makedirs(os.path.dirname(full),exist_ok=True)
+    os.makedirs(os.path.dirname(full) or ".",exist_ok=True)
     open(full,'w').write(doc)
     print("wrote",path)
 
@@ -298,17 +340,68 @@ for i,n in enumerate(NEWS):
     page("news/%s.html"%slug, "%s — KEA"%title.replace('&amp;','&'), exc.replace('&amp;','&'), art, active="news")
 
 # ---------------- SOLUTION PAGES ----------------
-def gallery(eyebrow,title,imgs):
-    cells="".join(f'<div class="g reveal"><img src="{U}{src}" alt="{alt}" loading="lazy"></div>' for src,alt in imgs)
-    return f'''<section class="gallery-sec"><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">{eyebrow}</span><h2>{title}</h2></div><div class="gallery">{cells}</div></div></section>'''
+def pic(rel, alt, sizes="(max-width:820px) 92vw, 33vw", lazy=True):
+    """<picture> with WebP + responsive srcset and a JPEG fallback; plain <img> if no derivatives."""
+    base=os.path.splitext(rel)[0]
+    webp=base+".webp"; webp640=base+"-640.webp"; fb=base+"-1600.jpg"
+    R=os.path.join(ROOT,"assets","img"); a=html.escape(alt)
+    lz='loading="lazy" decoding="async"' if lazy else 'decoding="async"'
+    if os.path.exists(os.path.join(R,webp)):
+        fbsrc=U+(fb if os.path.exists(os.path.join(R,fb)) else rel)
+        return (f'<picture><source type="image/webp" srcset="{U}{webp640} 640w, {U}{webp} 1600w" sizes="{sizes}">'
+                f'<img src="{fbsrc}" alt="{a}" {lz}></picture>')
+    return f'<img src="{U}{rel}" alt="{a}" {lz}>'
 
-SOLUTION_GALLERIES={
- "charter-flights":("In the field","Chartering across the region",[("2019/01/Cargo-Charter.jpg","Cargo charter loading"),("2019/04/Caravan-1.jpg","Cessna Caravan cabin"),("2019/02/Fleet-PC12.jpg","Pilatus PC-12"),("2020/03/Helicopter-Services-In-Uganda-KEA.jpg","Helicopter charter")]),
- "helicopter-and-fixed-wing":("In the field","Rotary and fixed wing in action",[("2019/01/External-Load-Work.jpg","External load work"),("2019/01/Helicopter-Rear-Door-Open.jpg","Helicopter cargo loading"),("2019/01/Medevac-KEA.jpg","Medevac operations"),("2021/08/Mi8-Helicopter-Kajjansi-KEA-1.jpg","Mi-8 at Kajjansi")]),
- "medical-division":("In the field","Air ambulance and HEMS",[("2019/04/Air-ambulance-paramedics.jpg","Air ambulance paramedics"),("2019/12/Loading-Stretcher.jpg","Loading a stretcher"),("2019/12/Medevac-Caravan.jpg","Medevac Caravan"),("2019/12/Laughing-CityAmb.jpg","Ground ambulance crew")]),
- "aerial-and-geophysical-survey":("In the field","Survey operations",[("2015/07/ground-breaking-animal-census.jpg","Wildlife census survey"),("2019/01/Aerial-Survey-KEA.jpg","Aerial survey"),("2019/04/DA42-Camera.jpg","DA42 survey sensor"),("2019/04/DA42-Back.jpg","DA42 MPP Guardian")]),
- "oil-gas-and-mining":("In the field","Supporting industry operators",[("2015/02/News-Flying-For-Total.jpg","Flying for Total"),("2019/01/Oil-Gas-and-Mining.jpg","Oil and gas support"),("2014/06/baiji-iraq-oil-refinery.jpg","Baiji refinery extraction"),("2019/01/Passenger-and-Cargo-Transportation.jpg","Crew transportation")]),
- "maintenance-and-hangarage":("Our AMO","Maintenance and hangarage",[("2019/01/1900-Maintenance.jpg","Beechcraft 1900 maintenance"),("2019/01/1900-Maintenance2.jpg","Engine maintenance"),("2019/01/1900-Maintenance3.jpg","Airframe inspection"),("2018/08/maintenance-hangarage.jpg","Hangarage facility")]),
+def alt_for(name, rel):
+    f=rel.lower()
+    if "interior" in f: return f"{name} cabin interior"
+    if "cockpit" in f:  return f"{name} cockpit"
+    if "camera" in f:   return f"{name} survey sensor"
+    if "medevac" in f:  return f"{name} medevac configuration"
+    if "back" in f:     return f"{name} rear loading"
+    return f"{name} exterior"
+
+_cn=[0]
+def _carousel_div(slides, label, ar="16/10", autoplay=False):
+    _cn[0]+=1; cid=f"car{_cn[0]}"; n=len(slides)
+    li=[]
+    for i,(rel,alt) in enumerate(slides):
+        wp=os.path.splitext(rel)[0]+".webp"
+        full=U+(wp if os.path.exists(os.path.join(ROOT,"assets","img",wp)) else rel)
+        li.append(f'<li class="slide" role="group" aria-roledescription="slide" aria-label="{i+1} of {n}">'
+                  f'<button class="slide-btn" data-full="{full}" data-alt="{html.escape(alt)}" aria-label="View full size: {html.escape(alt)}">{pic(rel,alt)}</button></li>')
+    nav=''
+    if n>1:
+        dots="".join('<button class="cdot" data-i="%d" aria-label="Slide %d"%s></button>'%(i,i+1,' aria-current="true"' if i==0 else '') for i in range(n))
+        nav=(f'<button class="cbtn cprev" aria-label="Previous slide" aria-controls="{cid}">\u2039</button>'
+             f'<button class="cbtn cnext" aria-label="Next slide" aria-controls="{cid}">\u203a</button>'
+             f'<div class="cdots" role="group" aria-label="Choose slide">{dots}</div>')
+    ap=' data-autoplay="1"' if (autoplay and n>1) else ''
+    return (f'<div class="carousel" id="{cid}" role="region" aria-roledescription="carousel" aria-label="{html.escape(label)}"{ap} style="--ar:{ar}">'
+            f'<ul class="carousel-track" tabindex="0" aria-label="{html.escape(label)} slides">{"".join(li)}</ul>{nav}</div>')
+
+def carousel_section(slides, label, eyebrow, title, ar="16/10"):
+    return (f'<section class="gallery-sec"><div class="wrap">'
+            f'<div class="sec-head reveal"><span class="eyebrow">{eyebrow}</span><h2>{title}</h2></div>'
+            f'{_carousel_div(slides,label,ar)}</div></section>')
+
+SOL_CAROUSELS={
+ "charter-flights":("In the field","Chartering across the region",[("2019/01/Cargo-Charter.jpg","Cargo charter loading"),("2021/08/Caravan-in-Kidepo.jpg","Caravan in Kidepo"),("2019/04/Caravan-1.jpg","Cessna Caravan cabin"),("2019/02/Fleet-PC12.jpg","Pilatus PC-12 on the ramp"),("2020/03/Helicopter-Services-In-Uganda-KEA.jpg","Helicopter charter")]),
+ "helicopter-and-fixed-wing":("In the field","Rotary and fixed wing in action",[("2019/01/External-Load-Work.jpg","External load work"),("2019/01/Helicopter-Rear-Door-Open.jpg","Helicopter cargo loading"),("2021/08/B412-Flying-with-Lake-and-Rocky-Scenery.jpg","Bell 412 over Uganda"),("2021/08/Mi8-Helicopter-Kajjansi-KEA-1.jpg","Mi-8 at Kajjansi"),("2019/01/Medevac-KEA.jpg","Medevac operations"),("2021/03/PHOTO-2021-02-23-13-56-15.jpg","Chad deployment")]),
+ "medical-division":("In the field","Air ambulance and HEMS",[("2019/04/Air-ambulance-paramedics.jpg","Air ambulance paramedics"),("2019/12/Gerald-in-Plane.jpg","Patient transfer aboard"),("2019/12/Loading-Stretcher-1.jpg","Loading a stretcher"),("2019/12/Medevac-Crews-Caravan.jpg","Medevac crews and Caravan"),("2019/01/Medevac-KEA.jpg","Medevac aircraft"),("2019/12/Laughing-CityAmb.jpg","Ground ambulance crew")]),
+ "aerial-and-geophysical-survey":("In the field","Survey operations",[("2019/01/Aerial-Survey-KEA.jpg","Aerial survey"),("2015/07/ground-breaking-animal-census.jpg","Wildlife census survey"),("2021/08/Kajjansi_KEA.jpg","Kajjansi base"),("2019/04/DA42-Camera.jpg","DA42 survey sensor"),("2019/04/DA42-Back.jpg","DA42 MPP Guardian")]),
+ "oil-gas-and-mining":("In the field","Supporting industry operators",[("2019/12/Oil-and-Gas-DAR-Post.jpg","Oil and gas operations"),("2015/02/News-Flying-For-Total.jpg","Flying for Total"),("2014/06/baiji-iraq-oil-refinery.jpg","Baiji refinery extraction"),("2019/01/Oil-Gas-and-Mining.jpg","Oil and gas support"),("2019/01/Passenger-and-Cargo-Transportation.jpg","Crew transportation"),("2021/08/Mi8-Helicopter-Kajjansi-KEA-1.jpg","Heavy-lift Mi-8")]),
+ "maintenance-and-hangarage":("Our AMO","Maintenance and hangarage",[("2019/01/1900-Maintenance.jpg","Beechcraft 1900 maintenance"),("2019/01/1900-Maintenance2.jpg","Engine maintenance"),("2019/01/1900-Maintenance3.jpg","Airframe inspection"),("2019/01/Helicopter-Rear-Door-Open.jpg","Helicopter servicing"),("2018/08/maintenance-hangarage.jpg","Hangarage facility")]),
+}
+ABOUT_CAROUSEL=[("2019/02/Our-People.jpg","The KEA team"),("2021/08/Kajjansi_KEA.jpg","Kajjansi base"),("2021/08/Pilots-in-B412-Cockpit.jpg","Flight crew in a Bell 412"),("2019/04/Safety-and-Quality.jpg","Safety and quality"),("2020/03/Carousel-1.jpg","Operations"),("2020/03/Carousel-2.jpg","In the field"),("2020/03/Carousel-3.jpg","On the ramp")]
+FLEET_GALLERIES={
+ "Bell 412":["2019/02/Fleet-B412.jpg","2019/04/B412_Interior.jpg","2019/04/B412_Medevac_Config.jpg"],
+ "Bell 206 Jet Ranger":["2019/02/Fleet-B206.jpg"],
+ "Pilatus PC-12":["2019/02/Fleet-PC12.jpg","2019/04/PC12-Interior.jpg"],
+ "Beechcraft 1900D":["2019/02/Fleet-B1900.jpg","2019/04/B1900_Interior.jpg","2019/04/B1900_Interior2.jpg","2019/04/B1900_Cockpit.jpg"],
+ "Cessna Caravan C208B":["2019/02/Fleet-C208B.jpg","2019/04/C208B-Interior.jpg"],
+ "Cessna 210":["2019/02/Fleet-C210.jpg","2019/04/C210-MLW2.jpg","2019/04/210_Interior.jpg"],
+ "Diamond DA42 MPP Guardian":["2019/02/Fleet-Diamond.jpg","2019/04/DA42-Camera.jpg","2019/04/DA42-Cockpit.jpg","2019/04/DA42-Interior.jpg","2019/04/DA42-Back.jpg"],
 }
 
 def solution_page(slug,nav_title,hero_eyebrow,hero_title,hero_sub,hero_bg,lead_big,lead_p,cards,extra="",og=""):
@@ -320,9 +413,9 @@ def solution_page(slug,nav_title,hero_eyebrow,hero_title,hero_sub,hero_bg,lead_b
     if cards:
         body+=f'<div class="wrap">{feats(cards)}</div>'
     body+='</section>'
-    if slug in SOLUTION_GALLERIES:
-        eb,tt,imgs=SOLUTION_GALLERIES[slug]
-        body+=gallery(eb,tt,imgs)
+    if slug in SOL_CAROUSELS:
+        eb,tt,imgs=SOL_CAROUSELS[slug]
+        body+=carousel_section(imgs, tt, eb, tt)
     body+=extra
     body+=cta_band()
     page("solutions/%s.html"%slug, "%s — KEA"%hero_title, hero_sub, body, active="solutions")
@@ -390,16 +483,19 @@ solution_page("maintenance-and-hangarage","Maintenance &amp; Hangarage","Third-p
 
 # ---------------- FLEET ----------------
 FLEET=[
- ("Rotary Wing","Bell 412","1 / 2","13","360 NM","125 kt","2019/02/Fleet-B412.jpg"),
- ("Rotary Wing","Bell 206 Jet Ranger","1","4","300 NM","100 kt","2019/02/Fleet-B206.jpg"),
- ("Fixed Wing","Pilatus PC-12","1 / 2","8","1600 NM","250 kt","2019/02/Fleet-PC12.jpg"),
- ("Fixed Wing","Beechcraft 1900D","2","19","1200 NM","285 kt","2019/02/Fleet-B1900.jpg"),
- ("Fixed Wing","Cessna Caravan C208B","1 / 2","13","900 NM","145 kt","2019/02/Fleet-C208B.jpg"),
- ("Fixed Wing","Cessna 210","1","5","700 NM","145 kt","2019/02/Fleet-C210.jpg"),
- ("Special Mission","Diamond DA42 MPP Guardian","1 + 1 sensor","2","1050 NM","125 kt","2019/02/Fleet-Diamond.jpg"),
+ ("Rotary Wing","Bell 412","1 / 2","13","360 NM","125 kt"),
+ ("Rotary Wing","Bell 206 Jet Ranger","1","4","300 NM","100 kt"),
+ ("Fixed Wing","Pilatus PC-12","1 / 2","8","1600 NM","250 kt"),
+ ("Fixed Wing","Beechcraft 1900D","2","19","1200 NM","285 kt"),
+ ("Fixed Wing","Cessna Caravan C208B","1 / 2","13","900 NM","145 kt"),
+ ("Fixed Wing","Cessna 210","1","5","700 NM","145 kt"),
+ ("Special Mission","Diamond DA42 MPP Guardian","1 + 1 sensor","2","1050 NM","125 kt"),
 ]
-def ac_card(cat,name,crew,pax,rng,spd,img):
-    return f'''<div class="ac reveal"><div class="ph"><img src="{U}{img}" alt="{name}" loading="lazy"></div><div class="ac-body"><div class="type">{cat}</div><h3>{name}</h3>
+def ac_card(cat,name,crew,pax,rng,spd):
+    gal=FLEET_GALLERIES.get(name,[])
+    slides=[(rel, alt_for(name,rel)) for rel in gal]
+    media=_carousel_div(slides, name+" photo gallery", ar="16/10") if slides else ''
+    return f'''<div class="ac reveal">{media}<div class="ac-body"><div class="type">{cat}</div><h3>{name}</h3>
 <div class="specs"><div class="s"><div class="v">{crew}</div><div class="k">Crew</div></div>
 <div class="s"><div class="v">{pax}</div><div class="k">Passengers</div></div>
 <div class="s"><div class="v">{rng}</div><div class="k">Range</div></div>
@@ -407,8 +503,8 @@ def ac_card(cat,name,crew,pax,rng,spd,img):
 fleet_cards="".join(ac_card(*a) for a in FLEET)
 fleet_body=f'''{page_hero("Uganda’s largest privately owned fleet","Our Fleet","A versatile fixed and rotary wing capability lets us tailor a solution to each client’s unique need.",U+"2020/03/Helicopter-Services-In-Uganda-KEA.jpg")}
 <section><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">Aircraft</span><h2>Fixed wing, rotary wing and special mission</h2></div>
+<p class="reveal" style="color:var(--slate);max-width:60ch;margin-top:1rem">Tap any aircraft photo to view the full gallery — exteriors, cabins and cockpits.</p>
 <div class="fleet-grid">{fleet_cards}</div></div></section>
-{gallery("Inside the fleet","Cabins, cockpits and configurations",[("2019/04/B1900_Interior.jpg","Beechcraft 1900D cabin"),("2019/04/B412_Interior.jpg","Bell 412 cabin"),("2019/04/PC12-Interior.jpg","Pilatus PC-12 cabin"),("2019/04/C208B-Interior.jpg","Caravan cabin"),("2019/04/B1900_Cockpit.jpg","Beechcraft 1900D cockpit"),("2019/04/DA42-Cockpit.jpg","DA42 survey cockpit")])}
 {banner("One operator","The right aircraft for every mission profile.","From single-engine bush operations to multi-engine airliner comfort and sensor-equipped survey platforms — we match the airframe to the task.",U+"2021/08/Mi8-Helicopter-Kajjansi-KEA-1.jpg",("Discuss your requirement","/contact.html"))}'''
 page("fleet.html","Fleet — KEA","KEA operates the largest privately owned fleet in Uganda — fixed wing, rotary wing and special mission aircraft.",fleet_body,active="fleet")
 
@@ -432,7 +528,7 @@ about_body=f'''{page_hero("Who we are","Specialist Aviation Solutions","For over
 <div class="stat"><div class="num" data-target="7800">0</div><div class="lbl">Flights Conducted</div></div>
 <div class="stat"><div class="num" data-target="13">0</div><div class="lbl">Countries Worked In</div></div>
 </div></div></div>
-{gallery("Our people and operations","The team behind every mission",[("2019/02/Our-People.jpg","The KEA team"),("2021/08/Kajjansi_KEA.jpg","Kajjansi base"),("2021/08/Pilots-in-B412-Cockpit.jpg","Flight crew"),("2019/04/Safety-and-Quality.jpg","Safety and quality"),("2020/03/Carousel-1.jpg","Operations"),("2020/03/Carousel-3.jpg","In the field")])}
+{carousel_section(ABOUT_CAROUSEL,"KEA people and operations","Our people and operations","The team behind every mission")}
 {cta_band()}'''
 page("about.html","About — KEA","Kampala Executive Aviation: specialist aviation solutions with an accident-free track record since 2008.",about_body,active="about")
 
@@ -497,6 +593,14 @@ thanks_body=f'''<section style="padding:9rem 0 7rem"><div class="wrap"><div clas
 <p class="big" style="margin-bottom:2rem">Your message has reached the KEA team. We’ll review it and be in touch as soon as we can.</p>
 <a class="btn btn-primary" href="/index.html">Back to home <span class="arr">→</span></a>
 </div></div></section>'''
-page("thank-you.html","Thank you — KEA","Your message has been received by Kampala Executive Aviation.",thanks_body,active="")
+page("thank-you.html","Thank you — KEA","Your message has been received by Kampala Executive Aviation.",thanks_body,active="",noindex=True)
+
+# ---------------- sitemap.xml + robots.txt ----------------
+_urls="".join(f'<url><loc>{BASE_URL}/{p}</loc><changefreq>monthly</changefreq></url>' for p in sorted(set(PAGES)))
+open(os.path.join(ROOT,'sitemap.xml'),'w').write(
+  '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+_urls+'</urlset>\n')
+open(os.path.join(ROOT,'robots.txt'),'w').write(
+  "User-agent: *\nAllow: /\n\nSitemap: %s/sitemap.xml\n" % BASE_URL)
+print("wrote sitemap.xml (%d urls) + robots.txt" % len(set(PAGES)))
 
 print("DONE. Pages generated.")

@@ -1,9 +1,16 @@
 <!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Aerial and Geophysical Survey — KEA</title><meta name="description" content="Make better decisions with accurate and actionable data.">
+<link rel="canonical" href="https://flykea-site-z8af.vercel.app/solutions/aerial-and-geophysical-survey.html">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Kampala Executive Aviation">
+<meta property="og:title" content="Aerial and Geophysical Survey — KEA"><meta property="og:description" content="Make better decisions with accurate and actionable data.">
+<meta property="og:url" content="https://flykea-site-z8af.vercel.app/solutions/aerial-and-geophysical-survey.html"><meta property="og:image" content="https://flykea-site-z8af.vercel.app/assets/img/2020/03/Helicopter-Services-In-Uganda-KEA.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Aerial and Geophysical Survey — KEA"><meta name="twitter:description" content="Make better decisions with accurate and actionable data."><meta name="twitter:image" content="https://flykea-site-z8af.vercel.app/assets/img/2020/03/Helicopter-Services-In-Uganda-KEA.jpg">
 <link rel="icon" href="/assets/img/2019/08/cropped-KEA-Favicon-270x270.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","name":"Kampala Executive Aviation","alternateName":"KEA","url":"https://flykea-site-z8af.vercel.app/","logo":"https://flykea-site-z8af.vercel.app/assets/img/2018/07/KEA-Logo.png","email":"reservations@flykea.com","telephone":"+256776333114","address":{"@type":"PostalAddress","streetAddress":"Gate 1, Kajjansi Airstrip","addressLocality":"Kajjansi","addressCountry":"UG"},"areaServed":["Uganda","Nigeria","DR Congo","Niger","Chad","Kenya","South Sudan"],"sameAs":["https://www.facebook.com/KampalaExecutiveAviation/","https://www.linkedin.com/company/18443655/","https://twitter.com/fly_kea","https://www.instagram.com/kampalaexecutiveaviation/"]},{"@type":"WebSite","name":"Kampala Executive Aviation","url":"https://flykea-site-z8af.vercel.app/"}]}</script>
 <style>:root{
   --lime:#90B820; --lime-dark:#7AA017; --green-ink:#56750F;
   --grey:#585858; --dark:#0F1A12; --dark-2:#16271A;
@@ -231,10 +238,48 @@ footer{background:var(--dark);color:var(--cloud);padding:80px 0 32px}
 .gallery .g:hover img{transform:scale(1.06)}
 @media(max-width:820px){.gallery{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:520px){.gallery{grid-template-columns:1fr}}
+
+/* ---- a11y: visible keyboard focus + skip link ---- */
+:focus-visible{outline:3px solid var(--green-ink);outline-offset:2px;border-radius:2px}
+.btn:focus-visible{outline-offset:3px}
+.skip{position:absolute;left:-9999px;top:0;z-index:2000;background:#fff;color:var(--ink);padding:.85rem 1.3rem;font-family:var(--mono);font-size:.78rem;letter-spacing:.08em;text-decoration:none;border:2px solid var(--lime);border-radius:3px}
+.skip:focus{left:10px;top:10px}
+main:focus{outline:none}
+
+/* ---- accessible carousel ---- */
+.carousel{position:relative;aspect-ratio:var(--ar,16/10);border-radius:5px;overflow:hidden;background:var(--tint);isolation:isolate}
+.carousel-track{display:flex;list-style:none;margin:0;padding:0;height:100%;width:100%;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.carousel-track::-webkit-scrollbar{display:none}
+.carousel-track:focus-visible{outline:3px solid var(--lime);outline-offset:-3px}
+.slide{flex:0 0 100%;width:100%;height:100%;scroll-snap-align:start;scroll-snap-stop:always}
+.slide-btn{display:block;width:100%;height:100%;padding:0;margin:0;border:0;background:none;cursor:zoom-in}
+.slide-btn picture,.slide-btn img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s cubic-bezier(.16,.84,.44,1)}
+.slide-btn:hover img{transform:scale(1.04)}
+.cbtn{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.92);color:var(--ink);font-size:1.6rem;line-height:1;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.18);display:flex;align-items:center;justify-content:center;transition:.2s}
+.cbtn:hover{background:#fff;transform:translateY(-50%) scale(1.07)}
+.cbtn[disabled]{opacity:0;pointer-events:none}
+.cprev{left:12px}.cnext{right:12px}
+.cdots{position:absolute;bottom:12px;left:0;right:0;z-index:3;display:flex;gap:.5rem;justify-content:center}
+.cdot{width:9px;height:9px;border-radius:50%;border:0;background:rgba(255,255,255,.55);cursor:pointer;padding:0;transition:.25s}
+.cdot[aria-current="true"]{background:#fff;width:22px;border-radius:5px}
+/* fleet card: carousel replaces the static photo slot */
+.ac .carousel{border-radius:0}
+/* ---- lightbox ---- */
+.lightbox{position:fixed;inset:0;z-index:3000;background:rgba(8,12,9,.93);display:flex;align-items:center;justify-content:center;padding:4vw}
+.lightbox[hidden]{display:none}
+.lb-img{max-width:92vw;max-height:86vh;object-fit:contain;border-radius:4px;box-shadow:0 24px 70px rgba(0,0,0,.55)}
+.lb-close,.lb-prev,.lb-next{position:absolute;background:rgba(255,255,255,.12);color:#fff;border:0;cursor:pointer;border-radius:50%;width:52px;height:52px;font-size:1.7rem;display:flex;align-items:center;justify-content:center;transition:.2s}
+.lb-close:hover,.lb-prev:hover,.lb-next:hover{background:rgba(255,255,255,.26)}
+.lb-close{top:18px;right:22px}
+.lb-prev{left:22px;top:50%;transform:translateY(-50%)}
+.lb-next{right:22px;top:50%;transform:translateY(-50%)}
+.lb-cap{position:absolute;bottom:18px;left:0;right:0;text-align:center;color:#fff;font-family:var(--mono);font-size:.78rem;letter-spacing:.06em}
+@media(max-width:600px){.lb-prev{left:8px}.lb-next{right:8px}.cbtn{width:38px;height:38px;font-size:1.3rem}}
 </style></head><body>
+<a class="skip" href="#main">Skip to content</a>
 <header id="hdr"><div class="wrap nav">
 <a href="/index.html" class="nav-logo"><img src="/assets/img/2018/07/KEA-Logo.png" alt="KEA — Kampala Executive Aviation"></a>
-<nav><ul class="nav-links">
+<nav aria-label="Primary"><ul class="nav-links">
 <li class="has-sub"><a href="/solutions/charter-flights.html" class="active">Solutions</a><div class="submenu"><a href="/solutions/charter-flights.html">Charter Flights</a><a href="/solutions/helicopter-and-fixed-wing.html">Helicopter and Fixed Wing</a><a href="/solutions/medical-division.html">Medical Division</a><a href="/solutions/aerial-and-geophysical-survey.html">Aerial and Geophysical Survey</a><a href="/solutions/oil-gas-and-mining.html">Oil, Gas and Mining</a><a href="/solutions/maintenance-and-hangarage.html">Maintenance and Hangarage</a></div></li>
 <li><a href="/fleet.html">Fleet</a></li>
 <li><a href="/about.html">About</a></li>
@@ -242,21 +287,23 @@ footer{background:var(--dark);color:var(--cloud);padding:80px 0 32px}
 <li><a href="/careers.html">Careers</a></li>
 <li><a href="/contact.html">Contact</a></li>
 </ul></nav>
-<button class="burger" aria-label="Open menu"><span></span><span></span><span></span></button>
+<button class="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobilemenu"><span></span><span></span><span></span></button>
 </div>
-<div class="mobile-menu">
+<div class="mobile-menu" id="mobilemenu">
 <a href="/solutions/charter-flights.html">Solutions</a><a href="/fleet.html">Fleet</a><a href="/about.html">About</a><a href="/news.html">News</a><a href="/careers.html">Careers</a><a href="/contact.html">Contact</a>
 </div></header>
+<main id="main" tabindex="-1">
 <section class="page-hero"><div class="bg" style="background-image:url('/assets/img/2019/01/Aerial-Survey-KEA.jpg')"></div>
 <div class="inner reveal"><span class="eyebrow on-dark">Fast, accurate and actionable data</span><h1>Aerial and Geophysical Survey</h1><p class="sub">Make better decisions with accurate and actionable data.</p></div></section>
 <section><div class="wrap lead-row">
 <div class="reveal"><span class="eyebrow">Aerial &amp; Geophysical Survey</span><p class="big" style="margin-top:1.2rem">KEA performs a variety of aerial and geophysical surveys with expert crews, multiple aircraft and modern processing software.</p></div>
 <div class="reveal"><p style="color:var(--slate);font-size:1.05rem;margin:1.4rem 0 2rem">From pipeline survey, seismic survey, LIDAR surveys, electricity and powerline survey, architectural, road and drainage, land and wildlife survey and more — using state-of-the-art technology and highly trained crews, we generate fast, accurate and actionable results, individually tailored to your needs.</p><a class="btn btn-outline" href="/contact.html">Request a quote <span class="arr">→</span></a></div>
-</div></section><section class="gallery-sec"><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">In the field</span><h2>Survey operations</h2></div><div class="gallery"><div class="g reveal"><img src="/assets/img/2015/07/ground-breaking-animal-census.jpg" alt="Wildlife census survey" loading="lazy"></div><div class="g reveal"><img src="/assets/img/2019/01/Aerial-Survey-KEA.jpg" alt="Aerial survey" loading="lazy"></div><div class="g reveal"><img src="/assets/img/2019/04/DA42-Camera.jpg" alt="DA42 survey sensor" loading="lazy"></div><div class="g reveal"><img src="/assets/img/2019/04/DA42-Back.jpg" alt="DA42 MPP Guardian" loading="lazy"></div></div></div></section><div class="banner"><div class="bg" style="background-image:url('/assets/img/2015/07/ground-breaking-animal-census.jpg')"></div>
+</div></section><section class="gallery-sec"><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">In the field</span><h2>Survey operations</h2></div><div class="carousel" id="car4" role="region" aria-roledescription="carousel" aria-label="Survey operations" style="--ar:16/10"><ul class="carousel-track" tabindex="0" aria-label="Survey operations slides"><li class="slide" role="group" aria-roledescription="slide" aria-label="1 of 5"><button class="slide-btn" data-full="/assets/img/2019/01/Aerial-Survey-KEA.webp" data-alt="Aerial survey" aria-label="View full size: Aerial survey"><picture><source type="image/webp" srcset="/assets/img/2019/01/Aerial-Survey-KEA-640.webp 640w, /assets/img/2019/01/Aerial-Survey-KEA.webp 1600w" sizes="(max-width:820px) 92vw, 33vw"><img src="/assets/img/2019/01/Aerial-Survey-KEA-1600.jpg" alt="Aerial survey" loading="lazy" decoding="async"></picture></button></li><li class="slide" role="group" aria-roledescription="slide" aria-label="2 of 5"><button class="slide-btn" data-full="/assets/img/2015/07/ground-breaking-animal-census.webp" data-alt="Wildlife census survey" aria-label="View full size: Wildlife census survey"><picture><source type="image/webp" srcset="/assets/img/2015/07/ground-breaking-animal-census-640.webp 640w, /assets/img/2015/07/ground-breaking-animal-census.webp 1600w" sizes="(max-width:820px) 92vw, 33vw"><img src="/assets/img/2015/07/ground-breaking-animal-census.jpg" alt="Wildlife census survey" loading="lazy" decoding="async"></picture></button></li><li class="slide" role="group" aria-roledescription="slide" aria-label="3 of 5"><button class="slide-btn" data-full="/assets/img/2021/08/Kajjansi_KEA.webp" data-alt="Kajjansi base" aria-label="View full size: Kajjansi base"><picture><source type="image/webp" srcset="/assets/img/2021/08/Kajjansi_KEA-640.webp 640w, /assets/img/2021/08/Kajjansi_KEA.webp 1600w" sizes="(max-width:820px) 92vw, 33vw"><img src="/assets/img/2021/08/Kajjansi_KEA-1600.jpg" alt="Kajjansi base" loading="lazy" decoding="async"></picture></button></li><li class="slide" role="group" aria-roledescription="slide" aria-label="4 of 5"><button class="slide-btn" data-full="/assets/img/2019/04/DA42-Camera.webp" data-alt="DA42 survey sensor" aria-label="View full size: DA42 survey sensor"><picture><source type="image/webp" srcset="/assets/img/2019/04/DA42-Camera-640.webp 640w, /assets/img/2019/04/DA42-Camera.webp 1600w" sizes="(max-width:820px) 92vw, 33vw"><img src="/assets/img/2019/04/DA42-Camera.jpg" alt="DA42 survey sensor" loading="lazy" decoding="async"></picture></button></li><li class="slide" role="group" aria-roledescription="slide" aria-label="5 of 5"><button class="slide-btn" data-full="/assets/img/2019/04/DA42-Back.webp" data-alt="DA42 MPP Guardian" aria-label="View full size: DA42 MPP Guardian"><picture><source type="image/webp" srcset="/assets/img/2019/04/DA42-Back-640.webp 640w, /assets/img/2019/04/DA42-Back.webp 1600w" sizes="(max-width:820px) 92vw, 33vw"><img src="/assets/img/2019/04/DA42-Back.jpg" alt="DA42 MPP Guardian" loading="lazy" decoding="async"></picture></button></li></ul><button class="cbtn cprev" aria-label="Previous slide" aria-controls="car4">‹</button><button class="cbtn cnext" aria-label="Next slide" aria-controls="car4">›</button><div class="cdots" role="group" aria-label="Choose slide"><button class="cdot" data-i="0" aria-label="Slide 1" aria-current="true"></button><button class="cdot" data-i="1" aria-label="Slide 2"></button><button class="cdot" data-i="2" aria-label="Slide 3"></button><button class="cdot" data-i="3" aria-label="Slide 4"></button><button class="cdot" data-i="4" aria-label="Slide 5"></button></div></div></div></section><div class="banner"><div class="bg" style="background-image:url('/assets/img/2015/07/ground-breaking-animal-census.jpg')"></div>
 <div class="banner-inner reveal"><span class="eyebrow on-dark">World-first capability</span><h2>The world’s most accurate animal census.</h2><p>Combining our Visionmap A3 Edge aerial mapping with facial-recognition software, KEA mapped Murchison Falls National Park in ultra-high resolution to count every visible animal automatically.</p>
 <a class="btn btn-primary" href="/news/ground-breaking-animal-census.html">Read the story <span class="arr">→</span></a></div></div><div class="cta-band"><div class="wrap reveal"><span class="eyebrow" style="justify-content:center">Have questions?</span>
 <h2>Our aviation experts are ready</h2><p>Tell us about your requirement and we’ll help find the solution best suited to your need.</p>
 <a class="btn btn-primary" href="/contact.html">Contact us <span class="arr">→</span></a></div></div>
+</main>
 <footer><div class="wrap">
 <div class="foot-top">
 <div class="foot-col">
@@ -274,6 +321,13 @@ footer{background:var(--dark);color:var(--cloud);padding:80px 0 32px}
 </div>
 <div class="foot-bottom"><span class="mono">© 2026 KEA — Kampala Executive Aviation</span><span class="mono">Specialist Aviation Solutions · Kajjansi, Uganda</span></div>
 </div></footer>
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer" hidden>
+<button class="lb-close" aria-label="Close viewer">✕</button>
+<button class="lb-prev" aria-label="Previous image">‹</button>
+<img class="lb-img" alt="">
+<button class="lb-next" aria-label="Next image">›</button>
+<div class="lb-cap" aria-live="polite"></div>
+</div>
 <script>(function(){
   var hdr=document.getElementById('hdr');
   function onScroll(){if(hdr)hdr.classList.toggle('scrolled',window.scrollY>40);}
@@ -285,7 +339,7 @@ footer{background:var(--dark);color:var(--cloud);padding:80px 0 32px}
   var sIO=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.querySelectorAll('.num').forEach(animate);sIO.unobserve(e.target);}})},{threshold:.4});
   document.querySelectorAll('.stats-grid').forEach(function(el){sIO.observe(el);});
   var b=document.querySelector('.burger'),m=document.querySelector('.mobile-menu');
-  if(b&&m){b.addEventListener('click',function(){m.classList.toggle('open');});}
+  if(b&&m){b.addEventListener('click',function(){var open=m.classList.toggle('open');b.setAttribute('aria-expanded',open?'true':'false');b.setAttribute('aria-label',open?'Close menu':'Open menu');});}
 })();
 
 /* ---- FormSubmit progressive enhancement ----
@@ -328,6 +382,79 @@ footer{background:var(--dark);color:var(--cloud);padding:80px 0 32px}
         .catch(function(){ setStatus(status,'err','Network error — please email reservations@flykea.com directly.'); })
         .finally(function(){ if(btn){ btn.disabled=false; btn.innerHTML=orig; } });
     });
+  });
+})();
+
+/* ---- accessible carousels + lightbox (vanilla, no deps) ---- */
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function setupCarousel(car){
+    var track=car.querySelector('.carousel-track');
+    var slides=[].slice.call(car.querySelectorAll('.slide'));
+    var prev=car.querySelector('.cprev'), next=car.querySelector('.cnext');
+    var dots=[].slice.call(car.querySelectorAll('.cdot'));
+    if(!track||slides.length<2) return;
+    var idx=0;
+    function go(i){ idx=Math.max(0,Math.min(slides.length-1,i));
+      slides[idx].scrollIntoView({behavior:reduce?'auto':'smooth',inline:'start',block:'nearest'}); }
+    if(prev) prev.addEventListener('click',function(){go(idx-1);});
+    if(next) next.addEventListener('click',function(){go(idx+1);});
+    dots.forEach(function(d){ d.addEventListener('click',function(){go(+d.dataset.i);}); });
+    track.addEventListener('keydown',function(e){
+      if(e.key==='ArrowRight'){e.preventDefault();go(idx+1);}
+      else if(e.key==='ArrowLeft'){e.preventDefault();go(idx-1);}
+      else if(e.key==='Home'){e.preventDefault();go(0);}
+      else if(e.key==='End'){e.preventDefault();go(slides.length-1);}
+    });
+    var io=new IntersectionObserver(function(es){es.forEach(function(en){
+      if(en.isIntersecting){ var i=slides.indexOf(en.target); if(i<0)return; idx=i;
+        dots.forEach(function(d,j){ if(j===i)d.setAttribute('aria-current','true'); else d.removeAttribute('aria-current'); });
+        if(prev) prev.disabled=(i===0);
+        if(next) next.disabled=(i===slides.length-1);
+      }});},{root:track,threshold:0.6});
+    slides.forEach(function(s){io.observe(s);});
+    if(prev) prev.disabled=true;
+    if(car.hasAttribute('data-autoplay') && !reduce){
+      var timer=null;
+      function tick(){ go(idx>=slides.length-1?0:idx+1); }
+      function start(){ if(!timer) timer=setInterval(tick,5000); }
+      function stop(){ if(timer){clearInterval(timer);timer=null;} }
+      car.addEventListener('mouseenter',stop); car.addEventListener('mouseleave',start);
+      car.addEventListener('focusin',stop); car.addEventListener('focusout',start);
+      start();
+    }
+  }
+  [].forEach.call(document.querySelectorAll('.carousel'),setupCarousel);
+
+  /* lightbox */
+  var lb=document.getElementById('lightbox');
+  if(!lb) return;
+  var lbImg=lb.querySelector('.lb-img'), lbCap=lb.querySelector('.lb-cap');
+  var btnClose=lb.querySelector('.lb-close'), btnPrev=lb.querySelector('.lb-prev'), btnNext=lb.querySelector('.lb-next');
+  var group=[], gi=0, lastFocus=null;
+  function show(i){ gi=(i+group.length)%group.length; var it=group[gi];
+    lbImg.src=it.full; lbImg.alt=it.alt; lbCap.textContent=it.alt+'  ('+(gi+1)+' / '+group.length+')'; }
+  function open(btns,start){ group=btns.map(function(b){return {full:b.dataset.full,alt:b.dataset.alt||''};});
+    lastFocus=document.activeElement; lb.hidden=false; document.documentElement.style.overflow='hidden';
+    show(start); btnClose.focus(); }
+  function close(){ lb.hidden=true; document.documentElement.style.overflow=''; if(lastFocus)lastFocus.focus(); }
+  [].forEach.call(document.querySelectorAll('.carousel'),function(car){
+    var btns=[].slice.call(car.querySelectorAll('.slide-btn'));
+    btns.forEach(function(b,i){ b.addEventListener('click',function(){ open(btns,i); }); });
+  });
+  btnClose.addEventListener('click',close);
+  btnPrev.addEventListener('click',function(){show(gi-1);});
+  btnNext.addEventListener('click',function(){show(gi+1);});
+  lb.addEventListener('click',function(e){ if(e.target===lb) close(); });
+  document.addEventListener('keydown',function(e){
+    if(lb.hidden) return;
+    if(e.key==='Escape') close();
+    else if(e.key==='ArrowRight') show(gi+1);
+    else if(e.key==='ArrowLeft') show(gi-1);
+    else if(e.key==='Tab'){ var f=lb.querySelectorAll('button'); var first=f[0],last=f[f.length-1];
+      if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+      else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();} }
   });
 })();
 </script></body></html>

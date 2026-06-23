@@ -225,3 +225,40 @@ footer{background:var(--dark);color:var(--cloud);padding:80px 0 32px}
 .gallery .g:hover img{transform:scale(1.06)}
 @media(max-width:820px){.gallery{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:520px){.gallery{grid-template-columns:1fr}}
+
+/* ---- a11y: visible keyboard focus + skip link ---- */
+:focus-visible{outline:3px solid var(--green-ink);outline-offset:2px;border-radius:2px}
+.btn:focus-visible{outline-offset:3px}
+.skip{position:absolute;left:-9999px;top:0;z-index:2000;background:#fff;color:var(--ink);padding:.85rem 1.3rem;font-family:var(--mono);font-size:.78rem;letter-spacing:.08em;text-decoration:none;border:2px solid var(--lime);border-radius:3px}
+.skip:focus{left:10px;top:10px}
+main:focus{outline:none}
+
+/* ---- accessible carousel ---- */
+.carousel{position:relative;aspect-ratio:var(--ar,16/10);border-radius:5px;overflow:hidden;background:var(--tint);isolation:isolate}
+.carousel-track{display:flex;list-style:none;margin:0;padding:0;height:100%;width:100%;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.carousel-track::-webkit-scrollbar{display:none}
+.carousel-track:focus-visible{outline:3px solid var(--lime);outline-offset:-3px}
+.slide{flex:0 0 100%;width:100%;height:100%;scroll-snap-align:start;scroll-snap-stop:always}
+.slide-btn{display:block;width:100%;height:100%;padding:0;margin:0;border:0;background:none;cursor:zoom-in}
+.slide-btn picture,.slide-btn img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s cubic-bezier(.16,.84,.44,1)}
+.slide-btn:hover img{transform:scale(1.04)}
+.cbtn{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.92);color:var(--ink);font-size:1.6rem;line-height:1;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.18);display:flex;align-items:center;justify-content:center;transition:.2s}
+.cbtn:hover{background:#fff;transform:translateY(-50%) scale(1.07)}
+.cbtn[disabled]{opacity:0;pointer-events:none}
+.cprev{left:12px}.cnext{right:12px}
+.cdots{position:absolute;bottom:12px;left:0;right:0;z-index:3;display:flex;gap:.5rem;justify-content:center}
+.cdot{width:9px;height:9px;border-radius:50%;border:0;background:rgba(255,255,255,.55);cursor:pointer;padding:0;transition:.25s}
+.cdot[aria-current="true"]{background:#fff;width:22px;border-radius:5px}
+/* fleet card: carousel replaces the static photo slot */
+.ac .carousel{border-radius:0}
+/* ---- lightbox ---- */
+.lightbox{position:fixed;inset:0;z-index:3000;background:rgba(8,12,9,.93);display:flex;align-items:center;justify-content:center;padding:4vw}
+.lightbox[hidden]{display:none}
+.lb-img{max-width:92vw;max-height:86vh;object-fit:contain;border-radius:4px;box-shadow:0 24px 70px rgba(0,0,0,.55)}
+.lb-close,.lb-prev,.lb-next{position:absolute;background:rgba(255,255,255,.12);color:#fff;border:0;cursor:pointer;border-radius:50%;width:52px;height:52px;font-size:1.7rem;display:flex;align-items:center;justify-content:center;transition:.2s}
+.lb-close:hover,.lb-prev:hover,.lb-next:hover{background:rgba(255,255,255,.26)}
+.lb-close{top:18px;right:22px}
+.lb-prev{left:22px;top:50%;transform:translateY(-50%)}
+.lb-next{right:22px;top:50%;transform:translateY(-50%)}
+.lb-cap{position:absolute;bottom:18px;left:0;right:0;text-align:center;color:#fff;font-family:var(--mono);font-size:.78rem;letter-spacing:.06em}
+@media(max-width:600px){.lb-prev{left:8px}.lb-next{right:8px}.cbtn{width:38px;height:38px;font-size:1.3rem}}
