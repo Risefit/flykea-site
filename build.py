@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # KEA static site generator. Edit content below, then: python3 build.py
 import os, html, re
+import content as C
 ROOT = os.path.dirname(os.path.abspath(__file__))
 # Production base URL — change to "https://flykea.com" once the custom domain is live on Vercel.
 BASE_URL   = "https://flykea-site-z8af.vercel.app"
@@ -45,22 +46,45 @@ SOL = [
 ]
 
 def nav(active=""):
-    sub="".join('<a href="/solutions/%s.html">%s</a>'%(s,t) for s,t in SOL)
     def cls(k): return ' class="active"' if k==active else ''
+    sub=('<div class="submenu submenu-wide">'
+      '<div class="grp">Charter</div>'
+      '<a href="/charter-flights-kampala/">Charter Flights Kampala</a>'
+      '<a href="/helicopter-charter-kampala/">Helicopter Charter Kampala</a>'
+      '<a href="/services/vip-corporate-charter/">VIP &amp; Corporate Charter</a>'
+      '<a href="/services/private-jet-charter/">Private Jet Charter</a>'
+      '<a href="/services/cargo-charter/">Cargo Charter</a>'
+      '<div class="grp">Industrial &amp; B2B</div>'
+      '<a href="/services/oil-gas-aviation/">Oil &amp; Gas Aviation</a>'
+      '<a href="/services/ngo-humanitarian-charter/">NGO &amp; Humanitarian</a>'
+      '<a href="/services/remote-site-operations/">Remote Site Operations</a>'
+      '<a href="/services/pipeline-patrol/">Pipeline Patrol</a>'
+      '<div class="grp">Emergency &amp; Specialist</div>'
+      '<a href="/services/medical-evacuation/">Medical Evacuation</a>'
+      '<a href="/services/search-rescue-helicopter/">Search &amp; Rescue</a>'
+      '<a href="/services/disaster-response/">Disaster Response</a>'
+      '<a href="/services/aerial-survey-geophysical/">Aerial Survey</a>'
+      '<a href="/services/external-load-helicopter/">External Load</a>'
+      '<div class="grp">MRO</div>'
+      '<a href="/services/aircraft-maintenance-mro/">Aircraft Maintenance &amp; MRO</a>'
+      '<a class="all" href="/services/">All services →</a>'
+      '</div>')
     return f'''<header id="hdr"><div class="wrap nav">
 <a href="/index.html" class="nav-logo"><img src="{LOGO_GREEN}" alt="KEA — Kampala Executive Aviation"></a>
 <nav aria-label="Primary"><ul class="nav-links">
-<li class="has-sub"><a href="/solutions/charter-flights.html"{cls('solutions')}>Solutions</a><div class="submenu">{sub}</div></li>
+<li class="has-sub"><a href="/services/"{cls('services')}>Services ▾</a>{sub}</li>
+<li><a href="/services/aircraft-leasing/"{cls('leasing')}>Leasing</a></li>
+<li><a href="/services/uav-drone-operations/"{cls('uav')}>UAV</a></li>
 <li><a href="/fleet.html"{cls('fleet')}>Fleet</a></li>
 <li><a href="/about.html"{cls('about')}>About</a></li>
-<li><a href="/news.html"{cls('news')}>News</a></li>
-<li><a href="/careers.html"{cls('careers')}>Careers</a></li>
+<li><a href="/blog/"{cls('blog')}>Blog</a></li>
 <li><a href="/contact.html"{cls('contact')}>Contact</a></li>
 </ul></nav>
+<a class="btn btn-outline nav-quote" href="/quote/">Get a Quote</a>
 <button class="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobilemenu"><span></span><span></span><span></span></button>
 </div>
 <div class="mobile-menu" id="mobilemenu">
-<a href="/solutions/charter-flights.html">Solutions</a><a href="/fleet.html">Fleet</a><a href="/about.html">About</a><a href="/news.html">News</a><a href="/careers.html">Careers</a><a href="/contact.html">Contact</a>
+<a href="/services/">Services</a><a href="/services/aircraft-leasing/">Aircraft Leasing</a><a href="/services/uav-drone-operations/">UAV Operations</a><a href="/fleet.html">Fleet</a><a href="/about.html">About</a><a href="/blog/">Blog</a><a href="/contact.html">Contact</a><a href="/quote/">Get a Quote</a>
 </div></header>'''
 
 FOOT=f'''<footer><div class="wrap">
@@ -74,19 +98,21 @@ FOOT=f'''<footer><div class="wrap">
 <a href="https://twitter.com/fly_kea" target="_blank" rel="noopener" aria-label="Twitter"><svg viewBox="0 0 24 24"><path d="M18.9 2H22l-7.1 8.1L23.3 22h-6.6l-5.2-6.8L5.6 22H2.4l7.6-8.7L1 2h6.8l4.7 6.2L18.9 2zm-1.2 18h1.8L7.4 3.8H5.5L17.7 20z"/></svg></a>
 <a href="https://www.instagram.com/kampalaexecutiveaviation/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.8.3 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.3 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.3-2.2-.4a3.8 3.8 0 0 1-1.4-.9 3.8 3.8 0 0 1-.9-1.4c-.2-.4-.4-1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c.1-1.2.3-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4 1.3-.1 1.7-.1 4.9-.1zm0 1.8c-3.1 0-3.5 0-4.7.1-1.1.1-1.7.2-2.1.4-.5.2-.9.4-1.3.8-.4.4-.6.8-.8 1.3-.2.4-.3 1-.4 2.1-.1 1.2-.1 1.6-.1 4.7s0 3.5.1 4.7c.1 1.1.2 1.7.4 2.1.2.5.4.9.8 1.3.4.4.8.6 1.3.8.4.2 1 .3 2.1.4 1.2.1 1.6.1 4.7.1s3.5 0 4.7-.1c1.1-.1 1.7-.2 2.1-.4.5-.2.9-.4 1.3-.8.4-.4.6-.8.8-1.3.2-.4.3-1 .4-2.1.1-1.2.1-1.6.1-4.7s0-3.5-.1-4.7c-.1-1.1-.2-1.7-.4-2.1a3.5 3.5 0 0 0-.8-1.3 3.5 3.5 0 0 0-1.3-.8c-.4-.2-1-.3-2.1-.4-1.2-.1-1.6-.1-4.7-.1zm0 3.1a4.9 4.9 0 1 1 0 9.8 4.9 4.9 0 0 1 0-9.8zm0 8a3.1 3.1 0 1 0 0-6.2 3.1 3.1 0 0 0 0 6.2zm6.3-8.2a1.1 1.1 0 1 1-2.3 0 1.1 1.1 0 0 1 2.3 0z"/></svg></a>
 </div></div>
-<div class="foot-col"><h4>Solutions</h4>{"".join('<a href="/solutions/%s.html">%s</a>'%(s,t) for s,t in SOL)}</div>
-<div class="foot-col"><h4>Company</h4><a href="/fleet.html">Fleet</a><a href="/about.html">About</a><a href="/news.html">News</a><a href="/careers.html">Careers</a><a href="/contact.html">Contact</a>
+<div class="foot-col"><h4>Services</h4><a href="/services/oil-gas-aviation/">Oil &amp; Gas Aviation</a><a href="/services/medical-evacuation/">Medical Evacuation</a><a href="/helicopter-charter-kampala/">Helicopter Charter</a><a href="/services/ngo-humanitarian-charter/">NGO &amp; Humanitarian</a><a href="/services/cargo-charter/">Cargo Charter</a><a href="/services/uav-drone-operations/">UAV Operations</a><a href="/services/aircraft-leasing/">Aircraft Leasing</a><a href="/services/">All services →</a></div>
+<div class="foot-col"><h4>Company</h4><a href="/fleet.html">Fleet</a><a href="/about.html">About</a><a href="/certifications/">Certifications</a><a href="/blog/">Blog</a><a href="/contact.html">Contact</a><a href="/news.html">News archive</a>
 <div class="foot-pay"><a class="btn btn-primary" style="padding:.7rem 1.2rem" href="{PAY}" target="_blank" rel="noopener">Make a Payment →</a></div></div>
 </div>
 <div class="foot-bottom"><span class="mono">© 2026 KEA — Kampala Executive Aviation</span><span class="mono">Specialist Aviation Solutions · Kajjansi, Uganda</span></div>
 </div></footer>'''
 
-def page(path, title, desc, body, active="", og_image=None, noindex=False):
-    canon = BASE_URL + "/" + path
+def page(path, title, desc, body, active="", og_image=None, noindex=False, extra_jsonld=""):
+    url_path = path[:-10] if path.endswith("index.html") else path   # clean dir URLs
+    canon = BASE_URL + "/" + url_path
     ogimg = BASE_URL + (og_image or OG_DEFAULT)
     desc_e, title_e = html.escape(desc), html.escape(title)
-    robots = '<meta name="robots" content="noindex,follow">' if noindex else ''
-    if not noindex: PAGES.append(path)
+    robots = '<meta name="robots" content="noindex,follow">' if noindex else '<meta name="robots" content="index,follow">'
+    if not noindex: PAGES.append(url_path)
+    extra_ld = ('<script type="application/ld+json">%s</script>'%extra_jsonld) if extra_jsonld else ''
     doc=f'''<!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title><meta name="description" content="{desc_e}">
@@ -99,7 +125,12 @@ def page(path, title, desc, body, active="", og_image=None, noindex=False):
 <link rel="icon" href="{FAVICON}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script type="application/ld+json">{JSONLD}</script>
+<script type="application/ld+json">{JSONLD}</script>{extra_ld}
+<!-- GA4: replace G-XXXXXXX with KEA's Measurement ID -->
+<!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-XXXXXXX');</script> -->
+<!-- Search Console: paste KEA's verification token -->
+<!-- <meta name="google-site-verification" content="REPLACE_WITH_TOKEN"> -->
 <style>{CSS}</style></head><body>
 <a class="skip" href="#main">Skip to content</a>
 {nav(active)}
@@ -114,6 +145,8 @@ def page(path, title, desc, body, active="", og_image=None, noindex=False):
 <button class="lb-next" aria-label="Next image">\u203a</button>
 <div class="lb-cap" aria-live="polite"></div>
 </div>
+<a class="sticky-quote" href="/quote/">⚡ Get a Quote</a>
+<a class="wa-float" href="https://wa.me/256776333114" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 .4C7.4.4.5 7.3.5 15.9c0 2.8.7 5.4 2 7.8L.4 31.6l8.1-2.1c2.3 1.2 4.8 1.9 7.5 1.9 8.6 0 15.5-6.9 15.5-15.5S24.6.4 16 .4zm0 28.3c-2.4 0-4.6-.6-6.5-1.8l-.5-.3-4.8 1.3 1.3-4.7-.3-.5c-1.3-2-2-4.4-2-6.9C3 8.9 8.8 3.1 16 3.1S29 8.9 29 16 23.2 28.7 16 28.7zm8.2-9.6c-.4-.2-2.6-1.3-3-1.4-.4-.2-.7-.2-1 .2s-1.1 1.4-1.4 1.7c-.3.3-.5.3-.9.1-2.4-1.2-4-2.1-5.6-4.8-.4-.7.4-.7 1.2-2.2.1-.3.1-.5 0-.7s-1-2.4-1.4-3.3c-.4-.9-.7-.7-1-.8h-.8c-.3 0-.7.1-1.1.5C7.5 9.3 6.7 10.4 6.7 12s1.2 3.5 1.4 3.8c.2.3 2.4 3.7 5.9 5.2 2.2.9 3 1 4.1.9.7-.1 2.6-1 2.9-2 .4-1 .4-1.8.3-2-.1-.2-.4-.3-.8-.5z"/></svg></a>
 <script>{JS}</script></body></html>'''
     full=os.path.join(ROOT,path)
     os.makedirs(os.path.dirname(full) or ".",exist_ok=True)
@@ -133,23 +166,157 @@ def cta_band():
 <h2>Our aviation experts are ready</h2><p>Tell us about your requirement and we’ll help find the solution best suited to your need.</p>
 <a class="btn btn-primary" href="/contact.html">Contact us <span class="arr">→</span></a></div></div>'''
 
-def banner(eyebrow,title,text,bg,btn=("Explore our capability","/solutions/charter-flights.html")):
+def banner(eyebrow,title,text,bg,btn=("Explore our services","/services/")):
     return f'''<div class="banner"><div class="bg" style="background-image:url('{bg}')"></div>
 <div class="banner-inner reveal"><span class="eyebrow on-dark">{eyebrow}</span><h2>{title}</h2><p>{text}</p>
 <a class="btn btn-primary" href="{btn[1]}">{btn[0]} <span class="arr">→</span></a></div></div>'''
 
 IC=U+"2019/04/"; IC1=U+"2019/01/"; IC2=U+"2019/02/"
+
+# ================= SEO SCHEMA HELPERS =================
+import json as _json
+def _ld(obj): return _json.dumps(obj, separators=(",",":"), ensure_ascii=False)
+def crumb_ld(trail):  # trail = [(name,url_path), ...] ; url_path "" for home
+    items=[{"@type":"ListItem","position":i+1,"name":n,
+            "item":BASE_URL+"/"+u} for i,(n,u) in enumerate(trail)]
+    return _ld({"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":items})
+def service_ld(name,desc,stype,url):
+    return _ld({"@context":"https://schema.org","@type":"Service","name":name,"description":desc,
+      "serviceType":stype,"url":BASE_URL+"/"+url,"areaServed":[c[1] for c in C.COUNTRIES],
+      "provider":{"@type":"Organization","name":"Kampala Executive Aviation","telephone":"+256776333114",
+        "address":{"@type":"PostalAddress","streetAddress":"Gate 1, Kajjansi Airstrip","addressLocality":"Kajjansi","addressCountry":"UG"}}})
+def faq_ld(faqs):
+    return _ld({"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+      {"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":a}} for q,a in faqs]})
+def article_ld(title,desc,url,img,date):
+    return _ld({"@context":"https://schema.org","@type":"Article","headline":title,"description":desc,
+      "image":BASE_URL+U+img,"datePublished":date,"url":BASE_URL+"/"+url,
+      "author":{"@type":"Organization","name":"Kampala Executive Aviation"},
+      "publisher":{"@type":"Organization","name":"Kampala Executive Aviation","logo":{"@type":"ImageObject","url":BASE_URL+LOGO_GREEN}}})
+LOCALBIZ_LD=_ld({"@context":"https://schema.org","@type":"LocalBusiness","name":"Kampala Executive Aviation",
+  "image":BASE_URL+OG_DEFAULT,"url":BASE_URL+"/","telephone":"+256776333114","priceRange":"$$$",
+  "address":{"@type":"PostalAddress","streetAddress":"Gate 1, Kajjansi Airstrip","addressLocality":"Kajjansi","addressRegion":"Wakiso","addressCountry":"UG"},
+  "geo":{"@type":"GeoCoordinates","latitude":-0.1953,"longitude":32.5536},
+  "openingHoursSpecification":{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],"opens":"00:00","closes":"23:59"},
+  "areaServed":[c[1] for c in C.COUNTRIES]})
+
+def crumbs_html(trail):
+    parts=[]
+    for i,(n,u) in enumerate(trail):
+        if i<len(trail)-1: parts.append(f'<a href="/{u}">{n}</a>')
+        else: parts.append(f'<span>{n}</span>')
+    return '<div class="crumb"><div class="wrap">'+' / '.join(parts)+'</div></div>'
+
+# ================= SHARED CONVERSION / TRUST COMPONENTS =================
+def quote_form(source="Website"):
+    return f'''<section class="quote" id="quote-form"><div class="wrap"><div class="quote-grid">
+<div class="reveal"><span class="eyebrow">Request a quote</span><h2 style="font-size:clamp(1.8rem,3.6vw,2.6rem);margin:1rem 0">Get a charter quote</h2>
+<p style="color:var(--slate);max-width:44ch">Tell us the route, dates and load — we’ll come back with options. For urgent requests call <a href="tel:+256776333114" style="color:var(--green-ink)">{PHONE}</a>.</p>
+<p style="color:var(--slate);font-family:var(--mono);font-size:.82rem;margin-top:1.6rem">Gate 1, Kajjansi Airstrip, Uganda<br>{PHONE} · {PHONE2}<br>{EMAIL}</p></div>
+<form class="form" data-formsubmit action="{FORM_ACTION}" method="POST">
+<input type="hidden" name="_subject" value="Quote request — flykea.com ({source})">
+<input type="hidden" name="_captcha" value="false"><input type="hidden" name="_template" value="table">
+<input type="hidden" name="_next" value="/quote-received.html"><input type="hidden" name="source" value="{source}">
+<input class="hp" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+<div class="row"><div><label>Name</label><input name="name" required></div><div><label>Company</label><input name="company"></div></div>
+<div class="row"><div><label>From</label><input name="route_from" placeholder="Origin"></div><div><label>To</label><input name="route_to" placeholder="Destination"></div></div>
+<div class="row"><div><label>Date</label><input name="date" placeholder="dd/mm/yyyy"></div><div><label>Passengers</label><input name="pax" placeholder="PAX count"></div></div>
+<div class="row"><div><label>Aircraft preference</label><select name="aircraft"><option>No preference</option><option>Helicopter</option><option>Fixed wing</option><option>Private jet</option><option>Cargo</option></select></div><div><label>Phone</label><input name="phone" type="tel" placeholder="+256…" required></div></div>
+<div><label>Message</label><textarea name="message" rows="3"></textarea></div>
+<div class="form-status" role="status" aria-live="polite" hidden></div>
+<div><button class="btn btn-primary" type="submit">Send request <span class="arr">→</span></button></div>
+</form></div></div></section>'''
+
+def clients_strip():
+    lg="".join(f'<span class="lg">{html.escape(n)}</span>' for n in C.CLIENTS)
+    return f'''<div class="trust"><div class="wrap"><!-- TRUST: client wordmarks confirmed by KEA; supply official logo files for production -->
+<div class="lbl">Trusted by operators &amp; agencies across the region</div><div class="logos">{lg}</div></div></div>'''
+
+def countries_section():
+    chips="".join(f'<span class="cc"><span class="fl">{f}</span>{html.escape(n)}</span>' for f,n in C.COUNTRIES)
+    chips+='<span class="cc todo"><!-- COUNTRIES: confirm 13th -->+ 1 to confirm</span>'
+    return f'''<section class="countries"><div class="wrap"><span class="eyebrow">Reach</span>
+<h2 style="font-size:clamp(1.9rem,4vw,2.8rem);margin-top:1rem">Countries we serve</h2>
+<div class="country-chips">{chips}</div></div></section>'''
+
+def certs_section(dark=True):
+    bd="".join(f'<div class="cert-badge"><span class="shield">✚</span><div><div class="mono">{t}</div><h4>{ti}</h4><p>{tx}</p></div></div>' for t,ti,tx in C.CERTS)
+    return f'''<section class="cert"><div class="wrap"><span class="eyebrow on-dark">Licensed &amp; approved</span>
+<h2 style="color:#fff;font-size:clamp(1.9rem,4vw,2.8rem);margin-top:1rem">Certifications &amp; approvals</h2>
+<div class="badges">{bd}</div></div></section>'''
+
+# ================= SERVICE PAGE RENDERER =================
+def render_service(s):
+    url=s["slug"]+"/"
+    trail=[("Home","")]
+    if s["slug"].startswith("services/"): trail.append(("Services","services/"))
+    trail.append((s["h1"], url))
+    secs="".join(f'<h2>{h}</h2>{b}' for h,b in s["secs"])
+    faqhtml="".join(f'<details{" open" if i==0 else ""}><summary>{q}</summary><p>{a}</p></details>' for i,(q,a) in enumerate(s["faqs"]))
+    rel="".join(f'<a class="rel-card" href="/{u}{"" if u.endswith(".html") else "/"}">{l} <span class="arr">→</span></a>' for l,u in s["related"])
+    gallery=""
+    if s.get("gallery"):
+        slides=[(g, s["h1"]) for g in s["gallery"]]
+        gallery=carousel_section(slides, s["h1"]+" gallery", s["eyebrow"], "In the field")
+    body=f'''{crumbs_html(trail)}
+<section class="svc-hero" style="padding:0"><div class="bg" style="background-image:url('{U}{s["hero"]}')"></div>
+<div class="inner reveal"><span class="eyebrow on-dark">{s["eyebrow"]}</span><h1>{s["h1"]}</h1></div></section>
+<section style="padding-top:64px"><div class="wrap"><div class="prose reveal"><p>{s["lead"]}</p>{secs}
+<div style="margin:2rem 0"><a class="btn btn-primary" href="#quote-form">Get a quote <span class="arr">→</span></a>
+<a class="btn btn-outline" href="tel:+256776333114" style="margin-left:.6rem">Call {PHONE}</a></div></div></div></section>
+{gallery}
+<section style="padding-top:0"><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">Questions</span><h2>Frequently asked questions</h2></div>
+<div class="faq reveal" style="margin-top:1.5rem">{faqhtml}</div>
+<div class="rel-row reveal" style="margin-top:3rem"><h3 style="font-size:1.1rem;margin-bottom:1rem">Related services</h3><div class="rel-grid">{rel}</div></div></div></section>
+{quote_form(s["h1"])}
+<div class="call-band"><div class="wrap"><h2>Talk to operations</h2><p>{PHONE} · {PHONE2} · <a href="mailto:{EMAIL}">{EMAIL}</a></p></div></div>'''
+    schema=service_ld(s["h1"],s["desc"],s["stype"],url)+"\n"+faq_ld(s["faqs"])+"\n"+crumb_ld(trail)
+    active = "leasing" if "leasing" in s["slug"] else ("uav" if "uav" in s["slug"] else "services")
+    page(url+"index.html", s["title"], s["desc"], body, active=active, og_image=U+s["og"], extra_jsonld=schema)
+
+# ================= BLOG RENDERER =================
+def render_blog_index(items):
+    cards=""
+    for n in items:
+        cards+=f'''<a class="news-card reveal" href="/blog/{n["slug"]}/"><div class="nc-img"><img src="{U}{n["img"]}" alt="{html.escape(n["title"])}" loading="lazy"></div>
+<div class="nc-body"><span class="nc-date">{n["date"]}</span><h3>{html.escape(n["title"])}</h3><p>{html.escape(n["summary"])}</p></div></a>'''
+    body=f'''{page_hero("Insights &amp; updates","KEA Aviation Blog &amp; News","News, contract awards and guides from Kampala Executive Aviation.",U+"2020/03/Helicopter-Services-In-Uganda-KEA.jpg")}
+<section><div class="wrap"><div class="news-grid">{cards}</div></div></section>{quote_form("Blog")}'''
+    page("blog/index.html","Aviation Blog &amp; News | KEA Aviation",
+         "News, contract awards and guides from Kampala Executive Aviation — charter, humanitarian, oil & gas and UAV operations. Call +256 776 333 114.",
+         body, active="blog", extra_jsonld=crumb_ld([("Home",""),("Blog","blog/")]))
+
+def render_post(n, is_blog=True):
+    url=f'blog/{n["slug"]}/'
+    trail=[("Home",""),("Blog","blog/"),(n["title"],url)]
+    kw=n.get("kw","")
+    title=n["title"]+" | KEA Aviation"
+    if len(title)>62: title=n["title"]+" | KEA"
+    desc=n.get("desc") or (n["summary"][:150]+" Call +256 776 333 114.")
+    bodyhtml=n.get("body","")
+    body=f'''{crumbs_html(trail)}
+<section class="svc-hero" style="padding:0;min-height:42vh"><div class="bg" style="background-image:url('{U}{n["img"]}')"></div>
+<div class="inner reveal"><span class="eyebrow on-dark">{n["date"]}</span><h1 style="max-width:24ch">{html.escape(n["title"])}</h1></div></section>
+<section style="padding-top:60px"><div class="wrap"><div class="prose reveal" style="max-width:74ch;margin:0 auto">{bodyhtml}
+<div style="margin-top:2.5rem"><a class="btn btn-primary" href="/quote/">Get a quote <span class="arr">→</span></a>
+<a class="btn btn-outline" href="/blog/" style="margin-left:.6rem">← All posts</a></div></div></div></section>
+<div class="call-band"><div class="wrap"><h2>Talk to KEA</h2><p>{PHONE} · {PHONE2} · <a href="mailto:{EMAIL}">{EMAIL}</a></p></div></div>'''
+    schema=article_ld(n["title"],desc,url,n["img"],n["date"])+"\n"+crumb_ld(trail)
+    if n.get("faqs"): schema+="\n"+faq_ld(n["faqs"])
+    page(url+"index.html", title, desc, body, active="blog", og_image=U+n["img"], extra_jsonld=schema)
+
+
 print("Generating KEA site...")
 
 # ---------------- HOME ----------------
 home_body=f'''
 <section class="hero" id="top"><div class="fallback"></div>
 <video autoplay muted loop playsinline poster="{U}2020/03/Helicopter-Services-In-Uganda-KEA.jpg"><source src="{VIDEO}" type="video/mp4"></video>
-<div class="hero-inner"><span class="eyebrow on-dark">Global Specialist Aviation Solutions</span>
-<h1>One Airline.<br>Endless Possibilities.</h1>
-<p class="lead">A full spectrum of aviation-centric services for government and private clients in the most challenging and austere environments on earth.</p>
-<div class="hero-actions"><a class="btn btn-primary" href="https://jietzbhvb7u.typeform.com/KEA-services" target="_blank" rel="noopener">Discover what we can do <span class="arr">→</span></a>
-<a class="btn btn-ghost" href="/solutions/charter-flights.html">View our solutions</a></div></div>
+<div class="hero-inner"><span class="eyebrow on-dark">CAA-Licensed Operator · Uganda AOC 097</span>
+<h1>Aviation Services in Kampala — Kajjansi Airstrip</h1>
+<p class="lead">Oil &amp; gas, NGO, medevac, cargo, VIP and UAV operations across 13 African countries — fixed wing, rotary wing and special-mission aircraft from one CAA-licensed operator at Kajjansi Airstrip, Kampala.</p>
+<div class="hero-actions"><a class="btn btn-primary" href="/quote/">Get a Quote <span class="arr">→</span></a>
+<a class="btn btn-ghost" href="tel:+256776333114">Call {PHONE}</a></div></div>
 <div class="scroll-hint"><span>Scroll</span><span class="line"></span></div></section>
 
 <section><div class="wrap lead-row">
@@ -165,18 +332,27 @@ home_body=f'''
 </div></div></div>
 
 <section><div class="wrap">
-<div class="sol-top"><div class="sec-head reveal"><span class="eyebrow">What we do</span><h2>Solutions built for austere environments</h2></div>
-<a class="btn btn-outline reveal" href="/contact.html">Talk to our experts <span class="arr">→</span></a></div>
+<div class="sol-top"><div class="sec-head reveal"><span class="eyebrow">What we do</span><h2>Specialist aviation, matched to the mission</h2></div>
+<a class="btn btn-outline reveal" href="/services/">All services <span class="arr">→</span></a></div>
 <div class="sol-grid">
-<a class="sol-card reveal" href="/solutions/charter-flights.html"><img src="{IC1}Cargo-Charter.jpg" alt="Charter flights"><div class="sol-body"><div class="sol-num">01</div><h3>Charters</h3><p>Safe, fast and worry-free passenger and cargo travel across Africa’s open spaces.</p><span class="sol-more">Learn more →</span></div></a>
-<a class="sol-card reveal" href="/solutions/helicopter-and-fixed-wing.html"><img src="{U}2020/03/Helicopter-Services-In-Uganda-KEA.jpg" alt="Rotary and fixed wing"><div class="sol-body"><div class="sol-num">02</div><h3>Rotary &amp; Fixed Wing</h3><p>Fully integrated helicopter and fixed-wing services with an accident-free record.</p><span class="sol-more">Learn more →</span></div></a>
-<a class="sol-card reveal" href="/solutions/oil-gas-and-mining.html"><img src="{U}2021/08/Mi8-Helicopter-Kajjansi-KEA-1.jpg" alt="Oil gas and mining"><div class="sol-body"><div class="sol-num">03</div><h3>Oil, Gas &amp; Mining</h3><p>The safety and quality standards demanded by industry operators, on call.</p><span class="sol-more">Learn more →</span></div></a>
-<a class="sol-card reveal" href="/solutions/medical-division.html"><img src="{IC1}Medevac-KEA.jpg" alt="Medical division"><div class="sol-body"><div class="sol-num">04</div><h3>Medical Division</h3><p>24-hour NVG medical evacuation and air ambulance with a 100% safety record.</p><span class="sol-more">Learn more →</span></div></a>
-<a class="sol-card reveal" href="/solutions/maintenance-and-hangarage.html"><img src="{U}2018/08/maintenance-hangarage.jpg" alt="Maintenance and hangarage"><div class="sol-body"><div class="sol-num">05</div><h3>Maintenance &amp; Hangarage</h3><p>Third-party maintenance through our Uganda and Iraqi licensed AMO.</p><span class="sol-more">Learn more →</span></div></a>
-<a class="sol-card reveal" href="/solutions/aerial-and-geophysical-survey.html"><img src="{IC1}Aerial-Survey-KEA.jpg" alt="Aerial and geophysical survey"><div class="sol-body"><div class="sol-num">06</div><h3>Aerial &amp; Geophysical Survey</h3><p>Fast, accurate and actionable data — from LIDAR to wildlife census.</p><span class="sol-more">Learn more →</span></div></a>
+<a class="sol-card reveal" href="/services/oil-gas-aviation/"><img src="{IC1}Oil-Gas-and-Mining.jpg" alt="KEA aircraft supporting oil and gas operations in Uganda"><div class="sol-body"><div class="sol-num">01</div><h3>Oil &amp; Gas Aviation</h3><p>Crew rotation, cargo and medevac for energy and mining operators.</p><span class="sol-more">Explore →</span></div></a>
+<a class="sol-card reveal" href="/services/medical-evacuation/"><img src="{IC1}Medevac-KEA.jpg" alt="KEA air ambulance medical evacuation aircraft Uganda"><div class="sol-body"><div class="sol-num">02</div><h3>Medical Evacuation</h3><p>Fixed-wing and helicopter air ambulance, 24/7 across East Africa.</p><span class="sol-more">Explore →</span></div></a>
+<a class="sol-card reveal" href="/helicopter-charter-kampala/"><img src="{U}2021/08/Mi8-Helicopter-Kajjansi-KEA-1.jpg" alt="KEA helicopter charter at Kajjansi Airstrip Kampala"><div class="sol-body"><div class="sol-num">03</div><h3>Helicopter Charter</h3><p>Bell 412 &amp; 206 for charter, survey and external-load work.</p><span class="sol-more">Explore →</span></div></a>
+<a class="sol-card reveal" href="/services/ngo-humanitarian-charter/"><img src="{IC}Air-ambulance-paramedics.jpg" alt="KEA NGO and humanitarian charter flight Uganda"><div class="sol-body"><div class="sol-num">04</div><h3>NGO &amp; Humanitarian</h3><p>Relief passengers and cargo into remote and cross-border sites.</p><span class="sol-more">Explore →</span></div></a>
+<a class="sol-card reveal" href="/services/uav-drone-operations/"><img src="{U}2026/06/Matrice-400-RTK-KEA.jpg" alt="DJI Matrice 400 RTK drone on a KEA UAV survey operation"><div class="sol-body"><div class="sol-num">05</div><h3>UAV / Drone Operations</h3><p>Matrice 400 RTK — LiDAR, orthophoto mapping &amp; asset monitoring.</p><span class="sol-more">Explore →</span></div></a>
+<a class="sol-card reveal" href="/services/cargo-charter/"><img src="{IC1}Cargo-Charter.jpg" alt="KEA cargo charter aircraft loading freight Uganda"><div class="sol-body"><div class="sol-num">06</div><h3>Cargo Charter</h3><p>Time-critical and outsized air freight across Uganda and Africa.</p><span class="sol-more">Explore →</span></div></a>
+<a class="sol-card reveal" href="/services/vip-corporate-charter/"><img src="{IC2}Fleet-PC12.jpg" alt="KEA Pilatus PC-12 VIP charter aircraft Kampala"><div class="sol-body"><div class="sol-num">07</div><h3>VIP &amp; Private Jet</h3><p>Discreet executive charter for corporate and government travel.</p><span class="sol-more">Explore →</span></div></a>
+<a class="sol-card reveal" href="/services/aerial-survey-geophysical/"><img src="{IC1}Aerial-Survey-KEA.jpg" alt="KEA DA42 aerial survey aircraft East Africa"><div class="sol-body"><div class="sol-num">08</div><h3>Aerial Survey</h3><p>Airborne geophysical and survey flights region-wide.</p><span class="sol-more">Explore →</span></div></a>
+<a class="sol-card reveal" href="/services/aircraft-leasing/"><img src="{IC2}Fleet-B1900.jpg" alt="KEA Beechcraft 1900D available for aircraft lease and ACMI"><div class="sol-body"><div class="sol-num">09</div><h3>Aircraft Leasing</h3><p>Wet lease, dry lease and ACMI from a CAA-licensed operator.</p><span class="sol-more">Explore →</span></div></a>
 </div></div></section>
 
-{banner("On every mission","When the runway ends, we keep going.","From a stabilised patient at 8,000 feet to a rig crew on a flooded site, our aircraft and crews are built for the places others can’t reach.",IC1+"Medevac-KEA.jpg",("Explore our capability","/solutions/charter-flights.html"))}
+{clients_strip()}
+
+{certs_section()}
+
+{countries_section()}
+
+{banner("On every mission","When the runway ends, we keep going.","From a stabilised patient at 8,000 feet to a rig crew on a flooded site, our aircraft and crews are built for the places others can’t reach.",IC1+"Medevac-KEA.jpg",("Explore our services","/services/"))}
 
 <div class="split">
 <div class="panel approach"><div class="inner reveal"><span class="eyebrow">How we work</span><h2 style="margin:1rem 0">Our Approach</h2>
@@ -199,10 +375,10 @@ home_body=f'''
 </div></div></section>
 
 <section class="services" style="background:var(--tint)"><div class="wrap"><div class="sol-top"><div class="sec-head reveal"><span class="eyebrow">From the field</span><h2>Latest News</h2></div>
-<a class="btn btn-outline reveal" href="/news.html">View all news <span class="arr">→</span></a></div>
+<a class="btn btn-outline reveal" href="/blog/">View all posts <span class="arr">→</span></a></div>
 <div class="news-grid" id="latest-news"></div></div></section>
 
-{banner("Have questions?","Our aviation experts are ready.","Tell us about your requirement and we’ll help find the solution best suited to your need.",U+"2021/08/Mi8-Helicopter-Kajjansi-KEA-1.jpg",("Contact us","/contact.html"))}
+{banner("Have questions?","Our aviation experts are ready.","Tell us about your requirement and we’ll help find the solution best suited to your need.",U+"2021/08/Mi8-Helicopter-Kajjansi-KEA-1.jpg",("Get a Quote","/quote/"))}
 '''
 
 # ---------------- NEWS DATA ----------------
@@ -308,9 +484,14 @@ def news_card(n):
 <div class="post-body"><div class="tags">{tags}</div><div class="date">{dd}</div><h3>{title}</h3><p>{exc}</p><span class="rm">Read more →</span></div></a>'''
 
 # inject 3 latest into home
-latest="".join(news_card(n) for n in NEWS[:3])
+def _home_card(n):
+    return f'''<a class="news-card reveal" href="/blog/{n["slug"]}/"><div class="nc-img"><img src="{U}{n["img"]}" alt="{html.escape(n["title"])}" loading="lazy"></div>
+<div class="nc-body"><span class="nc-date">{n["date"]}</span><h3>{html.escape(n["title"])}</h3><p>{html.escape(n["summary"])}</p></div></a>'''
+latest="".join(_home_card(n) for n in C.NEWS_NEW[:3])
 home_body=home_body.replace('<div class="news-grid" id="latest-news"></div>', '<div class="news-grid">%s</div>'%latest)
-page("index.html","KEA — Global Specialist Aviation Solutions","A full spectrum of aviation-centric services for government and private clients in challenging and austere environments.",home_body,active="")
+page("index.html","Aviation Services Kampala & Kajjansi | KEA Aviation",
+     "CAA-licensed aviation in Uganda — oil & gas, NGO, medevac, cargo, VIP and UAV charter across 13 African countries from Kajjansi Airstrip, Kampala. Call +256 776 333 114.",
+     home_body, active="", extra_jsonld=LOCALBIZ_LD)
 
 # news index
 cards="".join(news_card(n) for n in NEWS)
@@ -420,6 +601,7 @@ def solution_page(slug,nav_title,hero_eyebrow,hero_title,hero_sub,hero_bg,lead_b
     body+=cta_band()
     page("solutions/%s.html"%slug, "%s — KEA"%hero_title, hero_sub, body, active="solutions")
 
+solution_page = lambda *a, **k: None   # old /solutions/* replaced by keyword-first /services/* pages (301s in vercel.json)
 solution_page("charter-flights","Charter Flights","Safe, fast and worry-free travel","Charter Flights",
  "Reliable helicopter and fixed-wing charters across Africa.",IC1+"Cargo-Charter.jpg",
  "We offer the best solutions for safe, fast and worry-free travel across Africa’s wide open spaces.",
@@ -518,7 +700,7 @@ about_body=f'''{page_hero("Who we are","Specialist Aviation Solutions","For over
 <div class="split">
 <div class="panel approach"><div class="inner reveal"><span class="eyebrow">How we work</span><h2 style="margin:1rem 0">Our Approach</h2>
 <p>The KEA approach employs the best of technology and innovation to deliver an ongoing commitment to service excellence. Our specialised services are built on a strong, robust team of highly skilled people with deep operational and management competence.</p>
-<a class="btn btn-outline" href="/solutions/charter-flights.html">Our solutions <span class="arr">→</span></a></div></div>
+<a class="btn btn-outline" href="/services/">Our services <span class="arr">→</span></a></div></div>
 <div class="panel fleet-teaser"><div class="inner reveal"><span class="eyebrow">Safety &amp; Quality</span><h2 style="margin:1rem 0">Safety is everything</h2>
 <p>We currently hold an accident-free track record, achieved through an increased focus on safety and quality across all spheres of our service. We are the only aviation company in Uganda to have qualified to fly for Total plc, following an intense audit by Total Oil and Gas and Bureau Veritas.</p>
 <a class="btn btn-primary" href="{U}2020/04/KEA-Safety-Policy2020-Screen.pdf" target="_blank" rel="noopener">Read our Safety Policy <span class="arr">→</span></a></div></div></div>
@@ -594,6 +776,59 @@ thanks_body=f'''<section style="padding:9rem 0 7rem"><div class="wrap"><div clas
 <a class="btn btn-primary" href="/index.html">Back to home <span class="arr">→</span></a>
 </div></div></section>'''
 page("thank-you.html","Thank you — KEA","Your message has been received by Kampala Executive Aviation.",thanks_body,active="",noindex=True)
+
+# ================= GENERATE NEW SEO PAGES =================
+def _blurb(s): return re.sub('<[^>]+>','',s['lead'])[:96].rsplit(' ',1)[0]+'…'
+
+for s in C.SERVICES:
+    render_service(s)
+
+# ---- Services hub ----
+hub_cards="".join(
+ f'<a class="sol-card reveal" href="/{s["slug"]}/"><img src="{U}{s["hero"]}" alt="{html.escape(s["h1"])}">'
+ f'<div class="sol-body"><div class="sol-num">{i+1:02d}</div><h3>{s["h1"].replace(" in Uganda","").replace(" near Entebbe","")}</h3>'
+ f'<p>{html.escape(_blurb(s))}</p><span class="sol-more">Explore →</span></div></a>'
+ for i,s in enumerate(C.SERVICES))
+hub_body=f'''{page_hero("What we do","Aviation Services in Uganda &amp; Africa","Charter, oil &amp; gas, humanitarian, medevac, cargo, survey, UAV, leasing and MRO — one CAA-licensed operator at Kajjansi Airstrip, Kampala.",U+"2020/03/Helicopter-Services-In-Uganda-KEA.jpg")}
+<section><div class="wrap"><div class="prose reveal" style="margin-bottom:2.5rem"><p>KEA delivers a full spectrum of <b>aviation services in Uganda</b> and across 13 African countries from <b>Kajjansi Airstrip, Kampala</b>. Explore each capability below, or <a href="/quote/">request a quote</a>.</p></div>
+<div class="sol-grid">{hub_cards}</div></div></section>
+{clients_strip()}{certs_section()}{quote_form("Services hub")}'''
+hub_items=_ld({"@context":"https://schema.org","@type":"ItemList","itemListElement":[
+  {"@type":"ListItem","position":i+1,"name":s["h1"],"url":BASE_URL+"/"+s["slug"]+"/"} for i,s in enumerate(C.SERVICES)]})
+page("services/index.html","Aviation Services in Uganda | KEA Aviation",
+     "Full-spectrum aviation services in Uganda — charter, oil & gas, NGO, medevac, cargo, survey, UAV, leasing and MRO from Kajjansi, Kampala. Call +256 776 333 114.",
+     hub_body, active="services",
+     extra_jsonld=hub_items+"\n"+crumb_ld([("Home",""),("Services","services/")]))
+
+# ---- Certifications ----
+cert_body=f'''{page_hero("Licensed &amp; approved","Certifications & Approvals","KEA operates under Air Operator Certificates and Approved Maintenance Organisation approvals across the region.",U+"2018/08/maintenance-hangarage.jpg")}
+<section><div class="wrap"><div class="prose reveal"><p>Kampala Executive Aviation is a fully CAA-licensed operator. We hold <b>Uganda AOC&nbsp;097</b>, with additional Air Operator Certificates in <b>Chad</b> and <b>South Sudan</b>; Approved Maintenance Organisation (AMO) approvals in <b>Uganda, South Africa, Chad, the Central African Republic and Iraq</b>; and a Ugandan CAA <b>UAV Operating Certificate (UOC)</b> for certified drone operations.</p>
+<p style="color:var(--slate);font-family:var(--mono);font-size:.82rem"><!-- CERTS: certificate numbers/scopes beyond AOC 097 to be confirmed by KEA before publishing --></p></div></div></section>
+{certs_section()}{quote_form("Certifications")}'''
+page("certifications/index.html","Certifications & Approvals (AOC, AMO, UOC) | KEA Aviation",
+     "KEA holds Uganda AOC 097 plus AOCs in Chad & South Sudan, AMO approvals in five countries, and a Ugandan CAA UAV Operating Certificate. Call +256 776 333 114.",
+     cert_body, active="", extra_jsonld=crumb_ld([("Home",""),("Certifications","certifications/")]))
+
+# ---- Quote page ----
+quote_body=f'''{page_hero("Request a quote","Get a Charter Quote","Tell us the route, dates and passenger or cargo load and our operations team will respond with options.",U+"2019/04/Caravan-1.jpg")}
+{quote_form("Quote page")}'''
+page("quote/index.html","Get a Charter Quote | KEA Aviation",
+     "Request a charter, cargo, medevac or UAV quote from KEA — CAA-licensed aviation from Kajjansi Airstrip, Kampala. Call +256 776 333 114.",
+     quote_body, active="", extra_jsonld=crumb_ld([("Home",""),("Get a Quote","quote/")]))
+
+# ---- Quote received (form target, noindex) ----
+qr_body=f'''<section style="padding:9rem 0 7rem"><div class="wrap"><div class="thanks reveal">
+<div class="tick">✓</div><span class="eyebrow" style="justify-content:center">Request received</span>
+<h1 style="font-size:clamp(2rem,4vw,2.8rem);margin:.8rem 0 1rem">Thank you</h1>
+<p class="big" style="margin-bottom:2rem">Your quote request has reached the KEA operations team. We’ll review it and be in touch as soon as we can.</p>
+<a class="btn btn-primary" href="/index.html">Back to home <span class="arr">→</span></a></div></div></section>'''
+page("quote-received.html","Quote request received — KEA","Your quote request has been received by Kampala Executive Aviation.",qr_body,active="",noindex=True)
+
+# ---- Blog (news stories + cornerstone guides) ----
+ALL_POSTS=sorted(C.NEWS_NEW + C.BLOG_POSTS, key=lambda x:x["date"], reverse=True)
+render_blog_index(ALL_POSTS)
+for _n in ALL_POSTS:
+    render_post(_n)
 
 # ---------------- sitemap.xml + robots.txt ----------------
 _urls="".join(f'<url><loc>{BASE_URL}/{p}</loc><changefreq>monthly</changefreq></url>' for p in sorted(set(PAGES)))

@@ -262,3 +262,97 @@ main:focus{outline:none}
 .lb-next{right:22px;top:50%;transform:translateY(-50%)}
 .lb-cap{position:absolute;bottom:18px;left:0;right:0;text-align:center;color:#fff;font-family:var(--mono);font-size:.78rem;letter-spacing:.06em}
 @media(max-width:600px){.lb-prev{left:8px}.lb-next{right:8px}.cbtn{width:38px;height:38px;font-size:1.3rem}}
+
+/* ===== SEO restructure: new components (v2) ===== */
+.submenu-wide{min-width:300px}
+.submenu-wide .grp{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--green-ink);padding:.7rem .9rem .2rem}
+.submenu-wide a{padding:.42rem .9rem}
+.submenu-wide a.all{margin-top:.4rem;border-top:1px solid var(--line-dark);color:var(--green-ink);font-weight:600}
+.nav-quote{padding:.7rem 1.15rem!important;font-size:.72rem!important;margin-left:.4rem}
+.tile-flat{background:linear-gradient(150deg,#1d3220,#0f1a12)}
+.tile-flat img{opacity:.5}
+
+/* trust strip */
+.trust{background:var(--tint);padding:46px 0}
+.trust .lbl{font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--slate);text-align:center;margin-bottom:1.6rem}
+.logos{display:flex;flex-wrap:wrap;gap:1rem 2.4rem;justify-content:center;align-items:center}
+.logos .lg{font-family:var(--display);font-weight:700;font-size:1.1rem;color:#8a948b;filter:grayscale(1);opacity:.8;transition:.25s}
+.logos .lg:hover{opacity:1;color:var(--ink)}
+
+/* certifications */
+.cert{background:var(--dark);color:var(--cloud);padding:96px 0}
+.cert .badges{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2.4rem}
+.cert-badge{border:1px solid var(--line);border-radius:5px;padding:1.5rem 1.4rem;display:flex;gap:1rem;align-items:flex-start;background:rgba(255,255,255,.02)}
+.cert-badge .shield{flex:0 0 auto;width:40px;height:40px;border-radius:50%;background:rgba(144,184,32,.16);display:grid;place-items:center;color:#B6E04A;font-size:1.2rem}
+.cert-badge h4{color:#fff;font-size:1.02rem;font-weight:600;margin:.1rem 0 .3rem}
+.cert-badge p{font-size:.86rem;line-height:1.6}
+.cert-badge .mono{font-family:var(--mono);color:#B6E04A;font-size:.72rem;letter-spacing:.08em}
+
+/* countries */
+.countries{background:var(--tint);padding:96px 0}
+.country-chips{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:2.2rem}
+.cc{display:inline-flex;align-items:center;gap:.55rem;background:#fff;border:1px solid var(--line-dark);border-radius:3px;padding:.6rem 1rem;font-size:.92rem;font-weight:500}
+.cc .fl{font-size:1.15rem;line-height:1}
+.cc.todo{border-style:dashed;color:var(--slate);font-family:var(--mono);font-size:.78rem}
+
+/* breadcrumb + service hero */
+.crumb{background:#fff;padding:1.4rem 0 0}
+.crumb .wrap{font-family:var(--mono);font-size:.74rem;letter-spacing:.04em;color:var(--slate)}
+.crumb a{color:var(--green-ink)}
+.svc-hero{position:relative;min-height:48vh;display:flex;align-items:flex-end;color:#fff;overflow:hidden;background:#10210f;padding-bottom:48px}
+.svc-hero .bg{position:absolute;inset:0;background-size:cover;background-position:center;z-index:0}
+.svc-hero::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(to top,rgba(8,16,10,.92),rgba(8,16,10,.4))}
+.svc-hero .inner{position:relative;z-index:2;max-width:var(--maxw);margin:0 auto;padding:0 28px;width:100%}
+.svc-hero h1{font-size:clamp(2rem,4.2vw,3.1rem);max-width:22ch;margin-top:.6rem}
+.prose h2{font-size:1.55rem;margin:2rem 0 1rem}
+
+/* FAQ */
+.faq{max-width:780px}
+.faq details{border-bottom:1px solid var(--line-dark)}
+.faq summary{cursor:pointer;list-style:none;padding:1.1rem 0;font-family:var(--display);font-weight:600;font-size:1.05rem;display:flex;justify-content:space-between;gap:1rem}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";color:var(--green-ink);font-weight:400}
+.faq details[open] summary::after{content:"\2212"}
+.faq p{color:var(--slate);padding:0 0 1.1rem;max-width:72ch}
+
+/* related */
+.rel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.rel-card{border:1px solid var(--line-dark);border-radius:4px;padding:1.1rem 1.2rem;font-family:var(--display);font-weight:500;font-size:.98rem;display:flex;justify-content:space-between;align-items:center;transition:.25s}
+.rel-card:hover{border-color:var(--lime);color:var(--green-ink);transform:translateY(-3px)}
+
+/* quote section + call band */
+.quote{background:var(--tint);padding:96px 0}
+.quote-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start}
+.call-band{background:var(--dark);color:#fff;text-align:center;padding:64px 0}
+.call-band h2{font-size:clamp(1.5rem,3vw,2.1rem)}
+.call-band p{font-family:var(--mono);font-size:.92rem;color:var(--cloud);margin-top:.8rem}
+.call-band a{color:#B6E04A}
+
+/* blog cards */
+.news-card{display:flex;flex-direction:column;border:1px solid var(--line-dark);border-radius:6px;overflow:hidden;background:#fff;transition:.3s}
+.news-card:hover{box-shadow:0 16px 40px rgba(15,26,18,.10);transform:translateY(-4px);border-color:var(--lime)}
+.nc-img{aspect-ratio:16/10;overflow:hidden}
+.nc-img img{width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.16,.84,.44,1)}
+.news-card:hover .nc-img img{transform:scale(1.06)}
+.nc-body{padding:1.5rem}
+.nc-date{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;color:var(--green-ink)}
+.nc-body h3{font-size:1.2rem;margin:.5rem 0 .6rem;font-weight:600}
+.nc-body p{font-size:.92rem;color:var(--slate)}
+
+/* sticky quote + whatsapp */
+.sticky-quote{position:fixed;right:20px;bottom:20px;z-index:200;background:var(--lime);color:var(--ink);font-family:var(--mono);font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500;padding:.95rem 1.3rem;border-radius:40px;box-shadow:0 10px 30px rgba(15,26,18,.28);display:inline-flex;gap:.5rem;align-items:center;transition:.25s}
+.sticky-quote:hover{background:var(--lime-dark);transform:translateY(-2px)}
+.wa-float{position:fixed;left:20px;bottom:20px;z-index:200;width:54px;height:54px;border-radius:50%;background:#25D366;display:grid;place-items:center;box-shadow:0 10px 30px rgba(0,0,0,.25);transition:.25s}
+.wa-float:hover{transform:translateY(-2px)}
+.wa-float svg{width:28px;height:28px;fill:#fff}
+
+@media(max-width:980px){
+  .cert .badges{grid-template-columns:1fr}
+  .quote-grid{grid-template-columns:1fr;gap:2.4rem}
+  .rel-grid{grid-template-columns:1fr}
+}
+@media(max-width:680px){
+  .nav-quote{display:none}
+  .sticky-quote{right:14px;bottom:14px;padding:.8rem 1.1rem}
+  .wa-float{left:14px;bottom:14px}
+}
