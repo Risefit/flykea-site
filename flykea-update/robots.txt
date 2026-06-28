@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://flykea-site-z8af.vercel.app/sitemap.xml

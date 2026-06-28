@@ -1,0 +1,14 @@
+{
+  "cleanUrls": false,
+  "trailingSlash": true,
+  "redirects": [
+    { "source": "/solutions/charter-flights.html", "destination": "/charter-flights-kampala/", "permanent": true },
+    { "source": "/solutions/helicopter-and-fixed-wing.html", "destination": "/helicopter-charter-kampala/", "permanent": true },
+    { "source": "/solutions/oil-gas-and-mining.html", "destination": "/services/oil-gas-aviation/", "permanent": true },
+    { "source": "/solutions/medical-division.html", "destination": "/services/medical-evacuation/", "permanent": true },
+    { "source": "/solutions/aerial-and-geophysical-survey.html", "destination": "/services/aerial-survey-geophysical/", "permanent": true },
+    { "source": "/solutions/maintenance-and-hangarage.html", "destination": "/services/aircraft-maintenance-mro/", "permanent": true },
+    { "source": "/solutions", "destination": "/services/", "permanent": true },
+    { "source": "/solutions/(.*)", "destination": "/services/", "permanent": true }
+  ]
+}

@@ -1,0 +1,2666 @@
+{
+ "generated": "part2",
+ "library_api_total_header": 242,
+ "library_api_returnable": 175,
+ "files_in_assets_img": 384,
+ "originals_tracked": 215,
+ "unplaced": [
+  "2016/02/News-Beechcraft-1.jpg",
+  "2016/02/News-Beechcraft.jpg",
+  "2016/02/News-Beechcraft2.jpg",
+  "2018/07/Charter-flights.jpg",
+  "2018/07/Helicopter-Fixed-Wing-services.png",
+  "2018/07/Kampala-Executive-Aviation-Logo@2.png",
+  "2018/08/EMPIREJET-logo.png",
+  "2018/08/aerial-geophysical-survey.jpg",
+  "2018/08/airline-management.jpg",
+  "2018/08/empirejet.jpg",
+  "2018/08/helicopter-and-fixed-wing-1.jpg",
+  "2018/08/helicopter-charter-flights.jpg",
+  "2018/08/helicopter-charter-flights2.jpg",
+  "2018/08/kea-charter-flights-1.jpg",
+  "2018/08/kea-fleet-e1548240660487.jpg",
+  "2018/08/leasing-and-financing-1.jpg",
+  "2018/08/medical-evacuation-1.jpg",
+  "2018/08/why-kea.jpg",
+  "2018/09/book-business-flight.jpg",
+  "2018/09/book-charter-flight.jpg",
+  "2018/09/book-vip-transport.jpg",
+  "2018/09/charter-flights-top-bg.jpg",
+  "2018/09/charter-flights-top-bg2.jpg",
+  "2018/09/charter-flights-top-bg3.jpg",
+  "2019/02/About-us-story-of-ambition.jpg",
+  "2019/02/Air-Tours.jpg",
+  "2019/02/Business-Flights.jpg",
+  "2019/02/Charter-Flights-KEA-Small-Tile.jpg",
+  "2019/02/Fleet-Banner2.jpg",
+  "2019/02/Fleet.jpg",
+  "2019/02/Fly-uganda.jpg",
+  "2019/02/HomePage-Banner.jpg",
+  "2019/02/KEA-BANNER-VIDEO3.mp4",
+  "2019/02/KEA-Our-Approach.jpg",
+  "2019/02/Special-Events.jpg",
+  "2019/02/VIP-Flights.jpg",
+  "2019/04/Acquired-icons-KEA-01.svg",
+  "2019/04/B1900.jpg",
+  "2019/04/B19002.jpg",
+  "2019/04/Day-and-night-05.svg",
+  "2019/04/Drill-Rig-10.svg",
+  "2019/04/Globe-International.svg",
+  "2019/04/Have-Questions-About-Page.jpg",
+  "2019/04/Helicopter-icons-KEA-01.svg",
+  "2019/04/Helicopter-icons-KEA-02.svg",
+  "2019/04/Helicopter-icons-KEA-03.svg",
+  "2019/04/Incorporated-icons-KEA-01.svg",
+  "2019/04/Incorporated-icons-KEA-02.svg",
+  "2019/04/Integrated-07.svg",
+  "2019/04/Maintenance-Banner1.jpg",
+  "2019/04/Medevac-KEA.jpg",
+  "2019/04/Mining-08.svg",
+  "2019/04/Rooftop-Construction.svg",
+  "2019/04/Wind-Turbine-09.svg",
+  "2019/04/adhoc-charters-kea-icon.svg",
+  "2019/04/iraq-icon-01.svg",
+  "2019/04/kea-shape-bottom.svg",
+  "2019/04/kea-shape-top.svg",
+  "2019/04/medevac-kea-icon.svg",
+  "2019/04/oil-gas-petrolium-support.svg",
+  "2019/04/pilatus-kea-icon.svg",
+  "2019/08/KEA-Favicon.png",
+  "2019/08/cropped-KEA-Favicon.png",
+  "2019/10/Bell412-Flying-Over-Flooded-Pibor.jpeg",
+  "2019/10/Bell412-Pibor-South-Sudan.jpeg",
+  "2019/10/Bell412-Pibor-South-Sudan.jpg",
+  "2019/10/Flooded-Pibor.jpg",
+  "2019/10/Kea-Helicopter-in-Pibor.jpeg",
+  "2019/10/Pibor-MailChimp-1.jpg",
+  "2019/10/Post-PAA-01.jpg",
+  "2019/10/Post-PAA-01.png",
+  "2019/10/Post-PAA.jpg",
+  "2019/10/Post-PAA2.jpg",
+  "2019/10/WhatsApp-Image-2019-10-26-at-5.17.41-PM.jpeg",
+  "2019/10/WhatsApp-Image-2019-10-26-at-5.17.55-PM.jpeg",
+  "2019/10/WhatsApp-Image-2019-10-26-at-5.18.14-PM.jpeg",
+  "2019/10/WhatsApp-Image-2019-10-26-at-5.19.05-PM.jpeg",
+  "2019/12/DPOC-Post.jpg",
+  "2019/12/DPOC.png",
+  "2019/12/Grald-in-plan.jpg",
+  "2019/12/Loading-Stretcher.jpg",
+  "2019/12/Medevac-Caravan.jpg",
+  "2019/12/Medevac-Training-Caravan-01.jpg",
+  "2020/03/Carousel-4-scaled.jpg",
+  "2020/03/Carousel-4.jpg",
+  "2020/03/Carousel-5.jpg",
+  "2020/03/Carousel-6.jpg",
+  "2020/03/Carousel-7.jpg",
+  "2020/03/Chad-News-Banner-02-scaled.jpg",
+  "2020/03/Chad-News-Banner-02.jpg",
+  "2020/03/Chad-News-Banner-Blue-02.jpg",
+  "2020/03/Covid-KEA-Banner.jpg",
+  "2020/03/Covid-KEA-Banner2-scaled.jpg",
+  "2020/03/Covid-KEA-Banner5-scaled.jpg",
+  "2020/03/Fleet-KEA-1.jpg",
+  "2020/03/Fleet-KEA.jpg",
+  "2020/03/Medical-Evacuation-KEA-Uganda.jpg",
+  "2020/03/NCC-PAU.jpg",
+  "2020/03/Video-Cover.jpg",
+  "2020/04/KEA-APPROACH-BANNER-20.jpg",
+  "2020/04/KEA-Solutions-BANNER-20.jpg",
+  "2020/06/KEA-Landing-Page-Banner.jpg",
+  "2021/02/KEG-Banner-Web.jpg",
+  "2021/02/Mi8-Chad-Banner-Web.jpg",
+  "2021/03/Banner-Medical-Division-KEA.jpg",
+  "2021/03/IMG_3988.jpg",
+  "2021/03/IMG_3992-1.jpg",
+  "2021/03/PHOTO-2021-02-23-13-56-26.jpg",
+  "2021/03/PHOTO-2021-02-23-13-56-29.jpg",
+  "2021/03/PHOTO-2021-02-23-13-56-37-1.jpg",
+  "2021/03/PHOTO-2021-02-23-13-56-37.jpg",
+  "2021/03/PHOTO-2021-02-23-13-56-41.jpg",
+  "2021/03/PHOTO-2021-02-23-13-56-42-1.jpg",
+  "2021/08/Cockpit-Pilots.jpg",
+  "2021/10/Construction.jpg",
+  "2021/10/Crane-Lifting-Modular-Building.jpg",
+  "2021/10/Emergency-Team-Outside-Remote-Clinic.jpg",
+  "2021/10/Entrance-Remote-Medical-Clinic.jpg",
+  "2021/10/Fire-alarm-control-panel.jpg",
+  "2021/10/Remote-Medical-Clinic-Construction.jpg",
+  "2021/10/Remote-Medical-Emergency-Clinic-KEA-Nigeria.jpg",
+  "2021/10/Tripple-Redundancy-Power-Backup-System.jpg",
+  "2021/10/Truck-Transporting-Modular-Building-Unit.jpg",
+  "2022/01/Beechcraft.jpg",
+  "2022/01/Bell-412.jpg",
+  "2022/01/Caravan.jpg",
+  "2022/01/KEA-LOGO-White-Retina-01.png"
+ ],
+ "images": [
+  {
+   "file": "2014/06/baiji-iraq-oil-refinery.jpg",
+   "bytes": 194901,
+   "width": 3071,
+   "height": 1594,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "solution:oil-gas-and-mining"
+   ],
+   "used_on": [
+    "news.html",
+    "news/baiji-oil-refinery-extraction.html",
+    "solutions/oil-gas-and-mining.html"
+   ]
+  },
+  {
+   "file": "2015/02/News-Flying-For-Total.jpg",
+   "bytes": 236348,
+   "width": 2047,
+   "height": 1024,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "solution:oil-gas-and-mining"
+   ],
+   "used_on": [
+    "news.html",
+    "news/flying-for-total-cnooc-tullow.html",
+    "solutions/oil-gas-and-mining.html"
+   ]
+  },
+  {
+   "file": "2015/07/ground-breaking-animal-census.jpg",
+   "bytes": 186178,
+   "width": 1474,
+   "height": 765,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "solution:aerial-and-geophysical-survey"
+   ],
+   "used_on": [
+    "news.html",
+    "news/ground-breaking-animal-census.html",
+    "solutions/aerial-and-geophysical-survey.html"
+   ]
+  },
+  {
+   "file": "2016/02/News-Beechcraft-1.jpg",
+   "bytes": 204902,
+   "width": 4896,
+   "height": 2448,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2016/02/News-Beechcraft.jpg",
+   "bytes": 204902,
+   "width": 4896,
+   "height": 2448,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2016/02/News-Beechcraft2.jpg",
+   "bytes": 247392,
+   "width": 3071,
+   "height": 1535,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2016/02/News-Beechcraft3.jpg",
+   "bytes": 200644,
+   "width": 2047,
+   "height": 1365,
+   "webp": true,
+   "responsive": true,
+   "gallery": [],
+   "used_on": [
+    "news.html",
+    "news/beechcraft-1900d.html"
+   ]
+  },
+  {
+   "file": "2018/07/Charter-flights.jpg",
+   "bytes": 64272,
+   "width": 643,
+   "height": 445,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2018/07/Helicopter-Fixed-Wing-services.png",
+   "bytes": 142293,
+   "width": 645,
+   "height": 445,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2018/07/KEA-Logo.png",
+   "bytes": 3590,
+   "width": 185,
+   "height": 73,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": [
+    "404.html",
+    "about.html",
+    "careers.html",
+    "contact.html",
+    "fleet.html",
+    "index.html",
+    "news.html",
+    "news/200-tourists-uganda.html",
+    "news/africa-oil-week-2019.html",
+    "news/baiji-oil-refinery-extraction.html",
+    "news/beechcraft-1900d.html",
+    "news/covid-19-update.html",
+    "news/flying-for-total-cnooc-tullow.html",
+    "news/flyuganda-scheduled-flights.html",
+    "news/ground-breaking-animal-census.html",
+    "news/humanitarian-air-services-drc.html",
+    "news/medevac-training-simulation.html",
+    "news/multi-role-helicopter-contract.html",
+    "news/oil-and-gas-south-sudan.html",
+    "news/pau-national-content-conference.html",
+    "news/pibor-floods-relief.html",
+    "news/priority-air-ambulance.html",
+    "news/private-pilot-scholarship.html",
+    "news/remote-medical-clinic.html",
+    "news/total-bureau-veritas-audit.html",
+    "solutions/aerial-and-geophysical-survey.html",
+    "solutions/charter-flights.html",
+    "solutions/helicopter-and-fixed-wing.html",
+    "solutions/maintenance-and-hangarage.html",
+    "solutions/medical-division.html",
+    "solutions/oil-gas-and-mining.html",
+    "thank-you.html"
+   ]
+  },
+  {
+   "file": "2018/07/Kampala-Executive-Aviation-Logo@2.png",
+   "bytes": 6218,
+   "width": 530,
+   "height": 210,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2018/08/EMPIREJET-logo.png",
+   "bytes": 8510,
+   "width": 556,
+   "height": 54,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2018/08/aerial-geophysical-survey.jpg",
+   "bytes": 154233,
+   "width": 900,
+   "height": 450,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2018/08/airline-management.jpg",
+   "bytes": 61444,
+   "width": 900,
+   "height": 450,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2018/08/empirejet.jpg",
+   "bytes": 91558,
+   "width": 1280,
+   "height": 725,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2018/08/helicopter-and-fixed-wing-1.jpg",
+   "bytes": 136660,
+   "width": 900,
+   "height": 450,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2018/08/helicopter-charter-flights.jpg",
+   "bytes": 239623,
+   "width": 1920,
+   "height": 1080,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2018/08/helicopter-charter-flights2.jpg",
+   "bytes": 184963,
+   "width": 1920,
+   "height": 900,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2018/08/kea-charter-flights-1.jpg",
+   "bytes": 95497,
+   "width": 900,
+   "height": 450,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2018/08/kea-fleet-e1548240660487.jpg",
+   "bytes": 23413,
+   "width": 591,
+   "height": 269,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2018/08/leasing-and-financing-1.jpg",
+   "bytes": 71796,
+   "width": 900,
+   "height": 450,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2018/08/maintenance-hangarage.jpg",
+   "bytes": 85508,
+   "width": 900,
+   "height": 450,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "solution:maintenance-and-hangarage"
+   ],
+   "used_on": [
+    "index.html",
+    "solutions/maintenance-and-hangarage.html"
+   ]
+  },
+  {
+   "file": "2018/08/medical-evacuation-1.jpg",
+   "bytes": 113938,
+   "width": 900,
+   "height": 450,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2018/08/why-kea.jpg",
+   "bytes": 99724,
+   "width": 1100,
+   "height": 270,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2018/09/book-business-flight.jpg",
+   "bytes": 42355,
+   "width": 600,
+   "height": 400,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2018/09/book-charter-flight.jpg",
+   "bytes": 66362,
+   "width": 600,
+   "height": 400,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2018/09/book-vip-transport.jpg",
+   "bytes": 50075,
+   "width": 600,
+   "height": 400,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2018/09/charter-flights-top-bg.jpg",
+   "bytes": 103408,
+   "width": 1920,
+   "height": 1080,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2018/09/charter-flights-top-bg2.jpg",
+   "bytes": 89148,
+   "width": 1920,
+   "height": 1080,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2018/09/charter-flights-top-bg3.jpg",
+   "bytes": 76754,
+   "width": 1920,
+   "height": 825,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2018/11/Fly-uganda2.jpg",
+   "bytes": 182067,
+   "width": 3071,
+   "height": 1594,
+   "webp": true,
+   "responsive": true,
+   "gallery": [],
+   "used_on": [
+    "news.html",
+    "news/flyuganda-scheduled-flights.html"
+   ]
+  },
+  {
+   "file": "2019/01/1900-Maintenance.jpg",
+   "bytes": 82210,
+   "width": 900,
+   "height": 600,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "solution:maintenance-and-hangarage"
+   ],
+   "used_on": [
+    "solutions/maintenance-and-hangarage.html"
+   ]
+  },
+  {
+   "file": "2019/01/1900-Maintenance2.jpg",
+   "bytes": 85073,
+   "width": 900,
+   "height": 600,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "solution:maintenance-and-hangarage"
+   ],
+   "used_on": [
+    "solutions/maintenance-and-hangarage.html"
+   ]
+  },
+  {
+   "file": "2019/01/1900-Maintenance3.jpg",
+   "bytes": 84946,
+   "width": 900,
+   "height": 600,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "solution:maintenance-and-hangarage"
+   ],
+   "used_on": [
+    "solutions/maintenance-and-hangarage.html"
+   ]
+  },
+  {
+   "file": "2019/01/Aerial-Survey-KEA.jpg",
+   "bytes": 547589,
+   "width": 3071,
+   "height": 1535,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "solution:aerial-and-geophysical-survey"
+   ],
+   "used_on": [
+    "index.html",
+    "solutions/aerial-and-geophysical-survey.html"
+   ]
+  },
+  {
+   "file": "2019/01/Avionics-01.svg",
+   "bytes": 5845,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": [
+    "solutions/maintenance-and-hangarage.html"
+   ]
+  },
+  {
+   "file": "2019/01/Cargo-Charter.jpg",
+   "bytes": 225149,
+   "width": 1594,
+   "height": 886,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "solution:charter-flights"
+   ],
+   "used_on": [
+    "index.html",
+    "solutions/charter-flights.html"
+   ]
+  },
+  {
+   "file": "2019/01/External-Load-Work.jpg",
+   "bytes": 88269,
+   "width": 765,
+   "height": 539,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "solution:helicopter-and-fixed-wing"
+   ],
+   "used_on": [
+    "solutions/helicopter-and-fixed-wing.html"
+   ]
+  },
+  {
+   "file": "2019/01/Helicopter-Rear-Door-Open.jpg",
+   "bytes": 266834,
+   "width": 1920,
+   "height": 1441,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "solution:helicopter-and-fixed-wing",
+    "solution:maintenance-and-hangarage"
+   ],
+   "used_on": [
+    "solutions/helicopter-and-fixed-wing.html",
+    "solutions/maintenance-and-hangarage.html"
+   ]
+  },
+  {
+   "file": "2019/01/Medevac-KEA.jpg",
+   "bytes": 283636,
+   "width": 3071,
+   "height": 1535,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "solution:helicopter-and-fixed-wing",
+    "solution:medical-division"
+   ],
+   "used_on": [
+    "index.html",
+    "solutions/helicopter-and-fixed-wing.html",
+    "solutions/medical-division.html"
+   ]
+  },
+  {
+   "file": "2019/01/Oil-Gas-and-Mining.jpg",
+   "bytes": 85545,
+   "width": 1594,
+   "height": 1063,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "solution:oil-gas-and-mining"
+   ],
+   "used_on": [
+    "solutions/oil-gas-and-mining.html"
+   ]
+  },
+  {
+   "file": "2019/01/Passenger-and-Cargo-Transportation.jpg",
+   "bytes": 307530,
+   "width": 3189,
+   "height": 1772,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "solution:oil-gas-and-mining"
+   ],
+   "used_on": [
+    "solutions/oil-gas-and-mining.html"
+   ]
+  },
+  {
+   "file": "2019/01/Scheduled-01.svg",
+   "bytes": 10659,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": [
+    "solutions/maintenance-and-hangarage.html"
+   ]
+  },
+  {
+   "file": "2019/01/Sheet-Repairs-01.svg",
+   "bytes": 6000,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": [
+    "solutions/maintenance-and-hangarage.html"
+   ]
+  },
+  {
+   "file": "2019/01/TopBanner.jpg",
+   "bytes": 178551,
+   "width": 1920,
+   "height": 1080,
+   "webp": true,
+   "responsive": true,
+   "gallery": [],
+   "used_on": [
+    "contact.html",
+    "news.html",
+    "news/total-bureau-veritas-audit.html"
+   ]
+  },
+  {
+   "file": "2019/01/Unscheduled-01.svg",
+   "bytes": 5029,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": [
+    "solutions/maintenance-and-hangarage.html"
+   ]
+  },
+  {
+   "file": "2019/02/200-Tourists.jpg",
+   "bytes": 256717,
+   "width": 3070,
+   "height": 1594,
+   "webp": true,
+   "responsive": true,
+   "gallery": [],
+   "used_on": [
+    "news.html",
+    "news/200-tourists-uganda.html"
+   ]
+  },
+  {
+   "file": "2019/02/About-us-story-of-ambition.jpg",
+   "bytes": 103019,
+   "width": 2126,
+   "height": 1181,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/02/Air-Tours.jpg",
+   "bytes": 56428,
+   "width": 1890,
+   "height": 1063,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/02/Business-Flights.jpg",
+   "bytes": 98212,
+   "width": 1260,
+   "height": 709,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/02/Charter-Flights-KEA-Small-Tile.jpg",
+   "bytes": 170675,
+   "width": 2835,
+   "height": 1417,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/02/Dispatch-14.svg",
+   "bytes": 3659,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": [
+    "solutions/oil-gas-and-mining.html"
+   ]
+  },
+  {
+   "file": "2019/02/Fleet-B1900.jpg",
+   "bytes": 79379,
+   "width": 1181,
+   "height": 787,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "fleet:Beechcraft 1900D"
+   ],
+   "used_on": [
+    "fleet.html"
+   ]
+  },
+  {
+   "file": "2019/02/Fleet-B206.jpg",
+   "bytes": 131086,
+   "width": 1181,
+   "height": 787,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "fleet:Bell 206 Jet Ranger"
+   ],
+   "used_on": [
+    "fleet.html"
+   ]
+  },
+  {
+   "file": "2019/02/Fleet-B412.jpg",
+   "bytes": 91130,
+   "width": 1181,
+   "height": 787,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "fleet:Bell 412"
+   ],
+   "used_on": [
+    "fleet.html"
+   ]
+  },
+  {
+   "file": "2019/02/Fleet-Banner2.jpg",
+   "bytes": 217930,
+   "width": 4094,
+   "height": 2283,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/02/Fleet-C208B.jpg",
+   "bytes": 141169,
+   "width": 886,
+   "height": 591,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "fleet:Cessna Caravan C208B"
+   ],
+   "used_on": [
+    "fleet.html"
+   ]
+  },
+  {
+   "file": "2019/02/Fleet-C210.jpg",
+   "bytes": 122513,
+   "width": 1181,
+   "height": 787,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "fleet:Cessna 210"
+   ],
+   "used_on": [
+    "fleet.html"
+   ]
+  },
+  {
+   "file": "2019/02/Fleet-Diamond.jpg",
+   "bytes": 98052,
+   "width": 1181,
+   "height": 787,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "fleet:Diamond DA42 MPP Guardian"
+   ],
+   "used_on": [
+    "fleet.html"
+   ]
+  },
+  {
+   "file": "2019/02/Fleet-PC12.jpg",
+   "bytes": 122649,
+   "width": 1181,
+   "height": 787,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "fleet:Pilatus PC-12",
+    "solution:charter-flights"
+   ],
+   "used_on": [
+    "fleet.html",
+    "solutions/charter-flights.html"
+   ]
+  },
+  {
+   "file": "2019/02/Fleet.jpg",
+   "bytes": 280780,
+   "width": 4016,
+   "height": 1890,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/02/Fly-uganda.jpg",
+   "bytes": 285573,
+   "width": 3071,
+   "height": 1594,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/02/HomePage-Banner.jpg",
+   "bytes": 482224,
+   "width": 4094,
+   "height": 2126,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/02/KEA-BANNER-VIDEO3.mp4",
+   "bytes": 3022259,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/02/KEA-BANNER-VIDEO6.mp4",
+   "bytes": 3060940,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": [
+    "index.html"
+   ]
+  },
+  {
+   "file": "2019/02/KEA-Our-Approach.jpg",
+   "bytes": 157269,
+   "width": 690,
+   "height": 598,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/02/Medevac-13.svg",
+   "bytes": 2644,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": [
+    "solutions/oil-gas-and-mining.html"
+   ]
+  },
+  {
+   "file": "2019/02/Offshore-12.svg",
+   "bytes": 3713,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": [
+    "solutions/oil-gas-and-mining.html"
+   ]
+  },
+  {
+   "file": "2019/02/Our-People.jpg",
+   "bytes": 234889,
+   "width": 3189,
+   "height": 1772,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "about"
+   ],
+   "used_on": [
+    "about.html"
+   ]
+  },
+  {
+   "file": "2019/02/Special-Events.jpg",
+   "bytes": 82666,
+   "width": 945,
+   "height": 531,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/02/VIP-Flights.jpg",
+   "bytes": 78374,
+   "width": 1890,
+   "height": 1063,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/04/210_Interior.jpg",
+   "bytes": 93394,
+   "width": 1181,
+   "height": 787,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "fleet:Cessna 210"
+   ],
+   "used_on": [
+    "fleet.html"
+   ]
+  },
+  {
+   "file": "2019/04/Acquired-icons-KEA-01.svg",
+   "bytes": 1800,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/04/Air-ambulance-paramedics.jpg",
+   "bytes": 338214,
+   "width": 1920,
+   "height": 1080,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "solution:medical-division"
+   ],
+   "used_on": [
+    "solutions/medical-division.html"
+   ]
+  },
+  {
+   "file": "2019/04/Aircraft-02.svg",
+   "bytes": 2099,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": [
+    "solutions/charter-flights.html",
+    "solutions/helicopter-and-fixed-wing.html"
+   ]
+  },
+  {
+   "file": "2019/04/B1900.jpg",
+   "bytes": 81166,
+   "width": 1181,
+   "height": 787,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/04/B19002.jpg",
+   "bytes": 73241,
+   "width": 1181,
+   "height": 787,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/04/B1900_Cockpit.jpg",
+   "bytes": 75325,
+   "width": 1181,
+   "height": 787,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "fleet:Beechcraft 1900D"
+   ],
+   "used_on": [
+    "fleet.html"
+   ]
+  },
+  {
+   "file": "2019/04/B1900_Interior.jpg",
+   "bytes": 38432,
+   "width": 1181,
+   "height": 787,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "fleet:Beechcraft 1900D"
+   ],
+   "used_on": [
+    "fleet.html"
+   ]
+  },
+  {
+   "file": "2019/04/B1900_Interior2.jpg",
+   "bytes": 48967,
+   "width": 1181,
+   "height": 787,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "fleet:Beechcraft 1900D"
+   ],
+   "used_on": [
+    "fleet.html"
+   ]
+  },
+  {
+   "file": "2019/04/B412_Interior.jpg",
+   "bytes": 136233,
+   "width": 1181,
+   "height": 787,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "fleet:Bell 412"
+   ],
+   "used_on": [
+    "fleet.html"
+   ]
+  },
+  {
+   "file": "2019/04/B412_Medevac_Config.jpg",
+   "bytes": 98395,
+   "width": 945,
+   "height": 630,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "fleet:Bell 412"
+   ],
+   "used_on": [
+    "fleet.html"
+   ]
+  },
+  {
+   "file": "2019/04/C208B-Interior.jpg",
+   "bytes": 65478,
+   "width": 1181,
+   "height": 787,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "fleet:Cessna Caravan C208B"
+   ],
+   "used_on": [
+    "fleet.html"
+   ]
+  },
+  {
+   "file": "2019/04/C210-MLW2.jpg",
+   "bytes": 66735,
+   "width": 1181,
+   "height": 787,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "fleet:Cessna 210"
+   ],
+   "used_on": [
+    "fleet.html"
+   ]
+  },
+  {
+   "file": "2019/04/Caravan-1.jpg",
+   "bytes": 186401,
+   "width": 1920,
+   "height": 1080,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "solution:charter-flights"
+   ],
+   "used_on": [
+    "solutions/charter-flights.html"
+   ]
+  },
+  {
+   "file": "2019/04/DA42-Back.jpg",
+   "bytes": 52510,
+   "width": 1181,
+   "height": 787,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "fleet:Diamond DA42 MPP Guardian",
+    "solution:aerial-and-geophysical-survey"
+   ],
+   "used_on": [
+    "fleet.html",
+    "solutions/aerial-and-geophysical-survey.html"
+   ]
+  },
+  {
+   "file": "2019/04/DA42-Camera.jpg",
+   "bytes": 76382,
+   "width": 1181,
+   "height": 787,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "fleet:Diamond DA42 MPP Guardian",
+    "solution:aerial-and-geophysical-survey"
+   ],
+   "used_on": [
+    "fleet.html",
+    "solutions/aerial-and-geophysical-survey.html"
+   ]
+  },
+  {
+   "file": "2019/04/DA42-Cockpit.jpg",
+   "bytes": 87267,
+   "width": 1181,
+   "height": 787,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "fleet:Diamond DA42 MPP Guardian"
+   ],
+   "used_on": [
+    "fleet.html"
+   ]
+  },
+  {
+   "file": "2019/04/DA42-Interior.jpg",
+   "bytes": 49580,
+   "width": 1181,
+   "height": 787,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "fleet:Diamond DA42 MPP Guardian"
+   ],
+   "used_on": [
+    "fleet.html"
+   ]
+  },
+  {
+   "file": "2019/04/Day-and-night-05.svg",
+   "bytes": 2833,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/04/Drill-Rig-10.svg",
+   "bytes": 1711,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/04/Globe-International.svg",
+   "bytes": 2942,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/04/Have-Questions-About-Page.jpg",
+   "bytes": 173666,
+   "width": 2047,
+   "height": 1063,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/04/Helicopter-icons-KEA-01.svg",
+   "bytes": 1997,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/04/Helicopter-icons-KEA-02.svg",
+   "bytes": 3725,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/04/Helicopter-icons-KEA-03.svg",
+   "bytes": 1479,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/04/Incorporated-icons-KEA-01.svg",
+   "bytes": 1344,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/04/Incorporated-icons-KEA-02.svg",
+   "bytes": 1847,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/04/Integrated-07.svg",
+   "bytes": 15798,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/04/Life-Support-19.svg",
+   "bytes": 1027,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": [
+    "solutions/medical-division.html"
+   ]
+  },
+  {
+   "file": "2019/04/Location-pin-18.svg",
+   "bytes": 5544,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": [
+    "solutions/charter-flights.html"
+   ]
+  },
+  {
+   "file": "2019/04/Maintenance-Banner1.jpg",
+   "bytes": 515073,
+   "width": 3071,
+   "height": 1594,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/04/Medevac-KEA.jpg",
+   "bytes": 121184,
+   "width": 800,
+   "height": 533,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/04/Mining-08.svg",
+   "bytes": 5281,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/04/Oil-Rig-03.svg",
+   "bytes": 1916,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": [
+    "solutions/helicopter-and-fixed-wing.html"
+   ]
+  },
+  {
+   "file": "2019/04/PC12-Interior.jpg",
+   "bytes": 80803,
+   "width": 1181,
+   "height": 787,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "fleet:Pilatus PC-12"
+   ],
+   "used_on": [
+    "fleet.html"
+   ]
+  },
+  {
+   "file": "2019/04/Rescue-04.svg",
+   "bytes": 2742,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": [
+    "solutions/helicopter-and-fixed-wing.html",
+    "solutions/medical-division.html"
+   ]
+  },
+  {
+   "file": "2019/04/Rooftop-Construction.svg",
+   "bytes": 3562,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/04/Safety-and-Quality.jpg",
+   "bytes": 98439,
+   "width": 1417,
+   "height": 1701,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "about"
+   ],
+   "used_on": [
+    "about.html"
+   ]
+  },
+  {
+   "file": "2019/04/Scenery-16.svg",
+   "bytes": 7742,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": [
+    "solutions/charter-flights.html"
+   ]
+  },
+  {
+   "file": "2019/04/VIP-15.svg",
+   "bytes": 2112,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": [
+    "solutions/charter-flights.html"
+   ]
+  },
+  {
+   "file": "2019/04/Wind-Turbine-09.svg",
+   "bytes": 4295,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/04/Worker-20.svg",
+   "bytes": 2656,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": [
+    "solutions/medical-division.html"
+   ]
+  },
+  {
+   "file": "2019/04/adhoc-charters-kea-icon.svg",
+   "bytes": 2109,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/04/helicopter-Medical-01-01.svg",
+   "bytes": 1900,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": [
+    "solutions/helicopter-and-fixed-wing.html"
+   ]
+  },
+  {
+   "file": "2019/04/iraq-icon-01.svg",
+   "bytes": 2878,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/04/kea-shape-bottom.svg",
+   "bytes": 753,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/04/kea-shape-top.svg",
+   "bytes": 715,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/04/medevac-kea-icon.svg",
+   "bytes": 2511,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/04/oil-gas-petrolium-support.svg",
+   "bytes": 2194,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/04/pilatus-kea-icon.svg",
+   "bytes": 2031,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/08/KEA-Favicon.png",
+   "bytes": 6324,
+   "width": 512,
+   "height": 512,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/08/cropped-KEA-Favicon-270x270.png",
+   "bytes": 32653,
+   "width": 270,
+   "height": 270,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": [
+    "404.html",
+    "about.html",
+    "careers.html",
+    "contact.html",
+    "fleet.html",
+    "index.html",
+    "news.html",
+    "news/200-tourists-uganda.html",
+    "news/africa-oil-week-2019.html",
+    "news/baiji-oil-refinery-extraction.html",
+    "news/beechcraft-1900d.html",
+    "news/covid-19-update.html",
+    "news/flying-for-total-cnooc-tullow.html",
+    "news/flyuganda-scheduled-flights.html",
+    "news/ground-breaking-animal-census.html",
+    "news/humanitarian-air-services-drc.html",
+    "news/medevac-training-simulation.html",
+    "news/multi-role-helicopter-contract.html",
+    "news/oil-and-gas-south-sudan.html",
+    "news/pau-national-content-conference.html",
+    "news/pibor-floods-relief.html",
+    "news/priority-air-ambulance.html",
+    "news/private-pilot-scholarship.html",
+    "news/remote-medical-clinic.html",
+    "news/total-bureau-veritas-audit.html",
+    "solutions/aerial-and-geophysical-survey.html",
+    "solutions/charter-flights.html",
+    "solutions/helicopter-and-fixed-wing.html",
+    "solutions/maintenance-and-hangarage.html",
+    "solutions/medical-division.html",
+    "solutions/oil-gas-and-mining.html",
+    "thank-you.html"
+   ]
+  },
+  {
+   "file": "2019/08/cropped-KEA-Favicon.png",
+   "bytes": 32653,
+   "width": 270,
+   "height": 270,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/10/Bell412-Flying-Over-Flooded-Pibor.jpeg",
+   "bytes": 73705,
+   "width": 1024,
+   "height": 768,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/10/Bell412-Pibor-South-Sudan.jpeg",
+   "bytes": 285201,
+   "width": 1600,
+   "height": 1200,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/10/Bell412-Pibor-South-Sudan.jpg",
+   "bytes": 161998,
+   "width": 1920,
+   "height": 1080,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/10/Flooded-Pibor.jpg",
+   "bytes": 261374,
+   "width": 768,
+   "height": 543,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/10/Kea-Helicopter-in-Pibor.jpeg",
+   "bytes": 279517,
+   "width": 1600,
+   "height": 1200,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/10/Pibor-Banner.jpg",
+   "bytes": 262154,
+   "width": 1920,
+   "height": 1080,
+   "webp": true,
+   "responsive": true,
+   "gallery": [],
+   "used_on": [
+    "news.html",
+    "news/pibor-floods-relief.html"
+   ]
+  },
+  {
+   "file": "2019/10/Pibor-MailChimp-1.jpg",
+   "bytes": 103069,
+   "width": 800,
+   "height": 550,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/10/Post-PAA-01.jpg",
+   "bytes": 946032,
+   "width": 8000,
+   "height": 4500,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/10/Post-PAA-01.png",
+   "bytes": 946642,
+   "width": 8000,
+   "height": 4500,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/10/Post-PAA.jpg",
+   "bytes": 150002,
+   "width": 1920,
+   "height": 1080,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/10/Post-PAA2.jpg",
+   "bytes": 156972,
+   "width": 1920,
+   "height": 1080,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/10/Post-PAAcadmy2.jpg",
+   "bytes": 178999,
+   "width": 1920,
+   "height": 1080,
+   "webp": true,
+   "responsive": true,
+   "gallery": [],
+   "used_on": [
+    "news.html",
+    "news/private-pilot-scholarship.html"
+   ]
+  },
+  {
+   "file": "2019/10/Priority-Air-Ambulance.jpg",
+   "bytes": 155231,
+   "width": 1920,
+   "height": 1080,
+   "webp": true,
+   "responsive": true,
+   "gallery": [],
+   "used_on": [
+    "news.html",
+    "news/priority-air-ambulance.html"
+   ]
+  },
+  {
+   "file": "2019/10/WhatsApp-Image-2019-10-26-at-5.17.41-PM.jpeg",
+   "bytes": 285201,
+   "width": 1600,
+   "height": 1200,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/10/WhatsApp-Image-2019-10-26-at-5.17.55-PM.jpeg",
+   "bytes": 279517,
+   "width": 1600,
+   "height": 1200,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/10/WhatsApp-Image-2019-10-26-at-5.18.14-PM.jpeg",
+   "bytes": 110118,
+   "width": 1024,
+   "height": 768,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/10/WhatsApp-Image-2019-10-26-at-5.19.05-PM.jpeg",
+   "bytes": 263338,
+   "width": 1600,
+   "height": 1200,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/12/AOW-Banner-1.jpg",
+   "bytes": 111998,
+   "width": 1920,
+   "height": 1080,
+   "webp": true,
+   "responsive": true,
+   "gallery": [],
+   "used_on": [
+    "news.html",
+    "news/africa-oil-week-2019.html"
+   ]
+  },
+  {
+   "file": "2019/12/DPOC-Post.jpg",
+   "bytes": 52760,
+   "width": 800,
+   "height": 500,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/12/DPOC.png",
+   "bytes": 4050,
+   "width": 301,
+   "height": 140,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/12/Gerald-in-Plane.jpg",
+   "bytes": 70966,
+   "width": 800,
+   "height": 500,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "solution:medical-division"
+   ],
+   "used_on": [
+    "solutions/medical-division.html"
+   ]
+  },
+  {
+   "file": "2019/12/Grald-in-plan.jpg",
+   "bytes": 70966,
+   "width": 800,
+   "height": 500,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/12/Laughing-CityAmb.jpg",
+   "bytes": 107126,
+   "width": 800,
+   "height": 500,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "solution:medical-division"
+   ],
+   "used_on": [
+    "solutions/medical-division.html"
+   ]
+  },
+  {
+   "file": "2019/12/Loading-Stretcher-1.jpg",
+   "bytes": 117817,
+   "width": 800,
+   "height": 500,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "solution:medical-division"
+   ],
+   "used_on": [
+    "solutions/medical-division.html"
+   ]
+  },
+  {
+   "file": "2019/12/Loading-Stretcher.jpg",
+   "bytes": 117817,
+   "width": 800,
+   "height": 500,
+   "webp": true,
+   "responsive": true,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/12/Medevac-Caravan.jpg",
+   "bytes": 156541,
+   "width": 800,
+   "height": 543,
+   "webp": true,
+   "responsive": true,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/12/Medevac-Crews-Caravan-Banner.jpg",
+   "bytes": 610221,
+   "width": 1920,
+   "height": 1080,
+   "webp": true,
+   "responsive": true,
+   "gallery": [],
+   "used_on": [
+    "careers.html",
+    "news.html",
+    "news/medevac-training-simulation.html",
+    "solutions/medical-division.html"
+   ]
+  },
+  {
+   "file": "2019/12/Medevac-Crews-Caravan.jpg",
+   "bytes": 593402,
+   "width": 1920,
+   "height": 1080,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "solution:medical-division"
+   ],
+   "used_on": [
+    "solutions/medical-division.html"
+   ]
+  },
+  {
+   "file": "2019/12/Medevac-Training-Caravan-01.jpg",
+   "bytes": 187370,
+   "width": 800,
+   "height": 543,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2019/12/Oil-and-Gas-DAR-Post.jpg",
+   "bytes": 179136,
+   "width": 1920,
+   "height": 1080,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "solution:oil-gas-and-mining"
+   ],
+   "used_on": [
+    "news.html",
+    "news/oil-and-gas-south-sudan.html",
+    "solutions/oil-gas-and-mining.html"
+   ]
+  },
+  {
+   "file": "2020/03/Carousel-1.jpg",
+   "bytes": 629147,
+   "width": 2362,
+   "height": 1574,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "about"
+   ],
+   "used_on": [
+    "about.html"
+   ]
+  },
+  {
+   "file": "2020/03/Carousel-2.jpg",
+   "bytes": 348995,
+   "width": 2362,
+   "height": 1636,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "about"
+   ],
+   "used_on": [
+    "about.html"
+   ]
+  },
+  {
+   "file": "2020/03/Carousel-3.jpg",
+   "bytes": 330246,
+   "width": 2048,
+   "height": 1401,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "about"
+   ],
+   "used_on": [
+    "about.html"
+   ]
+  },
+  {
+   "file": "2020/03/Carousel-4-scaled.jpg",
+   "bytes": 469484,
+   "width": 1920,
+   "height": 2560,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2020/03/Carousel-4.jpg",
+   "bytes": 469484,
+   "width": 1920,
+   "height": 2560,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2020/03/Carousel-5.jpg",
+   "bytes": 206272,
+   "width": 2362,
+   "height": 1772,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2020/03/Carousel-6.jpg",
+   "bytes": 183434,
+   "width": 1575,
+   "height": 1050,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2020/03/Carousel-7.jpg",
+   "bytes": 172870,
+   "width": 1575,
+   "height": 1050,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2020/03/Chad-News-Banner-02-scaled.jpg",
+   "bytes": 385489,
+   "width": 2560,
+   "height": 1450,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2020/03/Chad-News-Banner-02.jpg",
+   "bytes": 385489,
+   "width": 2560,
+   "height": 1450,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2020/03/Chad-News-Banner-Blue-02-scaled.jpg",
+   "bytes": 381222,
+   "width": 2560,
+   "height": 1450,
+   "webp": true,
+   "responsive": true,
+   "gallery": [],
+   "used_on": [
+    "news.html",
+    "news/multi-role-helicopter-contract.html"
+   ]
+  },
+  {
+   "file": "2020/03/Chad-News-Banner-Blue-02.jpg",
+   "bytes": 381222,
+   "width": 2560,
+   "height": 1450,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2020/03/Coronavirus-COVID-19-AP_GB.jpg",
+   "bytes": 402708,
+   "width": 1280,
+   "height": 720,
+   "webp": true,
+   "responsive": true,
+   "gallery": [],
+   "used_on": [
+    "index.html",
+    "news.html",
+    "news/covid-19-update.html"
+   ]
+  },
+  {
+   "file": "2020/03/Covid-KEA-Banner.jpg",
+   "bytes": 329675,
+   "width": 1920,
+   "height": 1080,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2020/03/Covid-KEA-Banner2-scaled.jpg",
+   "bytes": 363672,
+   "width": 2560,
+   "height": 1529,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2020/03/Covid-KEA-Banner5-scaled.jpg",
+   "bytes": 338820,
+   "width": 2560,
+   "height": 1397,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2020/03/Fleet-KEA-1.jpg",
+   "bytes": 356574,
+   "width": 1920,
+   "height": 1080,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2020/03/Fleet-KEA.jpg",
+   "bytes": 385472,
+   "width": 1920,
+   "height": 1080,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2020/03/Helicopter-Services-In-Uganda-KEA.jpg",
+   "bytes": 335827,
+   "width": 1920,
+   "height": 1079,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "solution:charter-flights"
+   ],
+   "used_on": [
+    "404.html",
+    "about.html",
+    "careers.html",
+    "contact.html",
+    "fleet.html",
+    "index.html",
+    "news.html",
+    "news/200-tourists-uganda.html",
+    "news/africa-oil-week-2019.html",
+    "news/baiji-oil-refinery-extraction.html",
+    "news/beechcraft-1900d.html",
+    "news/covid-19-update.html",
+    "news/flying-for-total-cnooc-tullow.html",
+    "news/flyuganda-scheduled-flights.html",
+    "news/ground-breaking-animal-census.html",
+    "news/humanitarian-air-services-drc.html",
+    "news/medevac-training-simulation.html",
+    "news/multi-role-helicopter-contract.html",
+    "news/oil-and-gas-south-sudan.html",
+    "news/pau-national-content-conference.html",
+    "news/pibor-floods-relief.html",
+    "news/priority-air-ambulance.html",
+    "news/private-pilot-scholarship.html",
+    "news/remote-medical-clinic.html",
+    "news/total-bureau-veritas-audit.html",
+    "solutions/aerial-and-geophysical-survey.html",
+    "solutions/charter-flights.html",
+    "solutions/helicopter-and-fixed-wing.html",
+    "solutions/maintenance-and-hangarage.html",
+    "solutions/medical-division.html",
+    "solutions/oil-gas-and-mining.html",
+    "thank-you.html"
+   ]
+  },
+  {
+   "file": "2020/03/Medical-Evacuation-KEA-Uganda.jpg",
+   "bytes": 391487,
+   "width": 1920,
+   "height": 1080,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2020/03/NCC-PAU-2.jpg",
+   "bytes": 680774,
+   "width": 1920,
+   "height": 1080,
+   "webp": true,
+   "responsive": true,
+   "gallery": [],
+   "used_on": [
+    "news.html",
+    "news/pau-national-content-conference.html"
+   ]
+  },
+  {
+   "file": "2020/03/NCC-PAU.jpg",
+   "bytes": 403009,
+   "width": 1920,
+   "height": 1080,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2020/03/Video-Cover.jpg",
+   "bytes": 186378,
+   "width": 800,
+   "height": 600,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2020/04/KEA-APPROACH-BANNER-20.jpg",
+   "bytes": 298102,
+   "width": 1287,
+   "height": 1080,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2020/04/KEA-Safety-Policy2020-Screen.pdf",
+   "bytes": 697621,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": [
+    "about.html"
+   ]
+  },
+  {
+   "file": "2020/04/KEA-Solutions-BANNER-20.jpg",
+   "bytes": 334724,
+   "width": 1920,
+   "height": 1080,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2020/06/KEA-Landing-Page-Banner.jpg",
+   "bytes": 466262,
+   "width": 1920,
+   "height": 1080,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2021/02/KEG-Banner-Web.jpg",
+   "bytes": 204172,
+   "width": 1920,
+   "height": 1080,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2021/02/Mi8-Chad-Banner-Web.jpg",
+   "bytes": 219531,
+   "width": 1920,
+   "height": 1050,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2021/03/Banner-Medical-Division-KEA.jpg",
+   "bytes": 202084,
+   "width": 1920,
+   "height": 1080,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2021/03/IMG_3988.jpg",
+   "bytes": 137685,
+   "width": 640,
+   "height": 480,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2021/03/IMG_3992-1.jpg",
+   "bytes": 83239,
+   "width": 640,
+   "height": 480,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2021/03/Kalemie-Banner.jpg",
+   "bytes": 201956,
+   "width": 1008,
+   "height": 477,
+   "webp": true,
+   "responsive": true,
+   "gallery": [],
+   "used_on": [
+    "index.html",
+    "news.html",
+    "news/humanitarian-air-services-drc.html"
+   ]
+  },
+  {
+   "file": "2021/03/PHOTO-2021-02-23-13-56-15.jpg",
+   "bytes": 109519,
+   "width": 1008,
+   "height": 477,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "solution:helicopter-and-fixed-wing"
+   ],
+   "used_on": [
+    "solutions/helicopter-and-fixed-wing.html"
+   ]
+  },
+  {
+   "file": "2021/03/PHOTO-2021-02-23-13-56-26.jpg",
+   "bytes": 55036,
+   "width": 1008,
+   "height": 477,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2021/03/PHOTO-2021-02-23-13-56-29.jpg",
+   "bytes": 95211,
+   "width": 1008,
+   "height": 477,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2021/03/PHOTO-2021-02-23-13-56-37-1.jpg",
+   "bytes": 82116,
+   "width": 1008,
+   "height": 477,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2021/03/PHOTO-2021-02-23-13-56-37.jpg",
+   "bytes": 82116,
+   "width": 1008,
+   "height": 477,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2021/03/PHOTO-2021-02-23-13-56-41.jpg",
+   "bytes": 43213,
+   "width": 912,
+   "height": 684,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2021/03/PHOTO-2021-02-23-13-56-42-1.jpg",
+   "bytes": 88491,
+   "width": 1024,
+   "height": 768,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2021/08/B412-Flying-with-Lake-and-Rocky-Scenery.jpg",
+   "bytes": 184238,
+   "width": 1920,
+   "height": 1080,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "solution:helicopter-and-fixed-wing"
+   ],
+   "used_on": [
+    "solutions/helicopter-and-fixed-wing.html"
+   ]
+  },
+  {
+   "file": "2021/08/Caravan-in-Kidepo.jpg",
+   "bytes": 194885,
+   "width": 1920,
+   "height": 1080,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "solution:charter-flights"
+   ],
+   "used_on": [
+    "solutions/charter-flights.html"
+   ]
+  },
+  {
+   "file": "2021/08/Cockpit-Pilots.jpg",
+   "bytes": 106013,
+   "width": 800,
+   "height": 533,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2021/08/Kajjansi_KEA.jpg",
+   "bytes": 302815,
+   "width": 1920,
+   "height": 1080,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "solution:aerial-and-geophysical-survey",
+    "about"
+   ],
+   "used_on": [
+    "about.html",
+    "solutions/aerial-and-geophysical-survey.html"
+   ]
+  },
+  {
+   "file": "2021/08/Mi8-Helicopter-Kajjansi-KEA-1.jpg",
+   "bytes": 100717,
+   "width": 1920,
+   "height": 1080,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "solution:helicopter-and-fixed-wing",
+    "solution:oil-gas-and-mining"
+   ],
+   "used_on": [
+    "fleet.html",
+    "index.html",
+    "solutions/helicopter-and-fixed-wing.html",
+    "solutions/oil-gas-and-mining.html"
+   ]
+  },
+  {
+   "file": "2021/08/Pilots-in-B412-Cockpit.jpg",
+   "bytes": 170826,
+   "width": 800,
+   "height": 600,
+   "webp": true,
+   "responsive": true,
+   "gallery": [
+    "about"
+   ],
+   "used_on": [
+    "about.html"
+   ]
+  },
+  {
+   "file": "2021/10/Construction.jpg",
+   "bytes": 156800,
+   "width": 800,
+   "height": 600,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2021/10/Crane-Lifting-Modular-Building.jpg",
+   "bytes": 60047,
+   "width": 800,
+   "height": 600,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2021/10/Emergency-Team-Outside-Remote-Clinic.jpg",
+   "bytes": 100961,
+   "width": 800,
+   "height": 600,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2021/10/Entrance-Remote-Medical-Clinic.jpg",
+   "bytes": 48232,
+   "width": 800,
+   "height": 600,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2021/10/Fire-alarm-control-panel.jpg",
+   "bytes": 34942,
+   "width": 800,
+   "height": 600,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2021/10/Remote-Medical-Clinic-Construction.jpg",
+   "bytes": 107392,
+   "width": 800,
+   "height": 600,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2021/10/Remote-Medical-Clinic-KEA-1.jpg",
+   "bytes": 295452,
+   "width": 1920,
+   "height": 1080,
+   "webp": true,
+   "responsive": true,
+   "gallery": [],
+   "used_on": [
+    "index.html",
+    "news.html",
+    "news/remote-medical-clinic.html"
+   ]
+  },
+  {
+   "file": "2021/10/Remote-Medical-Emergency-Clinic-KEA-Nigeria.jpg",
+   "bytes": 126713,
+   "width": 800,
+   "height": 600,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2021/10/Tripple-Redundancy-Power-Backup-System.jpg",
+   "bytes": 95805,
+   "width": 800,
+   "height": 600,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2021/10/Truck-Transporting-Modular-Building-Unit.jpg",
+   "bytes": 93838,
+   "width": 800,
+   "height": 600,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2022/01/Beechcraft.jpg",
+   "bytes": 56001,
+   "width": 600,
+   "height": 400,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2022/01/Bell-412.jpg",
+   "bytes": 221894,
+   "width": 600,
+   "height": 840,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2022/01/Caravan.jpg",
+   "bytes": 109422,
+   "width": 600,
+   "height": 784,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2022/01/KEA-LOGO-White-Retina-01.png",
+   "bytes": 71696,
+   "width": 2084,
+   "height": 833,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": []
+  },
+  {
+   "file": "2022/01/KEA-LOGO-White-Screen-01.png",
+   "bytes": 22360,
+   "width": 772,
+   "height": 319,
+   "webp": false,
+   "responsive": false,
+   "gallery": [],
+   "used_on": [
+    "404.html",
+    "about.html",
+    "careers.html",
+    "contact.html",
+    "fleet.html",
+    "index.html",
+    "news.html",
+    "news/200-tourists-uganda.html",
+    "news/africa-oil-week-2019.html",
+    "news/baiji-oil-refinery-extraction.html",
+    "news/beechcraft-1900d.html",
+    "news/covid-19-update.html",
+    "news/flying-for-total-cnooc-tullow.html",
+    "news/flyuganda-scheduled-flights.html",
+    "news/ground-breaking-animal-census.html",
+    "news/humanitarian-air-services-drc.html",
+    "news/medevac-training-simulation.html",
+    "news/multi-role-helicopter-contract.html",
+    "news/oil-and-gas-south-sudan.html",
+    "news/pau-national-content-conference.html",
+    "news/pibor-floods-relief.html",
+    "news/priority-air-ambulance.html",
+    "news/private-pilot-scholarship.html",
+    "news/remote-medical-clinic.html",
+    "news/total-bureau-veritas-audit.html",
+    "solutions/aerial-and-geophysical-survey.html",
+    "solutions/charter-flights.html",
+    "solutions/helicopter-and-fixed-wing.html",
+    "solutions/maintenance-and-hangarage.html",
+    "solutions/medical-division.html",
+    "solutions/oil-gas-and-mining.html",
+    "thank-you.html"
+   ]
+  }
+ ]
+}
