@@ -10,7 +10,7 @@
 <link rel="icon" href="/assets/img/2019/08/cropped-KEA-Favicon-270x270.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","name":"Kampala Executive Aviation","alternateName":"KEA","url":"https://flykea-site-z8af.vercel.app/","logo":"https://flykea-site-z8af.vercel.app/assets/img/2018/07/KEA-Logo.png","email":"reservations@flykea.com","telephone":"+256776333114","address":{"@type":"PostalAddress","streetAddress":"Gate 1, Kajjansi Airstrip","addressLocality":"Kajjansi","addressCountry":"UG"},"areaServed":["Uganda","Nigeria","DR Congo","Niger","Chad","Kenya","South Sudan"],"sameAs":["https://www.facebook.com/KampalaExecutiveAviation/","https://www.linkedin.com/company/18443655/","https://twitter.com/fly_kea","https://www.instagram.com/kampalaexecutiveaviation/"]},{"@type":"WebSite","name":"Kampala Executive Aviation","url":"https://flykea-site-z8af.vercel.app/"}]}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Emergency Aviation Services in East Africa","description":"How emergency aviation works in East Africa — medevac, search & rescue and disaster response, and how to plan cover. Call KEA +256 776 333 114.","image":"https://flykea-site-z8af.vercel.app/assets/img/2019/01/Medevac-KEA.jpg","datePublished":"2025-12-15","url":"https://flykea-site-z8af.vercel.app/blog/emergency-aviation-east-africa/","author":{"@type":"Organization","name":"Kampala Executive Aviation"},"publisher":{"@type":"Organization","name":"Kampala Executive Aviation","logo":{"@type":"ImageObject","url":"https://flykea-site-z8af.vercel.app/assets/img/2018/07/KEA-Logo.png"}}}
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","name":"Kampala Executive Aviation","alternateName":"KEA","url":"https://flykea-site-z8af.vercel.app/","logo":"https://flykea-site-z8af.vercel.app/assets/img/2018/07/KEA-Logo.png","email":"reservations@flykea.com","telephone":"+256776333114","address":{"@type":"PostalAddress","streetAddress":"Gate 1, Kajjansi Airfield","addressLocality":"Kajjansi","addressCountry":"UG"},"areaServed":["Uganda","Nigeria","DR Congo","Niger","Chad","Kenya","South Sudan"],"sameAs":["https://www.facebook.com/KampalaExecutiveAviation/","https://www.linkedin.com/company/18443655/","https://twitter.com/fly_kea","https://www.instagram.com/kampalaexecutiveaviation/"]},{"@type":"WebSite","name":"Kampala Executive Aviation","url":"https://flykea-site-z8af.vercel.app/"}]}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Emergency Aviation Services in East Africa","description":"How emergency aviation works in East Africa — medevac, search & rescue and disaster response, and how to plan cover. Call KEA +256 776 333 114.","image":"https://flykea-site-z8af.vercel.app/assets/img/2019/01/Medevac-KEA.jpg","datePublished":"2025-12-15","url":"https://flykea-site-z8af.vercel.app/blog/emergency-aviation-east-africa/","author":{"@type":"Organization","name":"Kampala Executive Aviation"},"publisher":{"@type":"Organization","name":"Kampala Executive Aviation","logo":{"@type":"ImageObject","url":"https://flykea-site-z8af.vercel.app/assets/img/2018/07/KEA-Logo.png"}}}
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://flykea-site-z8af.vercel.app/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://flykea-site-z8af.vercel.app/blog/"},{"@type":"ListItem","position":3,"name":"Emergency Aviation Services in East Africa","item":"https://flykea-site-z8af.vercel.app/blog/emergency-aviation-east-africa/"}]}</script>
 <!-- GA4: replace G-XXXXXXX with KEA's Measurement ID -->
 <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
@@ -425,12 +425,37 @@ main:focus{outline:none}
 .qc-result .qbtn{flex:0 0 auto;min-width:0;padding:.6rem 1rem}
 @media(max-width:860px){.qmap{grid-template-columns:1fr}.qmap-mapwrap{min-height:380px}
  .qc-row{grid-template-columns:1fr 1fr;}.qc-row .q-go{grid-column:1/-1}}
+
+/* ===== quote tool v2: override, day-stop, intl, modal ===== */
+.q-override{width:100%;border:1px solid var(--line-dark);border-radius:6px;padding:.5rem .6rem;font-family:var(--display);font-weight:600;font-size:1.05rem;color:var(--ink);margin-top:.1rem;cursor:pointer}
+.qday{display:inline-flex;align-items:center;gap:.4rem;font-size:.78rem;color:var(--slate);margin-top:.45rem;cursor:pointer}
+.q-intl .qprice,.q-priceblock .qprice{font-family:var(--mono);font-size:.95rem;font-weight:600;color:var(--ink)}
+.q-intl .qprice{color:var(--green-ink)}
+.qmodal{position:fixed;inset:0;z-index:1000;background:rgba(8,16,10,.62);display:flex;align-items:center;justify-content:center;padding:18px;overflow:auto}
+.qmodal[hidden]{display:none}
+.qmodal-box{position:relative;width:100%;max-width:1120px;max-height:calc(100vh - 36px);overflow:auto;background:#fff;border-radius:14px;box-shadow:0 40px 100px rgba(0,0,0,.5)}
+.qmodal-box .qmap-sec{padding:0}
+.qmodal-box .qmap{border:0;border-radius:14px;box-shadow:none}
+.qmodal .qmap-mapwrap{min-height:420px}
+.qmodal-x{position:absolute;top:10px;right:14px;z-index:6;background:rgba(255,255,255,.92);border:1px solid var(--line-dark);width:36px;height:36px;border-radius:50%;font-size:1.3rem;line-height:1;cursor:pointer}
+@media(max-width:860px){.qmodal .qmap-mapwrap{min-height:300px}}
+
+/* ===== deploy 2: hero subhead + capability grid ===== */
+.hero-sub{font-family:var(--mono);font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;color:var(--lime);margin:.1rem 0 1rem}
+.cap5 .cap-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1.6rem;margin-top:2.4rem;text-align:left}
+.cap-col h3{font-size:1.02rem;margin-bottom:.7rem;padding-bottom:.5rem;border-bottom:2px solid var(--lime)}
+.cap-col ul{list-style:none;padding:0;margin:0}
+.cap-col li{margin:.42rem 0}
+.cap-col li a{color:var(--ink);text-decoration:none;font-size:.9rem;border-bottom:1px solid transparent;transition:.15s}
+.cap-col li a:hover{color:var(--green-ink);border-bottom-color:var(--lime)}
+@media(max-width:980px){.cap5 .cap-grid{grid-template-columns:repeat(2,1fr);gap:1.4rem 2rem}}
+@media(max-width:560px){.cap5 .cap-grid{grid-template-columns:1fr}}
 </style></head><body>
 <a class="skip" href="#main">Skip to content</a>
 <header id="hdr"><div class="wrap nav">
 <a href="/index.html" class="nav-logo"><img src="/assets/img/2018/07/KEA-Logo.png" alt="KEA — Kampala Executive Aviation"></a>
 <nav aria-label="Primary"><ul class="nav-links">
-<li class="has-sub"><a href="/services/">Services ▾</a><div class="submenu submenu-wide"><div class="grp">Charter</div><a href="/charter-flights-kampala/">Charter Flights Kampala</a><a href="/helicopter-charter-kampala/">Helicopter Charter Kampala</a><a href="/services/vip-corporate-charter/">VIP &amp; Corporate Charter</a><a href="/services/private-jet-charter/">Private Jet Charter</a><a href="/services/cargo-charter/">Cargo Charter</a><div class="grp">Industrial &amp; B2B</div><a href="/services/oil-gas-aviation/">Oil &amp; Gas Aviation</a><a href="/services/ngo-humanitarian-charter/">NGO &amp; Humanitarian</a><a href="/services/remote-site-operations/">Remote Site Operations</a><a href="/services/pipeline-patrol/">Pipeline Patrol</a><div class="grp">Emergency &amp; Specialist</div><a href="/services/medical-evacuation/">Medical Evacuation</a><a href="/services/search-rescue-helicopter/">Search &amp; Rescue</a><a href="/services/disaster-response/">Disaster Response</a><a href="/services/aerial-survey-geophysical/">Aerial Survey</a><a href="/services/external-load-helicopter/">External Load</a><div class="grp">MRO</div><a href="/services/aircraft-maintenance-mro/">Aircraft Maintenance &amp; MRO</a><a class="all" href="/services/">All services →</a></div></li>
+<li class="has-sub"><a href="/services/">Services ▾</a><div class="submenu submenu-wide"><div class="grp">Charter</div><a href="/charter-flights-kampala/">Charter Flights</a><a href="/helicopter-charter-kampala/">Helicopter Charter</a><a href="/services/vip-corporate-charter/">VIP &amp; Corporate Charter</a><a href="/services/private-jet-charter/">Private Jet Charter</a><a href="/services/cargo-charter/">Cargo Charter</a><div class="grp">Industrial &amp; B2B</div><a href="/services/oil-gas-aviation/">Oil &amp; Gas Aviation</a><a href="/services/ngo-humanitarian-charter/">NGO &amp; Humanitarian</a><a href="/services/remote-site-operations/">Remote Site Operations</a><a href="/services/pipeline-patrol/">Pipeline Patrol</a><div class="grp">Emergency &amp; Specialist</div><a href="/services/medical-evacuation/">Medical Evacuation</a><a href="/services/search-rescue-helicopter/">Search &amp; Rescue</a><a href="/services/disaster-response/">Disaster Response</a><a href="/services/aerial-survey-geophysical/">Aerial Survey</a><a href="/services/external-load-helicopter/">External Load</a><div class="grp">MRO</div><a href="/services/aircraft-maintenance-mro/">Aircraft Maintenance &amp; MRO</a><a class="all" href="/services/">All services →</a></div></li>
 <li><a href="/services/aircraft-leasing/">Leasing</a></li>
 <li><a href="/services/uav-drone-operations/">UAV</a></li>
 <li><a href="/fleet.html">Fleet</a></li>
@@ -456,7 +481,7 @@ main:focus{outline:none}
 <div class="foot-top">
 <div class="foot-col">
 <div class="foot-logo"><img src="/assets/img/2022/01/KEA-LOGO-White-Screen-01.png" alt="KEA"></div>
-<p>Gate 1, Kajjansi Airstrip, Uganda<br>Tel: +256 776 333 114 / +256 772 712 554<br>E-mail: reservations@flykea.com</p>
+<p>Gate 1, Kajjansi Airfield, Uganda<br>Tel: +256 776 333 114 / +256 772 712 554<br>E-mail: reservations@flykea.com</p>
 <div class="socials">
 <a href="https://www.facebook.com/KampalaExecutiveAviation/" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 0-11.5 9.9v-7H7.9V12h2.6V9.8c0-2.6 1.5-4 3.9-4 1.1 0 2.3.2 2.3.2v2.5h-1.3c-1.3 0-1.7.8-1.7 1.6V12h2.9l-.5 2.9h-2.4v7A10 10 0 0 0 22 12z"/></svg></a>
 <a href="https://www.linkedin.com/company/18443655/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14zM8.3 18.3V10H5.7v8.3h2.6zM7 8.8a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm11.3 9.5v-4.5c0-2.4-1.3-3.5-3-3.5a2.6 2.6 0 0 0-2.3 1.3V10h-2.6v8.3h2.6v-4.4c0-1.2.2-2.3 1.7-2.3s1.5 1.3 1.5 2.4v4.3h2.4z"/></svg></a>
@@ -476,6 +501,28 @@ main:focus{outline:none}
 <button class="lb-next" aria-label="Next image">›</button>
 <div class="lb-cap" aria-live="polite"></div>
 </div>
+<div class="qmodal" id="qmodal" hidden><div class="qmodal-box"><button class="qmodal-x" aria-label="Close quote">×</button><section class="qmap-sec"><div class="wrap"><div class="qmap" data-variant="full" data-source="Quote modal">
+<div class="qmap-panel"><span class="eyebrow">Plan your charter</span><h2>Get an instant estimate</h2>
+<div class="qfld"><label>From</label><input class="q-from" list="qports" placeholder="Origin airfield / town" value="Kajjansi (Kampala)" autocomplete="off"></div>
+<div class="qfld"><label>To</label><input class="q-to" list="qports" placeholder="Destination" autocomplete="off"><button class="q-swap" title="Swap" aria-label="Swap origin and destination" type="button">⇅</button></div>
+<div class="qfld"><label>Landing coordinates — optional (lat, lng) for helicopter / off-airfield</label><input class="q-coord" placeholder="e.g. 1.5740, 30.2200" autocomplete="off"></div>
+<div class="qtwo"><div class="qfld"><label>Date</label><input class="q-date" type="date"></div>
+<div class="qfld"><label>Passengers</label><input class="q-pax" type="number" min="1" max="19" value="4"></div></div>
+<div class="qfld"><label>Mission</label><select class="q-mission"><option value="pax">Passengers</option><option value="cargo">Cargo</option><option value="medevac">Medical evacuation</option><option value="site">Remote site access (helicopter)</option></select></div>
+<div class="qtwo"><div class="qfld"><label>Email</label><input class="q-email" type="email" placeholder="you@company.com"></div>
+<div class="qfld"><label>Phone</label><input class="q-phone" type="tel" placeholder="+256…"></div></div>
+<button class="q-go" type="button">Calculate &amp; show route</button></div>
+<div class="qmap-mapwrap"><svg class="qmap-map" viewBox="0 0 1000 625" preserveAspectRatio="xMidYMid slice" aria-label="Charter route map"></svg>
+<div class="qmap-result"><div class="qr-top">
+<div class="qmetric"><div class="qv q-dist">—</div><div class="qk">Distance</div></div>
+<div class="qmetric"><div class="qv q-time">—</div><div class="qk">Est. flight time</div></div>
+<div class="qreco"><div class="qk2">Aircraft (change to upgrade)</div><select class="q-override"></select><div class="qalt q-acnote"></div></div>
+<div class="q-priceblock" style="text-align:right;display:none"><div class="qprice">Indicative rack <span class="q-price">—</span></div>
+<label class="qday"><input type="checkbox" class="q-daystop"> + same-day wait (<span class="q-daystopamt">$800</span>)</label><div class="qdisc">±10% · aircraft returns to base · exact rack on request</div></div>
+<div class="q-intl" style="text-align:right;display:none"><div class="qprice">International route</div><div class="qdisc">We’ll send a firm quote fast — add your details &amp; send.</div></div>
+</div><div class="qr-cta"><a class="qbtn qbtn-wa q-wa" target="_blank" rel="noopener">Send on WhatsApp</a><a class="qbtn qbtn-q q-rq" href="#quote-form">Request exact quote →</a></div></div></div>
+</div></div></section></div></div><datalist id="qports"></datalist>
+<script src="/assets/quote-map.js" defer></script>
 <a class="sticky-quote" href="/quote/">⚡ Get a Quote</a>
 <a class="wa-float" href="https://wa.me/256776333114" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 .4C7.4.4.5 7.3.5 15.9c0 2.8.7 5.4 2 7.8L.4 31.6l8.1-2.1c2.3 1.2 4.8 1.9 7.5 1.9 8.6 0 15.5-6.9 15.5-15.5S24.6.4 16 .4zm0 28.3c-2.4 0-4.6-.6-6.5-1.8l-.5-.3-4.8 1.3 1.3-4.7-.3-.5c-1.3-2-2-4.4-2-6.9C3 8.9 8.8 3.1 16 3.1S29 8.9 29 16 23.2 28.7 16 28.7zm8.2-9.6c-.4-.2-2.6-1.3-3-1.4-.4-.2-.7-.2-1 .2s-1.1 1.4-1.4 1.7c-.3.3-.5.3-.9.1-2.4-1.2-4-2.1-5.6-4.8-.4-.7.4-.7 1.2-2.2.1-.3.1-.5 0-.7s-1-2.4-1.4-3.3c-.4-.9-.7-.7-1-.8h-.8c-.3 0-.7.1-1.1.5C7.5 9.3 6.7 10.4 6.7 12s1.2 3.5 1.4 3.8c.2.3 2.4 3.7 5.9 5.2 2.2.9 3 1 4.1.9.7-.1 2.6-1 2.9-2 .4-1 .4-1.8.3-2-.1-.2-.4-.3-.8-.5z"/></svg></a>
 <script>(function(){
@@ -485,7 +532,7 @@ main:focus{outline:none}
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.12});
   document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
   function fmt(n){return n.toLocaleString('en-US');}
-  function animate(el){var t=+el.dataset.target,sfx=el.dataset.suffix||'',d=1600,t0=performance.now();function tick(now){var p=Math.min((now-t0)/d,1),e=1-Math.pow(1-p,3);el.innerHTML=fmt(Math.round(t*e))+(sfx?'<span>'+sfx+'</span>':'');if(p<1)requestAnimationFrame(tick);}requestAnimationFrame(tick);}
+  function animate(el){var t;if(el.dataset.base){var per=+el.dataset.per||0,st=el.dataset.start?new Date(el.dataset.start).getTime():Date.now();var dd=Math.max(0,Math.floor((Date.now()-st)/864e5));t=(+el.dataset.base)+dd*per;}else{t=+el.dataset.target;}var sfx=el.dataset.suffix||'',d=1600,t0=performance.now();function tick(now){var p=Math.min((now-t0)/d,1),e=1-Math.pow(1-p,3);el.innerHTML=fmt(Math.round(t*e))+(sfx?'<span>'+sfx+'</span>':'');if(p<1)requestAnimationFrame(tick);}requestAnimationFrame(tick);}
   var sIO=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.querySelectorAll('.num').forEach(animate);sIO.unobserve(e.target);}})},{threshold:.4});
   document.querySelectorAll('.stats-grid').forEach(function(el){sIO.observe(el);});
   var b=document.querySelector('.burger'),m=document.querySelector('.mobile-menu');

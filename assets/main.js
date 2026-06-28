@@ -5,7 +5,7 @@
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.12});
   document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
   function fmt(n){return n.toLocaleString('en-US');}
-  function animate(el){var t=+el.dataset.target,sfx=el.dataset.suffix||'',d=1600,t0=performance.now();function tick(now){var p=Math.min((now-t0)/d,1),e=1-Math.pow(1-p,3);el.innerHTML=fmt(Math.round(t*e))+(sfx?'<span>'+sfx+'</span>':'');if(p<1)requestAnimationFrame(tick);}requestAnimationFrame(tick);}
+  function animate(el){var t;if(el.dataset.base){var per=+el.dataset.per||0,st=el.dataset.start?new Date(el.dataset.start).getTime():Date.now();var dd=Math.max(0,Math.floor((Date.now()-st)/864e5));t=(+el.dataset.base)+dd*per;}else{t=+el.dataset.target;}var sfx=el.dataset.suffix||'',d=1600,t0=performance.now();function tick(now){var p=Math.min((now-t0)/d,1),e=1-Math.pow(1-p,3);el.innerHTML=fmt(Math.round(t*e))+(sfx?'<span>'+sfx+'</span>':'');if(p<1)requestAnimationFrame(tick);}requestAnimationFrame(tick);}
   var sIO=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.querySelectorAll('.num').forEach(animate);sIO.unobserve(e.target);}})},{threshold:.4});
   document.querySelectorAll('.stats-grid').forEach(function(el){sIO.observe(el);});
   var b=document.querySelector('.burger'),m=document.querySelector('.mobile-menu');

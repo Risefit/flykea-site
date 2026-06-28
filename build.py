@@ -2,6 +2,26 @@
 # KEA static site generator. Edit content below, then: python3 build.py
 import os, html, re
 import content as C
+C.SERVICES.append({
+ "slug":"services/aviation-consultancy","kw":"aviation consultancy Africa",
+ "title":"Aviation & Project Consultancy | KEA Aviation",
+ "desc":"Aviation advisory, airline and aviation-unit establishment, airfield design and soil stabilisation, government training and special-mission aircraft modification across Africa and beyond.",
+ "h1":"Aviation & Project Consultancy","eyebrow":"Consultancy","stype":"Aviation and project consultancy",
+ "hero":"2021/08/Kajjansi_KEA.jpg","og":"2021/08/Kajjansi_KEA.jpg",
+ "lead":"KEA advises governments, operators and project teams on the full lifecycle of an aviation capability \u2014 from <b>airfield design and construction</b> to <b>airline and aviation-unit establishment</b>, <b>advanced training</b> and <b>special-mission aircraft modification</b>.",
+ "secs":[
+  ("Advisory & management","<p>Strategic and operational advisory for aviation businesses and government units \u2014 structure, regulation, safety management systems, fleet planning and operational set-up, drawing on two decades of multi-country operating experience.</p>"),
+  ("Airfield design, construction & soil stabilisation","<p>Design and construction of airfields and helipads, including survey, drainage and <b>soil stabilisation</b> for durable all-weather surfaces at remote sites.</p>"),
+  ("Airline & aviation-unit establishment","<p>End-to-end establishment of airlines and specialised aviation units \u2014 AOC roadmap, manuals, fleet selection, recruitment and training, through to operational launch.</p>"),
+  ("Government training & special-mission aircraft","<p>Advanced training capabilities for government agencies, plus modification and operation of aircraft for special missions \u2014 surveillance, survey and other tailored roles.</p>"),
+ ],
+ "faqs":[
+  ("Do you help set up a new airline or aviation unit?","Yes \u2014 KEA supports the full process, from regulatory roadmap and manuals to fleet, crew and operational launch, for airlines and government aviation units."),
+  ("Can you design and build a remote airfield?","Yes. We provide airfield and helipad design, construction and soil stabilisation for all-weather operations at remote project sites."),
+ ],
+ "related":[("Aircraft Leasing","services/aircraft-leasing"),("Aircraft Maintenance & MRO","services/aircraft-maintenance-mro"),("UAV Operations","services/uav-drone-operations")],
+ "gallery":["2021/08/Kajjansi_KEA.jpg","2019/04/Safety-and-Quality.jpg","2019/02/Our-People.jpg"],
+})
 ROOT = os.path.dirname(os.path.abspath(__file__))
 # Production base URL — change to "https://flykea.com" once the custom domain is live on Vercel.
 BASE_URL   = "https://flykea-site-z8af.vercel.app"
@@ -22,7 +42,7 @@ OG_DEFAULT = U+"2020/03/Helicopter-Services-In-Uganda-KEA.jpg"   # default socia
 JSONLD = ('{"@context":"https://schema.org","@graph":['
   '{"@type":"Organization","name":"Kampala Executive Aviation","alternateName":"KEA",'
   '"url":"'+BASE_URL+'/","logo":"'+BASE_URL+LOGO_GREEN+'","email":"'+EMAIL+'","telephone":"+256776333114",'
-  '"address":{"@type":"PostalAddress","streetAddress":"Gate 1, Kajjansi Airstrip","addressLocality":"Kajjansi","addressCountry":"UG"},'
+  '"address":{"@type":"PostalAddress","streetAddress":"Gate 1, Kajjansi Airfield","addressLocality":"Kajjansi","addressCountry":"UG"},'
   '"areaServed":["Uganda","Nigeria","DR Congo","Niger","Chad","Kenya","South Sudan"],'
   '"sameAs":["https://www.facebook.com/KampalaExecutiveAviation/","https://www.linkedin.com/company/18443655/","https://twitter.com/fly_kea","https://www.instagram.com/kampalaexecutiveaviation/"]},'
   '{"@type":"WebSite","name":"Kampala Executive Aviation","url":"'+BASE_URL+'/"}]}')
@@ -49,8 +69,8 @@ def nav(active=""):
     def cls(k): return ' class="active"' if k==active else ''
     sub=('<div class="submenu submenu-wide">'
       '<div class="grp">Charter</div>'
-      '<a href="/charter-flights-kampala/">Charter Flights Kampala</a>'
-      '<a href="/helicopter-charter-kampala/">Helicopter Charter Kampala</a>'
+      '<a href="/charter-flights-kampala/">Charter Flights</a>'
+      '<a href="/helicopter-charter-kampala/">Helicopter Charter</a>'
       '<a href="/services/vip-corporate-charter/">VIP &amp; Corporate Charter</a>'
       '<a href="/services/private-jet-charter/">Private Jet Charter</a>'
       '<a href="/services/cargo-charter/">Cargo Charter</a>'
@@ -91,7 +111,7 @@ FOOT=f'''<footer><div class="wrap">
 <div class="foot-top">
 <div class="foot-col">
 <div class="foot-logo"><img src="{LOGO_WHITE}" alt="KEA"></div>
-<p>Gate 1, Kajjansi Airstrip, Uganda<br>Tel: {PHONE} / {PHONE2}<br>E-mail: {EMAIL}</p>
+<p>Gate 1, Kajjansi Airfield, Uganda<br>Tel: {PHONE} / {PHONE2}<br>E-mail: {EMAIL}</p>
 <div class="socials">
 <a href="https://www.facebook.com/KampalaExecutiveAviation/" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 0-11.5 9.9v-7H7.9V12h2.6V9.8c0-2.6 1.5-4 3.9-4 1.1 0 2.3.2 2.3.2v2.5h-1.3c-1.3 0-1.7.8-1.7 1.6V12h2.9l-.5 2.9h-2.4v7A10 10 0 0 0 22 12z"/></svg></a>
 <a href="https://www.linkedin.com/company/18443655/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14zM8.3 18.3V10H5.7v8.3h2.6zM7 8.8a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm11.3 9.5v-4.5c0-2.4-1.3-3.5-3-3.5a2.6 2.6 0 0 0-2.3 1.3V10h-2.6v8.3h2.6v-4.4c0-1.2.2-2.3 1.7-2.3s1.5 1.3 1.5 2.4v4.3h2.4z"/></svg></a>
@@ -145,6 +165,7 @@ def page(path, title, desc, body, active="", og_image=None, noindex=False, extra
 <button class="lb-next" aria-label="Next image">\u203a</button>
 <div class="lb-cap" aria-live="polite"></div>
 </div>
+{QMODAL}
 <a class="sticky-quote" href="/quote/">⚡ Get a Quote</a>
 <a class="wa-float" href="https://wa.me/256776333114" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 .4C7.4.4.5 7.3.5 15.9c0 2.8.7 5.4 2 7.8L.4 31.6l8.1-2.1c2.3 1.2 4.8 1.9 7.5 1.9 8.6 0 15.5-6.9 15.5-15.5S24.6.4 16 .4zm0 28.3c-2.4 0-4.6-.6-6.5-1.8l-.5-.3-4.8 1.3 1.3-4.7-.3-.5c-1.3-2-2-4.4-2-6.9C3 8.9 8.8 3.1 16 3.1S29 8.9 29 16 23.2 28.7 16 28.7zm8.2-9.6c-.4-.2-2.6-1.3-3-1.4-.4-.2-.7-.2-1 .2s-1.1 1.4-1.4 1.7c-.3.3-.5.3-.9.1-2.4-1.2-4-2.1-5.6-4.8-.4-.7.4-.7 1.2-2.2.1-.3.1-.5 0-.7s-1-2.4-1.4-3.3c-.4-.9-.7-.7-1-.8h-.8c-.3 0-.7.1-1.1.5C7.5 9.3 6.7 10.4 6.7 12s1.2 3.5 1.4 3.8c.2.3 2.4 3.7 5.9 5.2 2.2.9 3 1 4.1.9.7-.1 2.6-1 2.9-2 .4-1 .4-1.8.3-2-.1-.2-.4-.3-.8-.5z"/></svg></a>
 <script>{JS}</script></body></html>'''
@@ -164,7 +185,7 @@ def feats(items):
 def cta_band():
     return f'''<div class="cta-band"><div class="wrap reveal"><span class="eyebrow" style="justify-content:center">Have questions?</span>
 <h2>Our aviation experts are ready</h2><p>Tell us about your requirement and we’ll help find the solution best suited to your need.</p>
-<a class="btn btn-primary" href="/contact.html">Contact us <span class="arr">→</span></a></div></div>'''
+<a class="btn btn-primary" href="mailto:bookings@flykea.com">Get answers <span class="arr">→</span></a></div></div>'''
 
 def banner(eyebrow,title,text,bg,btn=("Explore our services","/services/")):
     return f'''<div class="banner"><div class="bg" style="background-image:url('{bg}')"></div>
@@ -184,7 +205,7 @@ def service_ld(name,desc,stype,url):
     return _ld({"@context":"https://schema.org","@type":"Service","name":name,"description":desc,
       "serviceType":stype,"url":BASE_URL+"/"+url,"areaServed":[c[1] for c in C.COUNTRIES],
       "provider":{"@type":"Organization","name":"Kampala Executive Aviation","telephone":"+256776333114",
-        "address":{"@type":"PostalAddress","streetAddress":"Gate 1, Kajjansi Airstrip","addressLocality":"Kajjansi","addressCountry":"UG"}}})
+        "address":{"@type":"PostalAddress","streetAddress":"Gate 1, Kajjansi Airfield","addressLocality":"Kajjansi","addressCountry":"UG"}}})
 def faq_ld(faqs):
     return _ld({"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
       {"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":a}} for q,a in faqs]})
@@ -195,7 +216,7 @@ def article_ld(title,desc,url,img,date):
       "publisher":{"@type":"Organization","name":"Kampala Executive Aviation","logo":{"@type":"ImageObject","url":BASE_URL+LOGO_GREEN}}})
 LOCALBIZ_LD=_ld({"@context":"https://schema.org","@type":"LocalBusiness","name":"Kampala Executive Aviation",
   "image":BASE_URL+OG_DEFAULT,"url":BASE_URL+"/","telephone":"+256776333114","priceRange":"$$$",
-  "address":{"@type":"PostalAddress","streetAddress":"Gate 1, Kajjansi Airstrip","addressLocality":"Kajjansi","addressRegion":"Wakiso","addressCountry":"UG"},
+  "address":{"@type":"PostalAddress","streetAddress":"Gate 1, Kajjansi Airfield","addressLocality":"Kajjansi","addressRegion":"Wakiso","addressCountry":"UG"},
   "geo":{"@type":"GeoCoordinates","latitude":-0.1953,"longitude":32.5536},
   "openingHoursSpecification":{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],"opens":"00:00","closes":"23:59"},
   "areaServed":[c[1] for c in C.COUNTRIES]})
@@ -219,7 +240,7 @@ def quote_form(source="Website"):
     return f'''<section class="quote" id="quote-form"><div class="wrap"><div class="quote-grid">
 <div class="reveal"><span class="eyebrow">Request a quote</span><h2 style="font-size:clamp(1.8rem,3.6vw,2.6rem);margin:1rem 0">Get a charter quote</h2>
 <p style="color:var(--slate);max-width:44ch">Tell us the route, dates and load — we’ll come back with options. For urgent requests call <a href="tel:+256776333114" style="color:var(--green-ink)">{PHONE}</a>.</p>
-<p style="color:var(--slate);font-family:var(--mono);font-size:.82rem;margin-top:1.6rem">Gate 1, Kajjansi Airstrip, Uganda<br>{PHONE} · {PHONE2}<br>{EMAIL}</p></div>
+<p style="color:var(--slate);font-family:var(--mono);font-size:.82rem;margin-top:1.6rem">Gate 1, Kajjansi Airfield, Uganda<br>{PHONE} · {PHONE2}<br>{EMAIL}</p></div>
 <form class="form" data-formsubmit action="{FORM_ACTION}" method="POST">
 <input type="hidden" name="_subject" value="Quote request — flykea.com ({source})">
 <input type="hidden" name="_captcha" value="false"><input type="hidden" name="_template" value="table">
@@ -249,26 +270,34 @@ def quote_map(variant="full", source="Website"):
 <div class="qmap-result qc-result"><span class="qc-line"><b class="q-time">—</b> · <span class="q-ac">—</span> · <span class="q-dist">—</span></span>
 <a class="qbtn qbtn-q q-see" href="/quote/">See route &amp; options →</a>
 <a class="qbtn qbtn-wa q-wa" target="_blank" rel="noopener">WhatsApp</a></div>
-<datalist id="qports"></datalist></div></div></section>
-<script src="/assets/quote-map.js" defer></script>'''
+</div></div></section>'''
     return f'''<section class="qmap-sec"><div class="wrap"><div class="qmap" data-variant="full" data-source="{source}">
 <div class="qmap-panel"><span class="eyebrow">Plan your charter</span><h2>Get an instant estimate</h2>
-<div class="qfld"><label>From</label><input class="q-from" list="qports" placeholder="Origin airstrip / town" value="Kajjansi (Kampala)" autocomplete="off"></div>
-<div class="qfld"><label>To</label><input class="q-to" list="qports" placeholder="Destination" autocomplete="off"><button class="q-swap" title="Swap" aria-label="Swap origin and destination">⇅</button></div>
+<div class="qfld"><label>From</label><input class="q-from" list="qports" placeholder="Origin airfield / town" value="Kajjansi (Kampala)" autocomplete="off"></div>
+<div class="qfld"><label>To</label><input class="q-to" list="qports" placeholder="Destination" autocomplete="off"><button class="q-swap" title="Swap" aria-label="Swap origin and destination" type="button">⇅</button></div>
+<div class="qfld"><label>Landing coordinates — optional (lat, lng) for helicopter / off-airfield</label><input class="q-coord" placeholder="e.g. 1.5740, 30.2200" autocomplete="off"></div>
 <div class="qtwo"><div class="qfld"><label>Date</label><input class="q-date" type="date"></div>
 <div class="qfld"><label>Passengers</label><input class="q-pax" type="number" min="1" max="19" value="4"></div></div>
 <div class="qfld"><label>Mission</label><select class="q-mission"><option value="pax">Passengers</option><option value="cargo">Cargo</option><option value="medevac">Medical evacuation</option><option value="site">Remote site access (helicopter)</option></select></div>
-<button class="q-go">Calculate &amp; show route</button>
-<datalist id="qports"></datalist></div>
+<div class="qtwo"><div class="qfld"><label>Email</label><input class="q-email" type="email" placeholder="you@company.com"></div>
+<div class="qfld"><label>Phone</label><input class="q-phone" type="tel" placeholder="+256…"></div></div>
+<button class="q-go" type="button">Calculate &amp; show route</button></div>
 <div class="qmap-mapwrap"><svg class="qmap-map" viewBox="0 0 1000 625" preserveAspectRatio="xMidYMid slice" aria-label="Charter route map"></svg>
 <div class="qmap-result"><div class="qr-top">
 <div class="qmetric"><div class="qv q-dist">—</div><div class="qk">Distance</div></div>
 <div class="qmetric"><div class="qv q-time">—</div><div class="qk">Est. flight time</div></div>
-<div class="qreco"><div class="qk2">Recommended aircraft</div><div class="qac q-ac">—</div><div class="qalt q-alt"></div></div>
-<div class="qprice-wrap" style="text-align:right"><div class="qprice">Indicative <span class="q-price">—</span></div><div class="qdisc">estimate · KEA confirms exact quote</div></div>
+<div class="qreco"><div class="qk2">Aircraft (change to upgrade)</div><select class="q-override"></select><div class="qalt q-acnote"></div></div>
+<div class="q-priceblock" style="text-align:right;display:none"><div class="qprice">Indicative rack <span class="q-price">—</span></div>
+<label class="qday"><input type="checkbox" class="q-daystop"> + same-day wait (<span class="q-daystopamt">$800</span>)</label><div class="qdisc">±10% · aircraft returns to base · exact rack on request</div></div>
+<div class="q-intl" style="text-align:right;display:none"><div class="qprice">International route</div><div class="qdisc">We’ll send a firm quote fast — add your details &amp; send.</div></div>
 </div><div class="qr-cta"><a class="qbtn qbtn-wa q-wa" target="_blank" rel="noopener">Send on WhatsApp</a><a class="qbtn qbtn-q q-rq" href="#quote-form">Request exact quote →</a></div></div></div>
-</div></div></section>
-<script src="/assets/quote-map.js" defer></script>'''
+</div></div></section>'''
+
+
+QMODAL = ('<div class="qmodal" id="qmodal" hidden><div class="qmodal-box">'
+ '<button class="qmodal-x" aria-label="Close quote">×</button>'
+ + quote_map("full","Quote modal")
+ + '</div></div><datalist id="qports"></datalist>\n<script src="/assets/quote-map.js" defer></script>')
 
 def clients_strip():
     lg="".join(f'<span class="lg">{html.escape(n)}</span>' for n in C.CLIENTS)
@@ -279,8 +308,9 @@ def countries_section():
     chips="".join(f'<span class="cc"><span class="fl">{f}</span>{html.escape(n)}</span>' for f,n in C.COUNTRIES)
     chips+='<span class="cc todo"><!-- COUNTRIES: confirm 13th -->+ 1 to confirm</span>'
     return f'''<section class="countries"><div class="wrap"><span class="eyebrow">Reach</span>
-<h2 style="font-size:clamp(1.9rem,4vw,2.8rem);margin-top:1rem">Countries we serve</h2>
-<div class="country-chips">{chips}</div></div></section>'''
+<h2 style="font-size:clamp(1.9rem,4vw,2.8rem);margin-top:1rem">Where we operate</h2>
+<p style="max-width:64ch;margin:1rem 0 0;color:var(--slate)">We mainly serve Africa and the Middle East and are licensed to operate worldwide. The countries below are bases we&rsquo;ve operated and based from on contract &mdash; not the limit of where we fly.</p>
+<div class="country-chips" style="margin-top:1.6rem">{chips}</div></div></section>'''
 
 def certs_section(dark=True):
     bd="".join(f'<div class="cert-badge"><span class="shield">✚</span><div><div class="mono">{t}</div><h4>{ti}</h4><p>{tx}</p></div></div>' for t,ti,tx in C.CERTS)
@@ -355,9 +385,10 @@ print("Generating KEA site...")
 home_body=f'''
 <section class="hero" id="top"><div class="fallback"></div>
 <video autoplay muted loop playsinline poster="{U}2020/03/Helicopter-Services-In-Uganda-KEA.jpg"><source src="{VIDEO}" type="video/mp4"></video>
-<div class="hero-inner"><span class="eyebrow on-dark">CAA-Licensed Operator · Uganda AOC 097</span>
-<h1>Aviation Services in Kampala — Kajjansi Airstrip</h1>
-<p class="lead">Oil &amp; gas, NGO, medevac, cargo, VIP and UAV operations across 13 African countries — fixed wing, rotary wing and special-mission aircraft from one CAA-licensed operator at Kajjansi Airstrip, Kampala.</p>
+<div class="hero-inner"><span class="eyebrow on-dark">CAA-Licensed Aircraft Operator · Uganda AOC 097</span>
+<h1>Aviation Services in Africa and Around the Globe</h1>
+<p class="hero-sub">Based at Kajjansi Airfield, Kampala, Uganda</p>
+<p class="lead">For two decades, KEA has delivered oil &amp; gas, NGO, medevac, cargo, VIP and UAV operations across 13 countries — building a reputation for high-quality, professional aviation services. Fixed wing, rotary wing and special-mission aircraft from one CAA-licensed aircraft operator.</p>
 <div class="hero-actions"><a class="btn btn-primary" href="/quote/">Get a Quote <span class="arr">→</span></a>
 <a class="btn btn-ghost" href="tel:+256776333114">Call {PHONE}</a></div></div>
 <div class="scroll-hint"><span>Scroll</span><span class="line"></span></div></section>
@@ -370,9 +401,9 @@ home_body=f'''
 </div></section>
 
 <div class="stats"><div class="wrap"><div class="stats-grid reveal">
-<div class="stat"><div class="num" data-target="4000" data-suffix="T">0<span>T</span></div><div class="lbl">Cargo Carried</div></div>
-<div class="stat"><div class="num" data-target="40000">0</div><div class="lbl">Passengers Flown</div></div>
-<div class="stat"><div class="num" data-target="7800">0</div><div class="lbl">Flights Conducted</div></div>
+<div class="stat"><div class="num" data-base="80000" data-per="7" data-start="2026-06-27" data-suffix="T">0<span>T</span></div><div class="lbl">Cargo Carried</div></div>
+<div class="stat"><div class="num" data-base="120000" data-per="57" data-start="2026-06-27">0</div><div class="lbl">Passengers Flown</div></div>
+<div class="stat"><div class="num" data-base="35000" data-per="9" data-start="2026-06-27">0</div><div class="lbl">Flights Conducted</div></div>
 <div class="stat"><div class="num" data-target="13">0</div><div class="lbl">Countries Worked In</div></div>
 </div></div></div>
 
@@ -382,7 +413,7 @@ home_body=f'''
 <div class="sol-grid">
 <a class="sol-card reveal" href="/services/oil-gas-aviation/"><img src="{IC1}Oil-Gas-and-Mining.jpg" alt="KEA aircraft supporting oil and gas operations in Uganda"><div class="sol-body"><div class="sol-num">01</div><h3>Oil &amp; Gas Aviation</h3><p>Crew rotation, cargo and medevac for energy and mining operators.</p><span class="sol-more">Explore →</span></div></a>
 <a class="sol-card reveal" href="/services/medical-evacuation/"><img src="{IC1}Medevac-KEA.jpg" alt="KEA air ambulance medical evacuation aircraft Uganda"><div class="sol-body"><div class="sol-num">02</div><h3>Medical Evacuation</h3><p>Fixed-wing and helicopter air ambulance, 24/7 across East Africa.</p><span class="sol-more">Explore →</span></div></a>
-<a class="sol-card reveal" href="/helicopter-charter-kampala/"><img src="{U}2021/08/Mi8-Helicopter-Kajjansi-KEA-1.jpg" alt="KEA helicopter charter at Kajjansi Airstrip Kampala"><div class="sol-body"><div class="sol-num">03</div><h3>Helicopter Charter</h3><p>Bell 412 &amp; 206 for charter, survey and external-load work.</p><span class="sol-more">Explore →</span></div></a>
+<a class="sol-card reveal" href="/helicopter-charter-kampala/"><img src="{U}2021/08/Mi8-Helicopter-Kajjansi-KEA-1.jpg" alt="KEA helicopter charter at Kajjansi Airfield Kampala"><div class="sol-body"><div class="sol-num">03</div><h3>Helicopter Charter</h3><p>Bell 412 &amp; 206 for charter, survey and external-load work.</p><span class="sol-more">Explore →</span></div></a>
 <a class="sol-card reveal" href="/services/ngo-humanitarian-charter/"><img src="{IC}Air-ambulance-paramedics.jpg" alt="KEA NGO and humanitarian charter flight Uganda"><div class="sol-body"><div class="sol-num">04</div><h3>NGO &amp; Humanitarian</h3><p>Relief passengers and cargo into remote and cross-border sites.</p><span class="sol-more">Explore →</span></div></a>
 <a class="sol-card reveal" href="/services/uav-drone-operations/"><img src="{U}2026/06/Matrice-400-RTK-KEA.jpg" alt="DJI Matrice 400 RTK drone on a KEA UAV survey operation"><div class="sol-body"><div class="sol-num">05</div><h3>UAV / Drone Operations</h3><p>Matrice 400 RTK — LiDAR, orthophoto mapping &amp; asset monitoring.</p><span class="sol-more">Explore →</span></div></a>
 <a class="sol-card reveal" href="/services/cargo-charter/"><img src="{IC1}Cargo-Charter.jpg" alt="KEA cargo charter aircraft loading freight Uganda"><div class="sol-body"><div class="sol-num">06</div><h3>Cargo Charter</h3><p>Time-critical and outsized air freight across Uganda and Africa.</p><span class="sol-more">Explore →</span></div></a>
@@ -405,25 +436,52 @@ home_body=f'''
 <a class="btn btn-outline" href="/about.html">Learn more <span class="arr">→</span></a></div></div>
 <div class="panel fleet-teaser"><div class="inner reveal"><span class="eyebrow">The largest privately owned fleet in Uganda</span><h2 style="margin:1rem 0">Our Fleet</h2>
 <p>A versatile fixed and rotary wing capability lets us tailor a solution to each client’s unique need.</p>
-<div class="chips"><span class="chip">Bell 412</span><span class="chip">Bell 206 Jet Ranger</span><span class="chip">Pilatus PC12</span><span class="chip">Beechcraft 1900D</span><span class="chip">Caravan C208B</span><span class="chip">Cessna 210</span><span class="chip">DA42 MPP Guardian</span></div>
+<div class="chips"><span class="chip">Bell 412</span><span class="chip">Airbus AS350 B3+</span><span class="chip">Beechcraft 1900D</span><span class="chip">Cessna Caravan C208EX</span><span class="chip">Cessna 210</span><span class="chip">Cessna 206</span><span class="chip">DA42 MPP Guardian</span></div>
 <a class="btn btn-primary" href="/fleet.html">View all fleet <span class="arr">→</span></a></div></div></div>
 
-<section class="services"><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">Full capability</span><h2>One operator, fourteen disciplines</h2></div>
-<div class="services-grid reveal">
-<div class="svc"><span class="idx">01</span><span class="name">Oil, Gas and Mining</span></div><div class="svc"><span class="idx">08</span><span class="name">Scheduled and Adhoc Charter</span></div>
-<div class="svc"><span class="idx">02</span><span class="name">Rotary Wing Services</span></div><div class="svc"><span class="idx">09</span><span class="name">Pipeline Patrol</span></div>
-<div class="svc"><span class="idx">03</span><span class="name">Fixed Wing Services</span></div><div class="svc"><span class="idx">10</span><span class="name">Disaster and Firefighting</span></div>
-<div class="svc"><span class="idx">04</span><span class="name">Medical Evacuation</span></div><div class="svc"><span class="idx">11</span><span class="name">Aerial and Geophysical Survey</span></div>
-<div class="svc"><span class="idx">05</span><span class="name">Search and Rescue</span></div><div class="svc"><span class="idx">12</span><span class="name">Logistics and Project Management</span></div>
-<div class="svc"><span class="idx">06</span><span class="name">External and Underslung Load Work</span></div><div class="svc"><span class="idx">13</span><span class="name">Remote Camp Construction and Catering</span></div>
-<div class="svc"><span class="idx">07</span><span class="name">VIP Transport · Passenger and Cargo</span></div><div class="svc"><span class="idx">14</span><span class="name">Helicopter Emergency Medical Service</span></div>
+<section class="services cap5"><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">Full capability</span><h2>Five disciplines, one operator &mdash; worldwide</h2>
+<p style="max-width:62ch;margin:1rem auto 0;color:var(--slate)">Mainly Africa and the Middle East, licensed to operate globally &mdash; fixed and rotary wing, maintenance, consultancy and UAV under one roof.</p></div>
+<div class="cap-grid reveal">
+<div class="cap-col"><h3>Fixed Wing</h3><ul>
+<li><a href="/services/aircraft-leasing/">ACMI leasing</a></li>
+<li><a href="/services/vip-corporate-charter/">VIP transport &mdash; passenger &amp; cargo</a></li>
+<li><a href="/services/medical-evacuation/">Medical evacuation</a></li>
+<li><a href="/charter-flights-kampala/">Ad-hoc charter</a></li>
+<li><a href="/services/aerial-survey-geophysical/">Aerial &amp; geophysical survey</a></li></ul></div>
+<div class="cap-col"><h3>Rotary Wing</h3><ul>
+<li><a href="/services/search-rescue-helicopter/">NVG-capable operations</a></li>
+<li><a href="/services/medical-evacuation/">HEMS</a></li>
+<li><a href="/services/search-rescue-helicopter/">Search &amp; rescue</a></li>
+<li><a href="/services/external-load-helicopter/">External &amp; underslung load</a></li>
+<li><a href="/services/disaster-response/">Disaster relief &amp; firefighting</a></li></ul></div>
+<div class="cap-col"><h3>Aircraft Maintenance</h3><ul>
+<li><a href="/services/aircraft-maintenance-mro/">Fixed &amp; rotary wing maintenance</a></li>
+<li><a href="/services/aircraft-maintenance-mro/">Line &amp; base maintenance</a></li>
+<li><a href="/services/aircraft-maintenance-mro/">Field repair teams</a></li>
+<li><a href="/services/aircraft-maintenance-mro/">Licensed in 5 countries</a></li>
+<li><a href="/services/aircraft-maintenance-mro/">Overhaul &amp; repair (via partners)</a></li>
+<li><a href="/services/aircraft-maintenance-mro/">CAMO</a></li></ul></div>
+<div class="cap-col"><h3>Aviation &amp; Project Consultancy</h3><ul>
+<li><a href="/services/aviation-consultancy/">Advisory &amp; management</a></li>
+<li><a href="/services/aviation-consultancy/">Bespoke aviation solutions</a></li>
+<li><a href="/services/aviation-consultancy/">Airfield design &amp; soil stabilisation</a></li>
+<li><a href="/services/aviation-consultancy/">Airline establishment</a></li>
+<li><a href="/services/aviation-consultancy/">Aviation unit establishment</a></li>
+<li><a href="/services/aviation-consultancy/">Government training</a></li>
+<li><a href="/services/aviation-consultancy/">Special-mission aircraft modification</a></li></ul></div>
+<div class="cap-col"><h3>UAV Operations</h3><ul>
+<li><a href="/services/uav-drone-operations/">Lidar mapping</a></li>
+<li><a href="/services/uav-drone-operations/">Orthophoto mapping</a></li>
+<li><a href="/services/uav-drone-operations/">Animal point sampling</a></li>
+<li><a href="/services/pipeline-patrol/">Asset inspection &mdash; towers, powerlines, pipelines</a></li>
+<li><a href="/services/uav-drone-operations/">Medical &amp; logistics delivery</a></li></ul></div>
 </div></div></section>
 
 <section class="services" style="background:var(--tint)"><div class="wrap"><div class="sol-top"><div class="sec-head reveal"><span class="eyebrow">From the field</span><h2>Latest News</h2></div>
 <a class="btn btn-outline reveal" href="/blog/">View all posts <span class="arr">→</span></a></div>
 <div class="news-grid" id="latest-news"></div></div></section>
 
-{banner("Have questions?","Our aviation experts are ready.","Tell us about your requirement and we’ll help find the solution best suited to your need.",U+"2021/08/Mi8-Helicopter-Kajjansi-KEA-1.jpg",("Get a Quote","/quote/"))}
+{banner("Have questions?","Our aviation experts are ready.","Tell us about your requirement and we’ll help find the solution best suited to your need.",U+"2021/08/Mi8-Helicopter-Kajjansi-KEA-1.jpg",("Get answers","mailto:bookings@flykea.com"))}
 '''
 
 # ---------------- NEWS DATA ----------------
@@ -535,7 +593,7 @@ def _home_card(n):
 latest="".join(_home_card(n) for n in C.NEWS_NEW[:3])
 home_body=home_body.replace('<div class="news-grid" id="latest-news"></div>', '<div class="news-grid">%s</div>'%latest)
 page("index.html","Aviation Services Kampala & Kajjansi | KEA Aviation",
-     "CAA-licensed aviation in Uganda — oil & gas, NGO, medevac, cargo, VIP and UAV charter across 13 African countries from Kajjansi Airstrip, Kampala. Call +256 776 333 114.",
+     "CAA-licensed aviation in Uganda — oil & gas, NGO, medevac, cargo, VIP and UAV charter across 13 African countries from Kajjansi Airfield, Kampala. Call +256 776 333 114.",
      home_body, active="", extra_jsonld=LOCALBIZ_LD)
 
 # news index
@@ -625,7 +683,7 @@ FLEET_GALLERIES={
  "Bell 206 Jet Ranger":["2019/02/Fleet-B206.jpg"],
  "Pilatus PC-12":["2019/02/Fleet-PC12.jpg","2019/04/PC12-Interior.jpg"],
  "Beechcraft 1900D":["2019/02/Fleet-B1900.jpg","2019/04/B1900_Interior.jpg","2019/04/B1900_Interior2.jpg","2019/04/B1900_Cockpit.jpg"],
- "Cessna Caravan C208B":["2019/02/Fleet-C208B.jpg","2019/04/C208B-Interior.jpg"],
+ "Cessna Caravan C208EX":["2026/06/Cessna-C208EX-5X-SIG-KEA.jpg","2019/02/Fleet-C208B.jpg","2019/04/C208B-Interior.jpg"],
  "Cessna 210":["2019/02/Fleet-C210.jpg","2019/04/C210-MLW2.jpg","2019/04/210_Interior.jpg"],
  "Diamond DA42 MPP Guardian":["2019/02/Fleet-Diamond.jpg","2019/04/DA42-Camera.jpg","2019/04/DA42-Cockpit.jpg","2019/04/DA42-Interior.jpg","2019/04/DA42-Back.jpg"],
 }
@@ -711,11 +769,11 @@ solution_page("maintenance-and-hangarage","Maintenance &amp; Hangarage","Third-p
 # ---------------- FLEET ----------------
 FLEET=[
  ("Rotary Wing","Bell 412","1 / 2","13","360 NM","125 kt"),
- ("Rotary Wing","Bell 206 Jet Ranger","1","4","300 NM","100 kt"),
- ("Fixed Wing","Pilatus PC-12","1 / 2","8","1600 NM","250 kt"),
+ ("Rotary Wing","Airbus AS350 B3+","1","5","350 NM","120 kt"),
  ("Fixed Wing","Beechcraft 1900D","2","19","1200 NM","285 kt"),
- ("Fixed Wing","Cessna Caravan C208B","1 / 2","13","900 NM","145 kt"),
+ ("Fixed Wing","Cessna Caravan C208EX","1 / 2","12","900 NM","175 kt"),
  ("Fixed Wing","Cessna 210","1","5","700 NM","145 kt"),
+ ("Fixed Wing","Cessna 206","1","5","600 NM","140 kt"),
  ("Special Mission","Diamond DA42 MPP Guardian","1 + 1 sensor","2","1050 NM","125 kt"),
 ]
 def ac_card(cat,name,crew,pax,rng,spd):
@@ -750,9 +808,9 @@ about_body=f'''{page_hero("Who we are","Specialist Aviation Solutions","For over
 <p>We currently hold an accident-free track record, achieved through an increased focus on safety and quality across all spheres of our service. We are the only aviation company in Uganda to have qualified to fly for Total plc, following an intense audit by Total Oil and Gas and Bureau Veritas.</p>
 <a class="btn btn-primary" href="{U}2020/04/KEA-Safety-Policy2020-Screen.pdf" target="_blank" rel="noopener">Read our Safety Policy <span class="arr">→</span></a></div></div></div>
 <div class="stats" style="padding-top:110px"><div class="wrap"><div class="stats-grid reveal">
-<div class="stat"><div class="num" data-target="4000" data-suffix="T">0<span>T</span></div><div class="lbl">Cargo Carried</div></div>
-<div class="stat"><div class="num" data-target="40000">0</div><div class="lbl">Passengers Flown</div></div>
-<div class="stat"><div class="num" data-target="7800">0</div><div class="lbl">Flights Conducted</div></div>
+<div class="stat"><div class="num" data-base="80000" data-per="7" data-start="2026-06-27" data-suffix="T">0<span>T</span></div><div class="lbl">Cargo Carried</div></div>
+<div class="stat"><div class="num" data-base="120000" data-per="57" data-start="2026-06-27">0</div><div class="lbl">Passengers Flown</div></div>
+<div class="stat"><div class="num" data-base="35000" data-per="9" data-start="2026-06-27">0</div><div class="lbl">Flights Conducted</div></div>
 <div class="stat"><div class="num" data-target="13">0</div><div class="lbl">Countries Worked In</div></div>
 </div></div></div>
 {carousel_section(ABOUT_CAROUSEL,"KEA people and operations","Our people and operations","The team behind every mission")}
@@ -787,7 +845,7 @@ contact_body=f'''{page_hero("Get in touch","Contact KEA","Tell us about your req
 <section><div class="wrap contact-grid">
 <div class="reveal">
 <div class="contact-card">
-<div class="line"><strong>Address</strong></div><div class="line">Gate 1, Kajjansi Airstrip, Uganda</div>
+<div class="line"><strong>Address</strong></div><div class="line">Gate 1, Kajjansi Airfield, Uganda</div>
 <div class="line"><strong>Telephone</strong></div><div class="line">{PHONE}<br>{PHONE2}</div>
 <div class="line"><strong>Email</strong></div><div class="line"><a href="mailto:{EMAIL}" style="color:var(--green-ink)">{EMAIL}</a></div>
 <div class="line"><strong>Payments</strong></div><div class="line"><a href="{PAY}" target="_blank" rel="noopener" style="color:var(--green-ink)">Make a payment online →</a></div>
@@ -810,7 +868,7 @@ contact_body=f'''{page_hero("Get in touch","Contact KEA","Tell us about your req
 </form>
 </div>
 </div></section>'''
-page("contact.html","Contact — KEA","Contact Kampala Executive Aviation — Gate 1, Kajjansi Airstrip, Uganda.",contact_body,active="contact")
+page("contact.html","Contact — KEA","Contact Kampala Executive Aviation — Gate 1, Kajjansi Airfield, Uganda.",contact_body,active="contact")
 
 # ---------------- THANK YOU (form redirect target) ----------------
 thanks_body=f'''<section style="padding:9rem 0 7rem"><div class="wrap"><div class="thanks reveal">
@@ -834,8 +892,8 @@ hub_cards="".join(
  f'<div class="sol-body"><div class="sol-num">{i+1:02d}</div><h3>{s["h1"].replace(" in Uganda","").replace(" near Entebbe","")}</h3>'
  f'<p>{html.escape(_blurb(s))}</p><span class="sol-more">Explore →</span></div></a>'
  for i,s in enumerate(C.SERVICES))
-hub_body=f'''{page_hero("What we do","Aviation Services in Uganda &amp; Africa","Charter, oil &amp; gas, humanitarian, medevac, cargo, survey, UAV, leasing and MRO — one CAA-licensed operator at Kajjansi Airstrip, Kampala.",U+"2020/03/Helicopter-Services-In-Uganda-KEA.jpg")}
-<section><div class="wrap"><div class="prose reveal" style="margin-bottom:2.5rem"><p>KEA delivers a full spectrum of <b>aviation services in Uganda</b> and across 13 African countries from <b>Kajjansi Airstrip, Kampala</b>. Explore each capability below, or <a href="/quote/">request a quote</a>.</p></div>
+hub_body=f'''{page_hero("What we do","Aviation Services in Uganda &amp; Africa","Charter, oil &amp; gas, humanitarian, medevac, cargo, survey, UAV, leasing and MRO — one CAA-licensed operator at Kajjansi Airfield, Kampala.",U+"2020/03/Helicopter-Services-In-Uganda-KEA.jpg")}
+<section><div class="wrap"><div class="prose reveal" style="margin-bottom:2.5rem"><p>KEA delivers a full spectrum of <b>aviation services in Uganda</b> and across 13 African countries from <b>Kajjansi Airfield, Kampala</b>. Explore each capability below, or <a href="/quote/">request a quote</a>.</p></div>
 <div class="sol-grid">{hub_cards}</div></div></section>
 {clients_strip()}{certs_section()}{quote_form("Services hub")}'''
 hub_items=_ld({"@context":"https://schema.org","@type":"ItemList","itemListElement":[
@@ -859,7 +917,7 @@ quote_body=f'''{page_hero("Request a quote","Get a Charter Quote","Estimate your
 {quote_map("full","Quote page")}
 {quote_form("Quote page")}'''
 page("quote/index.html","Get a Charter Quote | KEA Aviation",
-     "Request a charter, cargo, medevac or UAV quote from KEA — CAA-licensed aviation from Kajjansi Airstrip, Kampala. Call +256 776 333 114.",
+     "Request a charter, cargo, medevac or UAV quote from KEA — CAA-licensed aviation from Kajjansi Airfield, Kampala. Call +256 776 333 114.",
      quote_body, active="", extra_jsonld=crumb_ld([("Home",""),("Get a Quote","quote/")]))
 
 # ---- Quote received (form target, noindex) ----
