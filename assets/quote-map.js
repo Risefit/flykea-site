@@ -4,7 +4,7 @@ window.MAP_PATHS=["M298.5 497.4L309.6 525.5L322.4 543.1L343.0 538.5L357.6 536.2L
 (function(){
 "use strict";
 /* ---- EDITABLE CONFIG (KEA) ---- rack USD/block-hr; NET (x0.9) is internal, never shown ---- */
-var WA_NUMBER="256776333114", BOOK_EMAIL="bookings@flykea.com";
+var WA_NUMBER="256776333114", BOOK_EMAIL="reservations@flykea.com";
 var DAY_STOP=500, RANGE_PCT=0.10, TAXI=0.5;   // taxi/climb hrs added to block
 var FLEET=[
  {id:"c206", name:"Cessna 206",            cruise:140, pax:5,  range:600, rate:950,  min:700,  day:450,  heli:false, note:"light, economical"},
@@ -145,7 +145,7 @@ function initTool(root){
    var msg="Charter quote request — KEA\n From: "+last.A[0]+"\n To: "+last.bLabel+"\n Date: "+date+"\n Passengers: "+last.pax+
     "\n Aircraft: "+last.ac.name+(dayStop?"\n Day stop: yes (+$"+(last.ac.day||DAY_STOP)+")":"")+
     "\n Est. flight time: "+fmtTime(last.oneway+TAXI/2)+" (~"+Math.round(last.dist)+" nm)"+
-    "\n Email: "+l.email+"\n Phone: "+l.phone;
+    (l.email?"\n Email: "+l.email:"")+(l.phone?"\n Phone: "+l.phone:"");
    wa.href="https://wa.me/"+WA_NUMBER+"?text="+encodeURIComponent(msg);
    closeModal();
  });
@@ -154,6 +154,8 @@ function initTool(root){
    if(!last.ac){e.preventDefault();run(true);return;}
    if(!leadOk()){e.preventDefault();return;}
    var f=document.querySelector("#quote-form form")||document.querySelector("form[data-formsubmit]");
+   if(!f){e.preventDefault();closeModal();
+     location.href="/quote/?from="+encodeURIComponent(last.A[0])+"&to="+encodeURIComponent(last.bLabel)+"&pax="+last.pax+"#quote-form";return;}
    if(f){var l=lead();
     [["route_from",last.A[0]],["route_to",last.bLabel],["pax",last.pax],["aircraft",last.ac.name],
      ["date",(root.querySelector(".q-date")||{}).value],["phone",l.phone]].forEach(function(kv){
@@ -180,7 +182,14 @@ document.addEventListener("click",function(e){
  if(open){e.preventDefault();openModal();return;}
  if(e.target.closest(".qmodal-x")||e.target.classList.contains("qmodal")){closeModal();}
 });
-document.addEventListener("keydown",function(e){if(e.key==="Escape")closeModal();});
+document.addEventListener("keydown",function(e){
+ if(e.key==="Escape"){closeModal();return;}
+ var mo=modalEl();if(!mo||mo.hidden||e.key!=="Tab")return;
+ var f=mo.querySelectorAll("button, input, select, a[href]");if(!f.length)return;
+ var first=f[0],last2=f[f.length-1];
+ if(e.shiftKey&&document.activeElement===first){e.preventDefault();last2.focus();}
+ else if(!e.shiftKey&&document.activeElement===last2){e.preventDefault();first.focus();}
+});
 function boot(){document.querySelectorAll(".qmap").forEach(function(r){
  // don't auto-init the hidden modal tool until opened (saves map build); init visible ones
  if(!r.closest(".qmodal"))initTool(r);});}

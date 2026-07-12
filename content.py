@@ -12,7 +12,7 @@ COUNTRIES = [
  ("\U0001F1F9\U0001F1E9","Chad"), ("\U0001F1E8\U0001F1F2","Cameroon"),
  ("\U0001F1E8\U0001F1EB","Central African Republic"), ("\U0001F1F8\U0001F1F4","Somalia"),
  ("\U0001F1FF\U0001F1E6","South Africa"), ("\U0001F1EE\U0001F1F6","Iraq"),
- ("\U0001F1EE\U0001F1F6","Kurdistan"),
+ ("\U0001F30D","Kurdistan Region (Iraq)"),
 ]
 # <!-- COUNTRIES: 12 confirmed; confirm the 13th with KEA before publishing -->
 
@@ -397,6 +397,19 @@ SERVICES = [
 # ============================ NEWS / BLOG ============================
 # NEWS items (newest first). keys: date, slug, title, img, summary, body(html)
 NEWS_NEW = [
+{
+ "date":"2025-12-10","slug":"elevate-luxury-helicopter-safaris-uganda",
+ "title":"KEA and Nile Safari Lodge launch Elevate — luxury helicopter safaris in Uganda",
+ "img":"https://elevate-safaris.com/wp-content/uploads/2025/08/elevate-Uganda5.jpg",
+ "summary":"Elevate, a joint venture between KEA and Nile Safari Lodge (Novate), brings luxury helicopter safaris and lodge transfers to Uganda — flying the Airbus H130 and H125 from Kajjansi Airfield.",
+ "body":[
+  "<p>December 2025 marked the launch of <a href='https://elevate-safaris.com/' target='_blank' rel='noopener'>Elevate</a> — a joint venture between Kampala Executive Aviation and Nile Safari Lodge (Novate) offering luxury helicopter safaris across Uganda.</p>",
+  "<p>Operating from Gate 1, Kajjansi Airfield, Elevate flies the <b>Airbus H130</b> and <b>H125</b> — spacious VIP cabins, panoramic windows and low noise signatures suited to wildlife viewing — with KEA providing the aircraft, crews and CAA-licensed operation behind every flight.</p>",
+  "<h3>Uganda&rsquo;s icons, from above</h3>",
+  "<p>Signature itineraries link Entebbe with Murchison Falls, Queen Elizabeth National Park, Kibale Forest, Bwindi Impenetrable Forest and Kidepo Valley — pairing scenic flights and seamless lodge transfers with hand-picked luxury stays from partners including Nile Safari Lodge, Ndali Lodge and Clouds Mountain Gorilla Lodge.</p>",
+  "<p>Elevate reflects a KEA strength we bring to every consultancy client: conceiving, certifying and operating a new aviation venture end-to-end. To plan a flying safari, visit <a href='https://elevate-safaris.com/' target='_blank' rel='noopener'>elevate-safaris.com</a>.</p>"
+ ]
+},
 {
  "date":"2026-03-02","slug":"uganda-caa-uav-operating-certificate","title":"KEA awarded Ugandan CAA UAV Operating Certificate",
  "img":"2026/06/Matrice-400-RTK-KEA.jpg",
