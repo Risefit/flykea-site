@@ -24,7 +24,7 @@ C.SERVICES.append({
 })
 ROOT = os.path.dirname(os.path.abspath(__file__))
 # Production base URL — change to "https://flykea.com" once the custom domain is live on Vercel.
-BASE_URL   = "https://flykea-site-z8af.vercel.app"
+BASE_URL   = "https://www.flykea.com"
 PAGES      = []                                   # collected for sitemap.xml
 CSS = open(os.path.join(ROOT,'assets','styles.css')).read()
 CSSV = __import__('hashlib').md5(CSS.encode()).hexdigest()[:8]
@@ -149,11 +149,9 @@ def page(path, title, desc, body, active="", og_image=None, noindex=False, extra
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script type="application/ld+json">{JSONLD}</script>{extra_ld}
-<!-- GA4: replace G-XXXXXXX with KEA's Measurement ID -->
-<!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-XXXXXXX');</script> -->
-<!-- Search Console: paste KEA's verification token -->
-<!-- <meta name="google-site-verification" content="REPLACE_WITH_TOKEN"> -->
+<meta name="google-site-verification" content="ou8W3kXa1FmRS-AzqZr2GAOS-X2fosybIELGpTrRFSo">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XDV0FH0VK4"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-XDV0FH0VK4');</script>
 <link rel="stylesheet" href="/assets/styles.css?v={CSSV}"></head><body>
 <a class="skip" href="#main">Skip to content</a>
 {nav(active)}
