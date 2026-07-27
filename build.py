@@ -101,12 +101,13 @@ def nav(active=""):
 <li><a href="/about.html"{cls('about')}>About</a></li>
 <li><a href="/blog/"{cls('blog')}>Blog</a></li>
 <li><a href="/contact.html"{cls('contact')}>Contact</a></li>
+<li><a href="/agents/"{cls('agents')} class="nav-agents">Agent Login</a></li>
 </ul></nav>
 <a class="btn btn-outline nav-quote" href="/quote/">Get a Quote</a>
 <button class="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobilemenu"><span></span><span></span><span></span></button>
 </div>
 <div class="mobile-menu" id="mobilemenu">
-<a href="/services/">Services</a><a href="/services/aircraft-leasing/">Aircraft Leasing</a><a href="/services/uav-drone-operations/">UAV Operations</a><a href="/fleet.html">Fleet</a><a href="/about.html">About</a><a href="/blog/">Blog</a><a href="/contact.html">Contact</a><a href="/quote/">Get a Quote</a>
+<a href="/services/">Services</a><a href="/services/aircraft-leasing/">Aircraft Leasing</a><a href="/services/uav-drone-operations/">UAV Operations</a><a href="/fleet.html">Fleet</a><a href="/about.html">About</a><a href="/blog/">Blog</a><a href="/contact.html">Contact</a><a href="/agents/">Agent Login</a><a href="/quote/">Get a Quote</a>
 </div></header>'''
 
 FOOT=f'''<footer><div class="wrap">
@@ -121,7 +122,7 @@ FOOT=f'''<footer><div class="wrap">
 <a href="https://www.instagram.com/kampalaexecutiveaviation/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.8.3 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.3 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.3-2.2-.4a3.8 3.8 0 0 1-1.4-.9 3.8 3.8 0 0 1-.9-1.4c-.2-.4-.4-1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c.1-1.2.3-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4 1.3-.1 1.7-.1 4.9-.1zm0 1.8c-3.1 0-3.5 0-4.7.1-1.1.1-1.7.2-2.1.4-.5.2-.9.4-1.3.8-.4.4-.6.8-.8 1.3-.2.4-.3 1-.4 2.1-.1 1.2-.1 1.6-.1 4.7s0 3.5.1 4.7c.1 1.1.2 1.7.4 2.1.2.5.4.9.8 1.3.4.4.8.6 1.3.8.4.2 1 .3 2.1.4 1.2.1 1.6.1 4.7.1s3.5 0 4.7-.1c1.1-.1 1.7-.2 2.1-.4.5-.2.9-.4 1.3-.8.4-.4.6-.8.8-1.3.2-.4.3-1 .4-2.1.1-1.2.1-1.6.1-4.7s0-3.5-.1-4.7c-.1-1.1-.2-1.7-.4-2.1a3.5 3.5 0 0 0-.8-1.3 3.5 3.5 0 0 0-1.3-.8c-.4-.2-1-.3-2.1-.4-1.2-.1-1.6-.1-4.7-.1zm0 3.1a4.9 4.9 0 1 1 0 9.8 4.9 4.9 0 0 1 0-9.8zm0 8a3.1 3.1 0 1 0 0-6.2 3.1 3.1 0 0 0 0 6.2zm6.3-8.2a1.1 1.1 0 1 1-2.3 0 1.1 1.1 0 0 1 2.3 0z"/></svg></a>
 </div></div>
 <div class="foot-col"><h4>Services</h4><a href="/services/oil-gas-aviation/">Oil &amp; Gas Aviation</a><a href="/services/medical-evacuation/">Medical Evacuation</a><a href="/helicopter-charter-kampala/">Helicopter Charter</a><a href="/services/ngo-humanitarian-charter/">NGO &amp; Humanitarian</a><a href="/services/cargo-charter/">Cargo Charter</a><a href="/services/uav-drone-operations/">UAV Operations</a><a href="/services/aircraft-leasing/">Aircraft Leasing</a><a href="/services/">All services →</a></div>
-<div class="foot-col"><h4>Company</h4><a href="/fleet.html">Fleet</a><a href="/about.html">About</a><a href="/certifications/">Certifications</a><a href="/blog/">Blog</a><a href="/contact.html">Contact</a>
+<div class="foot-col"><h4>Company</h4><a href="/agents/">Trade &amp; Agent Portal</a><a href="/privacy.html">Privacy</a><a href="/fleet.html">Fleet</a><a href="/about.html">About</a><a href="/certifications/">Certifications</a><a href="/blog/">Blog</a><a href="/contact.html">Contact</a>
 <div class="foot-pay"><a class="btn btn-primary" style="padding:.7rem 1.2rem" href="{PAY}" target="_blank" rel="noopener">Make a Payment →</a></div></div>
 </div>
 <div class="foot-bottom"><span class="mono">© 2026 KEA — Kampala Executive Aviation</span><span class="mono">Specialist Aviation Solutions · Kajjansi, Uganda</span></div>
@@ -955,3 +956,389 @@ open(os.path.join(ROOT,'robots.txt'),'w').write(
 print("wrote sitemap.xml (%d urls) + robots.txt" % len(set(PAGES)))
 
 print("DONE. Pages generated.")
+
+PRIVACY_BODY = f"""{page_hero("Privacy","Privacy Notice","How Kampala Executive Aviation collects, uses and protects personal information.",U+"2021/08/Kajjansi_KEA.jpg")}
+<section><div class="wrap" style="max-width:78ch">
+<p class="lead">This notice explains what personal information KEA collects, why we collect it, and the choices you have.
+It covers this website, our quotation tools and the KEA Trade &amp; Agent Portal.</p>
+
+<h2 style="font-size:1.25rem;margin:2.2rem 0 .6rem">Who we are</h2>
+<p>Kampala Executive Aviation (&ldquo;KEA&rdquo;, &ldquo;we&rdquo;) is a Ugandan CAA-licensed aircraft operator, AOC 097,
+based at Gate 1, Kajjansi Airfield, Kampala, Uganda. For any privacy question contact
+<a href="mailto:reservations@flykea.com">reservations@flykea.com</a>.</p>
+
+<h2 style="font-size:1.25rem;margin:2.2rem 0 .6rem">What we collect</h2>
+<ul style="padding-left:1.2rem;color:var(--slate)">
+<li><b>Enquiries and quotations</b> &mdash; your name, company, email, phone and the details of the flight you ask about.</li>
+<li><b>Trade portal accounts</b> &mdash; agency name, contact name, email, phone, address, country, website and your agency logo.
+Passwords are handled by our authentication provider and are stored only as secure one-way hashes; KEA never sees them.</li>
+<li><b>Portal activity</b> &mdash; the quotes you generate and booking requests you submit, so you can review them and so we can
+service your bookings and improve our pricing and capacity planning.</li>
+<li><b>Website analytics</b> &mdash; aggregated usage data via Google Analytics, such as pages viewed and general location.
+This is statistical and is not used to identify you personally.</li>
+</ul>
+
+<h2 style="font-size:1.25rem;margin:2.2rem 0 .6rem">Why we use it</h2>
+<p>To prepare quotations, arrange and operate flights, meet aviation safety and regulatory obligations, manage trade
+accounts, respond to enquiries, and improve our services. We rely on your consent where you contact us, and on our
+legitimate interest in operating and improving the business. Passenger details supplied for a flight are processed
+because they are necessary to perform the charter contract and to satisfy aviation safety requirements.</p>
+
+<h2 style="font-size:1.25rem;margin:2.2rem 0 .6rem">Who we share it with</h2>
+<p>Only where necessary: our operations and reservations teams; airport, handling and immigration authorities where a
+flight requires it; regulators; and service providers who host our website, database and email. We do not sell personal
+information, and we do not use it for advertising. Agency net rates and margins are confidential and are visible only to
+the agency concerned and authorised KEA staff.</p>
+
+<h2 style="font-size:1.25rem;margin:2.2rem 0 .6rem">Where it is stored</h2>
+<p>Our website is hosted on Vercel and our portal database with Supabase, hosted in the European Union. Data may be
+processed outside Uganda by these providers under their standard contractual protections.</p>
+
+<h2 style="font-size:1.25rem;margin:2.2rem 0 .6rem">How long we keep it</h2>
+<p>Enquiry and quotation records are kept while the commercial relationship is active and for a reasonable period
+afterwards for accounting, safety and legal purposes. Flight and safety records are retained for the periods required by
+aviation regulation. You may ask us to close a trade account at any time.</p>
+
+<h2 style="font-size:1.25rem;margin:2.2rem 0 .6rem">Your choices</h2>
+<p>You can ask us to give you a copy of the information we hold about you, correct anything that is wrong, or delete
+information we no longer need to keep. Trade agents can update their own agency details and logo at any time in the
+portal. To make a request, email <a href="mailto:reservations@flykea.com">reservations@flykea.com</a>.</p>
+
+<h2 style="font-size:1.25rem;margin:2.2rem 0 .6rem">Cookies and similar technologies</h2>
+<p>We use a small number of essential items: a secure session token so the trade portal can keep you signed in, local
+storage so the charter calculator works offline, and Google Analytics cookies for aggregated statistics. You can clear
+or block these in your browser, though the portal will not stay signed in without its session token.</p>
+
+<h2 style="font-size:1.25rem;margin:2.2rem 0 .6rem">Changes</h2>
+<p>We may update this notice as our services develop. The version in force is the one published here.</p>
+<p style="color:var(--slate);font-size:.9rem;margin-top:1.4rem">Last updated: July 2026</p>
+</div></section>"""
+page("privacy.html","Privacy Notice | KEA Aviation",
+     "How Kampala Executive Aviation collects, uses, stores and protects personal information across our website, quotation tools and trade portal.",
+     PRIVACY_BODY, active="")
+
+PORTAL_BODY = """
+<section class="pt-hero"><div class="pt-wrap">
+<span class="eyebrow" style="color:#B6E04A">KEA Trade Portal</span>
+<h1>Quote, book and win more charters</h1>
+<p>Live charter pricing with your agency margin, aircraft specifications, booking requests and
+branded client quotations &mdash; built for tour operators and travel agents who work with KEA.</p>
+</div></section>
+
+<div id="pt-root">
+
+<!-- ============ GATES ============ -->
+<div id="pt-gates">
+
+  <div class="pt-gate pt-narrow" data-gate="auth">
+    <div class="pt-card">
+      <h2 style="font-size:1.35rem;margin-bottom:1.2rem">Agent sign in</h2>
+      <form id="pt-login-form">
+        <div class="pt-fld"><label>Email</label><input id="li-email" type="email" required autocomplete="email"></div>
+        <div class="pt-fld"><label>Password</label><input id="li-pass" type="password" required autocomplete="current-password"></div>
+        <button class="pt-btn" type="submit">Sign in</button>
+      </form>
+      <p class="pt-alt"><a href="#" id="pt-reset">Forgot password?</a></p>
+      <p class="pt-alt">New to KEA? <a href="#" data-gateswap="apply">Apply for a trade account</a></p>
+    </div>
+  </div>
+
+  <div class="pt-gate pt-narrow" data-gate="apply" hidden>
+    <div class="pt-card">
+      <h2 style="font-size:1.35rem;margin-bottom:.4rem">Apply for a trade account</h2>
+      <p class="pt-lead" style="font-size:.9rem">Trade accounts are for tour operators, travel agencies and DMCs.
+      Applications are reviewed by our reservations team &mdash; you&rsquo;ll be notified by email once approved.</p>
+      <form id="pt-apply-form">
+        <div class="pt-fld"><label>Agency name</label><input id="ap-agency" required></div>
+        <div class="pt-2">
+          <div class="pt-fld"><label>Your name</label><input id="ap-contact" required></div>
+          <div class="pt-fld"><label>Phone</label><input id="ap-phone" type="tel"></div>
+        </div>
+        <div class="pt-2">
+          <div class="pt-fld"><label>City</label><input id="ap-city"></div>
+          <div class="pt-fld"><label>Country</label><input id="ap-country"></div>
+        </div>
+        <div class="pt-fld"><label>Website</label><input id="ap-website" placeholder="https://"></div>
+        <div class="pt-fld"><label>Email</label><input id="ap-email" type="email" required autocomplete="email"></div>
+        <div class="pt-fld"><label>Choose a password</label><input id="ap-pass" type="password" required minlength="8" autocomplete="new-password"></div>
+        <p style="font-size:.78rem;color:var(--slate);margin-bottom:1rem">By applying you accept our trade terms and our
+        <a href="/privacy.html" style="color:var(--green-ink)">privacy notice</a>.</p>
+        <button class="pt-btn" type="submit">Submit application</button>
+      </form>
+      <p class="pt-alt">Already have an account? <a href="#" data-gateswap="auth">Sign in</a></p>
+    </div>
+  </div>
+
+  <div class="pt-gate pt-narrow" data-gate="pending" hidden>
+    <div class="pt-card" style="text-align:center">
+      <h2 style="font-size:1.3rem">Application received</h2>
+      <p class="pt-lead" style="margin:1rem auto">Thanks <span id="pt-pending-name"></span> &mdash; our reservations team
+      is reviewing your application. You&rsquo;ll get an email as soon as your account is approved, usually within one working day.</p>
+      <p style="font-size:.85rem;color:var(--slate)">Need to fly sooner? Call <a href="tel:+256776333114" style="color:var(--green-ink)">+256 776 333 114</a>
+      or email <a href="mailto:reservations@flykea.com" style="color:var(--green-ink)">reservations@flykea.com</a>.</p>
+      <button class="pt-btn ghost pt-signout" style="margin-top:1.4rem">Sign out</button>
+    </div>
+  </div>
+
+  <div class="pt-gate pt-narrow" data-gate="rejected" hidden>
+    <div class="pt-card" style="text-align:center">
+      <h2 style="font-size:1.3rem">Account not active</h2>
+      <p class="pt-lead" style="margin:1rem auto">This account isn&rsquo;t currently active. Please contact
+      <a href="mailto:reservations@flykea.com" style="color:var(--green-ink)">reservations@flykea.com</a> and we&rsquo;ll help.</p>
+      <button class="pt-btn ghost pt-signout" style="margin-top:1rem">Sign out</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============ APP ============ -->
+<div id="pt-app" hidden>
+  <div class="pt-bar">
+    <button class="pt-tab on" data-go="quote">Quote</button>
+    <button class="pt-tab" data-go="quotes">My quotes</button>
+    <button class="pt-tab" data-go="bookings">Bookings</button>
+    <button class="pt-tab" data-go="fleet">Aircraft</button>
+    <button class="pt-tab" data-go="terms">Terms</button>
+    <button class="pt-tab" data-go="profile">Profile</button>
+    <button class="pt-tab pt-staff-only" data-go="reports" hidden>Reports</button>
+    <button class="pt-tab pt-staff-only" data-go="admin" hidden>Agents</button>
+    <button class="pt-tab pt-staff-only" data-go="rates" hidden>Rate book</button>
+    <span class="pt-me"><span id="pt-who"></span>
+      <button class="pt-mini pt-signout" type="button">Sign out</button></span>
+  </div>
+
+  <!-- ---- QUOTE ---- -->
+  <section class="pt-view pt-wrap" data-view="quote">
+    <h2>Charter calculator</h2>
+    <p class="pt-lead">Prices are indicative rack rates with your agency net and margin shown. Charter is priced on
+    return positioning &mdash; the aircraft flies out and back to base.</p>
+    <div class="pt-grid">
+      <div class="pt-card">
+        <div class="pt-fld"><label>From</label><input id="pt-from" list="pt-ports" value="Kajjansi (Kampala)" autocomplete="off"></div>
+        <div class="pt-fld"><label>To</label><input id="pt-to" list="pt-ports" placeholder="Destination" autocomplete="off"></div>
+        <datalist id="pt-ports"></datalist>
+        <button class="pt-mini" id="pt-swap" type="button">&#8645; Swap</button>
+        <div class="pt-fld" style="margin-top:.9rem"><label>Landing coordinates &mdash; optional (lat, lng)</label><input id="pt-coord" placeholder="e.g. 1.5740, 30.2200"></div>
+        <div class="pt-2">
+          <div class="pt-fld"><label>Date</label><input id="pt-date" type="date"></div>
+          <div class="pt-fld"><label>Passengers</label><input id="pt-pax" type="number" min="1" max="19" value="4"></div>
+        </div>
+        <div class="pt-fld"><label>Mission</label><select id="pt-mission">
+          <option value="pax">Passengers</option><option value="cargo">Cargo</option>
+          <option value="medevac">Medical evacuation</option><option value="site">Remote site (helicopter)</option>
+        </select></div>
+        <div class="pt-fld"><label>Aircraft</label><select id="pt-ac"></select></div>
+        <label class="pt-fld" style="display:flex;gap:.5rem;align-items:center;font-size:.85rem;color:var(--slate)">
+          <input type="checkbox" id="pt-daystop" style="width:auto"> Aircraft waits same day (day stop)</label>
+        <button class="pt-btn" id="pt-calc" type="button">Calculate</button>
+      </div>
+
+      <div>
+        <div class="pt-card pt-res" id="pt-result" hidden>
+          <h3 id="pt-r-route" style="font-size:1.15rem;margin-bottom:.2rem"></h3>
+          <span class="pt-pill" id="pt-r-method"></span>
+          <p style="color:var(--slate);font-size:.9rem;margin-bottom:1.1rem"><b id="pt-r-ac"></b></p>
+          <div class="pt-metrics">
+            <div class="pt-m"><div class="k">Distance</div><div class="v" id="pt-r-dist"></div></div>
+            <div class="pt-m"><div class="k">Flight time</div><div class="v" id="pt-r-time"></div></div>
+            <div class="pt-m"><div class="k">Billed</div><div class="v" id="pt-r-block" style="font-size:.85rem"></div></div>
+          </div>
+          <div class="pt-price">
+            <div><div class="k">Rack (client price)</div><div class="v" id="pt-r-rack"></div></div>
+            <div><div class="k">Your net</div><div class="v" id="pt-r-net"></div></div>
+            <div class="margin"><div class="k">Your margin</div><div class="v" id="pt-r-margin"></div></div>
+          </div>
+          <p class="pt-confid">Indicative range <span id="pt-r-band"></span> &middot; excludes landing, handling &amp; route fees &middot;
+          net and margin are confidential to your agency</p>
+          <div id="pt-r-intl" hidden style="background:var(--tint);padding:.9rem 1.1rem;border-radius:8px;font-size:.86rem;color:var(--green-ink);margin-bottom:1rem">
+            International routing &mdash; permits and fees vary. Submit the request and we&rsquo;ll confirm a firm price fast.</div>
+          <div class="pt-actions">
+            <button class="pt-btn" id="pt-clientquote" type="button">Client quote PDF</button>
+            <button class="pt-btn ghost" id="pt-wa" type="button">WhatsApp KEA</button>
+            <button class="pt-btn ghost" id="pt-nobook" type="button">Not booking this</button>
+          </div>
+          <div class="pt-why" id="pt-why" hidden>
+            <div class="pt-fld"><label>What stopped this one?</label><select id="pt-why-reason"></select></div>
+            <div class="pt-fld"><label>Notes (optional)</label><input id="pt-why-notes" placeholder="e.g. client chose road transfer"></div>
+            <button class="pt-mini ok" id="pt-why-send" type="button">Send feedback</button>
+          </div>
+        </div>
+
+        <div class="pt-card" style="margin-top:1.3rem">
+          <h3 style="font-size:1.05rem;margin-bottom:.9rem">Request this charter</h3>
+          <form id="pt-book-form">
+            <div class="pt-2">
+              <div class="pt-fld"><label>Your client reference</label><input id="pt-b-ref" placeholder="e.g. SMITH/AUG"></div>
+              <div class="pt-fld"><label>Contact phone</label><input id="pt-b-phone" type="tel"></div>
+            </div>
+            <div class="pt-fld"><label>Passenger details / weights</label><input id="pt-b-pax" placeholder="names, weights, baggage"></div>
+            <div class="pt-fld"><label>Notes for operations</label><textarea id="pt-b-notes" rows="2"></textarea></div>
+            <button class="pt-btn" type="submit">Send booking request</button>
+          </form>
+          <div id="pt-booked" hidden style="margin-top:1rem;background:var(--tint);padding:1rem;border-radius:8px;font-size:.9rem">
+            Request sent &mdash; reference <b id="pt-booked-ref"></b>. Our team will confirm availability and a firm price.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---- MY QUOTES ---- -->
+  <section class="pt-view pt-wrap" data-view="quotes" hidden>
+    <h2>My quotes</h2><p class="pt-lead">Every calculation you run is saved here.</p>
+    <div class="pt-tablewrap"><table class="pt-t" id="tbl-quotes"><thead><tr>
+      <th>Date</th><th>Route</th><th>Aircraft</th><th>Pax</th><th>Rack</th><th>Net</th><th>Status</th>
+    </tr></thead><tbody id="pt-quotes-body"></tbody></table></div>
+  </section>
+
+  <!-- ---- BOOKINGS ---- -->
+  <section class="pt-view pt-wrap" data-view="bookings" hidden>
+    <h2>Booking requests</h2><p class="pt-lead">Track everything you&rsquo;ve asked us to fly.</p>
+    <div class="pt-tablewrap"><table class="pt-t"><thead><tr>
+      <th>Reference</th><th>Raised</th><th>Client ref</th><th>Value</th><th>Status</th>
+    </tr></thead><tbody id="pt-bookings-body"></tbody></table></div>
+  </section>
+
+  <!-- ---- FLEET ---- -->
+  <section class="pt-view pt-wrap" data-view="fleet" hidden>
+    <h2>Aircraft specifications</h2>
+    <p class="pt-lead">Share these with your clients &mdash; seats, range, baggage and strip requirements.</p>
+    <div class="pt-specs" id="pt-specs"></div>
+  </section>
+
+  <!-- ---- TERMS ---- -->
+  <section class="pt-view pt-wrap" data-view="terms" hidden>
+    <h2>Charter terms &amp; conditions</h2>
+    <p class="pt-lead">Version 2026.1 &middot; applies to every flight booked through the trade portal.</p>
+    <div class="pt-card pt-terms">
+      <h3>1. Quotations</h3>
+      <p>Quotations are indicative and based on the routing, dates and payload supplied. They remain subject to
+      aircraft availability at the time of booking and to final confirmation by KEA. Indicative prices may vary by
+      approximately 10% pending final routing, landing and handling fees.</p>
+      <h3>2. What the charter price includes</h3>
+      <p>Aircraft, crew, fuel and standard third-party and passenger liability insurance for the routing quoted. Charter is
+      priced on return positioning: the aircraft is chartered for the full journey including repositioning to and from its base.</p>
+      <h3>3. What is excluded</h3>
+      <ul><li>Landing, parking, navigation and handling fees</li><li>Government taxes and passenger service charges</li>
+      <li>Catering, ground transfers and accommodation</li><li>Overnight crew costs where the aircraft remains away from base</li>
+      <li>Permits and overflight charges on international routings</li></ul>
+      <h3>4. Payload, baggage and safety</h3>
+      <p>All passenger and baggage weights must be declared accurately before departure. KEA reserves the right to
+      offload baggage or passengers where weight and balance, runway performance or weather require it. The pilot in
+      command has final authority on every flight.</p>
+      <h3>5. Weather, delays and diversion</h3>
+      <p>Flights are subject to weather, air traffic control and airfield serviceability. Where a flight cannot operate
+      safely KEA will offer the next available slot or a refund of the unflown sector. KEA is not liable for
+      consequential losses arising from delay or diversion.</p>
+      <h3>6. Payment</h3>
+      <p>Unless credit terms are agreed in writing, payment is required in cleared funds before departure. Agency net
+      rates are confidential and must not be disclosed to your clients or third parties.</p>
+      <h3>7. Cancellation</h3>
+      <p>Cancellation charges are advised at the time of booking and depend on aircraft type, notice period and any
+      positioning already flown. No-shows are charged in full.</p>
+      <h3>8. Agency obligations</h3>
+      <p>Agents are responsible for the accuracy of passenger information, for ensuring passengers hold valid travel
+      documentation, and for passing KEA&rsquo;s safety briefings and conditions to their clients.</p>
+      <p style="margin-top:1.4rem"><b>Kampala Executive Aviation</b> &middot; Ugandan CAA AOC 097 &middot; Gate 1, Kajjansi Airfield, Kampala, Uganda</p>
+    </div>
+  </section>
+
+  <!-- ---- PROFILE ---- -->
+  <section class="pt-view pt-wrap" data-view="profile" hidden>
+    <h2>Agency profile &amp; branding</h2>
+    <p class="pt-lead">Your logo and details appear on the client quotations you generate. Your net rates and margin never do.</p>
+    <div class="pt-card" style="max-width:640px">
+      <form id="pt-profile-form">
+        <div class="pt-fld"><label>Agency name</label><input id="pf-agency" required></div>
+        <div class="pt-2">
+          <div class="pt-fld"><label>Contact name</label><input id="pf-contact"></div>
+          <div class="pt-fld"><label>Phone</label><input id="pf-phone" type="tel"></div>
+        </div>
+        <div class="pt-fld"><label>Address</label><input id="pf-address"></div>
+        <div class="pt-2">
+          <div class="pt-fld"><label>City</label><input id="pf-city"></div>
+          <div class="pt-fld"><label>Country</label><input id="pf-country"></div>
+        </div>
+        <div class="pt-fld"><label>Website</label><input id="pf-website" placeholder="https://"></div>
+        <div class="pt-fld"><label>Agency logo (PNG or JPG, max 2MB)</label><input id="pf-logo" type="file" accept="image/*">
+          <img id="pf-logo-prev" class="pt-logo-prev" alt="" hidden></div>
+        <button class="pt-btn" type="submit">Save profile</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ---- STAFF: REPORTS ---- -->
+  <section class="pt-view pt-wrap" data-view="reports" hidden>
+    <h2>Sales funnel reports</h2>
+    <p class="pt-lead">Reservations and marketing view. Figures update live as agents quote and book.</p>
+
+    <div class="pt-sec"><h3>Quote &rarr; request conversion
+      <button class="pt-mini" data-csv="rp-funnel-t">Export CSV</button></h3>
+      <div class="pt-tablewrap"><table class="pt-t" id="rp-funnel-t"><thead><tr>
+        <th>Month</th><th>Quotes run</th><th>Became requests</th><th>Conversion</th><th>Value quoted</th>
+      </tr></thead><tbody id="rp-funnel"></tbody></table></div></div>
+
+    <div class="pt-sec"><h3>Request &rarr; confirmed &rarr; flown
+      <button class="pt-mini" data-csv="rp-bookings-t">Export CSV</button></h3>
+      <div class="pt-tablewrap"><table class="pt-t" id="rp-bookings-t"><thead><tr>
+        <th>Month</th><th>Requests</th><th>Confirmed</th><th>Flown</th><th>Lost</th><th>Win rate</th><th>Won value</th>
+      </tr></thead><tbody id="rp-bookings"></tbody></table></div></div>
+
+    <div class="pt-sec"><h3>Why we lose bookings
+      <button class="pt-mini" data-csv="rp-loss-t">Export CSV</button></h3>
+      <div class="pt-tablewrap"><table class="pt-t" id="rp-loss-t"><thead><tr>
+        <th>Reason</th><th>Count</th><th>Value lost</th><th>Share</th>
+      </tr></thead><tbody id="rp-loss"></tbody></table></div></div>
+
+    <div class="pt-sec"><h3>Why quotes never became requests</h3>
+      <div class="pt-tablewrap"><table class="pt-t"><thead><tr>
+        <th>Reason given by agent</th><th>Times cited</th>
+      </tr></thead><tbody id="rp-abandon"></tbody></table></div></div>
+
+    <div class="pt-sec"><h3>Agent performance
+      <button class="pt-mini" data-csv="rp-agents-t">Export CSV</button></h3>
+      <div class="pt-tablewrap"><table class="pt-t" id="rp-agents-t"><thead><tr>
+        <th>Agency</th><th>Country</th><th>Quotes</th><th>Requests</th><th>Won</th><th>Quote&rarr;won</th><th>Value</th>
+      </tr></thead><tbody id="rp-agents"></tbody></table></div></div>
+
+    <div class="pt-sec"><h3>Route demand
+      <button class="pt-mini" data-csv="rp-routes-t">Export CSV</button></h3>
+      <div class="pt-tablewrap"><table class="pt-t" id="rp-routes-t"><thead><tr>
+        <th>Route</th><th>Quoted</th><th>Requested</th><th>Avg distance</th><th>Avg rack</th>
+      </tr></thead><tbody id="rp-routes"></tbody></table></div></div>
+  </section>
+
+  <!-- ---- STAFF: RATE BOOK ---- -->
+  <section class="pt-view pt-wrap" data-view="rates" hidden>
+    <h2>Rate book verification</h2>
+    <p class="pt-lead">Prices transcribed from the 2026 rate book. <b>Agents cannot see a rate until it is verified.</b>
+    Check each figure against the printed book, correct it if needed, then verify. Unverified routes fall back to the
+    hourly estimate instead.</p>
+    <p style="font-family:var(--mono);font-size:.72rem;color:var(--green-ink);margin-bottom:1rem" id="pt-rates-count"></p>
+    <div class="pt-tablewrap"><table class="pt-t"><thead><tr>
+      <th>Aircraft</th><th>Destination (return from Kajjansi)</th><th>Rack USD</th><th>Status</th><th>Note</th><th>Action</th>
+    </tr></thead><tbody id="pt-rates-body"></tbody></table></div>
+  </section>
+
+  <!-- ---- STAFF: AGENTS ---- -->
+  <section class="pt-view pt-wrap" data-view="admin" hidden>
+    <h2>Agent applications</h2>
+    <p class="pt-lead">Approve trade accounts. Approved agents immediately get rates, specs and booking access.</p>
+    <div class="pt-tablewrap"><table class="pt-t"><thead><tr>
+      <th>Agency</th><th>Location</th><th>Applied</th><th>Status</th><th>Action</th>
+    </tr></thead><tbody id="pt-apps-body"></tbody></table></div>
+  </section>
+
+</div>
+</div>
+<link rel="manifest" href="/agents/manifest.webmanifest">
+<meta name="theme-color" content="#90B820">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="KEA Trade">
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/agents/sw.js").catch(function(){});}</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/portal.js" defer></script>
+"""
+page("agents/index.html","Trade & Agent Portal | KEA Aviation",
+     "KEA trade portal for tour operators and travel agents — live charter pricing with agency margin, aircraft specifications, booking requests and branded client quotations.",
+     PORTAL_BODY, active="agents", noindex=True)
+
