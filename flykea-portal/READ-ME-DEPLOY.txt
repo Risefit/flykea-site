@@ -1,0 +1,24 @@
+KEA flykea.com — deploy this build
+===================================
+IMPORTANT: this zip must be UNZIPPED inside the repo. Committing the .zip
+file itself does nothing (that was the previous problem).
+
+In the Codespace TERMINAL (not the Mac Archive Utility), from the repo root:
+
+  cd /workspaces/flykea-site
+  unzip -o flykea-seo.zip
+
+  # verify the new files actually landed:
+  test -f services/oil-gas-aviation/index.html && \
+  test -f blog/index.html && \
+  grep -q "Aviation Services in Kampala" index.html && \
+  echo "OK - safe to push" || echo "STOP - files not in place"
+
+  # only if you saw "OK - safe to push":
+  rm -f flykea-seo.zip
+  rm -rf solutions
+  git add -A
+  git commit -m "Deploy SEO build: services + UAV + blog + Matrice photo"
+  git push
+
+Vercel auto-deploys in ~1 min.
