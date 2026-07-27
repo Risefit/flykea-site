@@ -102,7 +102,19 @@ async function onSession(session) {
   AGENT = r.data || null;
   var st = await sb.from("staff").select("user_id,role").eq("user_id", ME.id).maybeSingle();
   IS_STAFF = !!(st.data);
-  if (!AGENT && !IS_STAFF) { gate("apply"); return; }
+  if (!AGENT && !IS_STAFF) {
+    var md = (ME.user_metadata || {});
+    if (md.agency_name) {                       // confirmed but record missing - create it now
+      var ins = await sb.from("agents").insert({
+        id: ME.id, agency_name: md.agency_name, contact_name: md.contact_name || "",
+        email: ME.email, phone: md.phone || null, country: md.country || null,
+        city: md.city || null, website: md.website || null,
+        tc_accepted_at: new Date().toISOString(), tc_version: md.tc_version || TC_VERSION
+      }).select().single();
+      if (!ins.error) { AGENT = ins.data; gate("pending"); return; }
+    }
+    gate("apply"); return;
+  }
   if (IS_STAFF || (AGENT && AGENT.status === "approved")) { await enterPortal(); return; }
   gate(AGENT.status === "rejected" ? "rejected" : "pending");
 }
@@ -528,31 +540,42 @@ function exportCSV(tableId, filename) {
 
 /* ================= FORMS: apply / login ================= */
 async function doApply(ev) {
-  ev.preventDefault(); busy(true);
+  ev.preventDefault();
+  var err = $("#pt-apply-err"); if (err) { err.hidden = true; err.textContent = ""; }
+  busy(true);
   var email = $("#ap-email").value.trim(), pw = $("#ap-pass").value;
-  var su = await sb.auth.signUp({ email: email, password: pw });
-  if (su.error) { busy(false); toast(su.error.message, true); return; }
-  var uid = su.data.user && su.data.user.id;
-  if (!uid) { busy(false); toast("Check your email to confirm your address, then sign in to finish."); return; }
-  var ins = await sb.from("agents").insert({
-    id: uid, agency_name: $("#ap-agency").value.trim(), contact_name: $("#ap-contact").value.trim(),
-    email: email, phone: $("#ap-phone").value.trim(), country: $("#ap-country").value.trim(),
+  var meta = {
+    agency_name: $("#ap-agency").value.trim(), contact_name: $("#ap-contact").value.trim(),
+    phone: $("#ap-phone").value.trim(), country: $("#ap-country").value.trim(),
     city: $("#ap-city").value.trim(), website: $("#ap-website").value.trim(),
-    tc_accepted_at: new Date().toISOString(), tc_version: TC_VERSION
+    tc_version: TC_VERSION
+  };
+  var su = await sb.auth.signUp({
+    email: email, password: pw,
+    options: { data: meta, emailRedirectTo: location.origin + "/agents/" }
   });
   busy(false);
-  if (ins.error) { toast(ins.error.message, true); return; }
+  if (su.error) {
+    if (err) { err.textContent = su.error.message; err.hidden = false; }
+    toast(su.error.message, true);
+    return;
+  }
+  // let reservations know an application has landed
   try {
     await fetch("https://formsubmit.co/ajax/" + RESERVATIONS, {
       method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" },
-      body: JSON.stringify({ _subject: "New trade agent application — " + $("#ap-agency").value,
-        message: "Agency: " + $("#ap-agency").value + "\nContact: " + $("#ap-contact").value +
-                 "\nEmail: " + email + "\nPhone: " + $("#ap-phone").value +
-                 "\nCountry: " + $("#ap-country").value + "\nWebsite: " + $("#ap-website").value +
-                 "\n\nApprove in the KEA Trade Portal admin tab." })
+      body: JSON.stringify({ _subject: "New trade agent application — " + meta.agency_name,
+        message: "Agency: " + meta.agency_name + "\nContact: " + meta.contact_name +
+                 "\nEmail: " + email + "\nPhone: " + meta.phone +
+                 "\nCity: " + meta.city + "\nCountry: " + meta.country +
+                 "\nWebsite: " + meta.website +
+                 "\n\nApprove in the KEA Trade Portal -> Agents tab." })
     });
   } catch (e) {}
-  gate("pending");
+
+  if (su.data && su.data.session) { await onSession(su.data.session); return; }  // confirmation off
+  var em = $("#pt-confirm-email"); if (em) em.textContent = email;
+  gate("confirm");
 }
 
 async function doLogin(ev) {

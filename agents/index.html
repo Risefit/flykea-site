@@ -14,7 +14,7 @@
 <meta name="google-site-verification" content="ou8W3kXa1FmRS-AzqZr2GAOS-X2fosybIELGpTrRFSo">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XDV0FH0VK4"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XDV0FH0VK4');</script>
-<link rel="stylesheet" href="/assets/styles.css?v=a9a75dd9"></head><body>
+<link rel="stylesheet" href="/assets/styles.css?v=c56490aa"></head><body>
 <a class="skip" href="#main">Skip to content</a>
 <header id="hdr"><div class="wrap nav">
 <a href="/" class="nav-logo"><img src="/assets/img/2018/07/KEA-Logo.png" alt="KEA — Kampala Executive Aviation"></a>
@@ -26,8 +26,8 @@
 <li><a href="/about.html">About</a></li>
 <li><a href="/blog/">Blog</a></li>
 <li><a href="/contact.html">Contact</a></li>
-<li><a href="/agents/" class="active" class="nav-agents">Agent Login</a></li>
 </ul></nav>
+<a class="nav-agentbtn" href="/agents/">Agent Login</a>
 <a class="btn btn-outline nav-quote" href="/quote/">Get a Quote</a>
 <button class="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobilemenu"><span></span><span></span><span></span></button>
 </div>
@@ -81,9 +81,22 @@ branded client quotations &mdash; built for tour operators and travel agents who
         <div class="pt-fld"><label>Choose a password</label><input id="ap-pass" type="password" required minlength="8" autocomplete="new-password"></div>
         <p style="font-size:.78rem;color:var(--slate);margin-bottom:1rem">By applying you accept our trade terms and our
         <a href="/privacy.html" style="color:var(--green-ink)">privacy notice</a>.</p>
+        <p id="pt-apply-err" hidden style="background:#f7e0e0;color:#8d2b2b;padding:.7rem .9rem;border-radius:6px;font-size:.85rem;margin-bottom:.9rem"></p>
         <button class="pt-btn" type="submit">Submit application</button>
       </form>
       <p class="pt-alt">Already have an account? <a href="#" data-gateswap="auth">Sign in</a></p>
+    </div>
+  </div>
+
+  <div class="pt-gate pt-narrow" data-gate="confirm" hidden>
+    <div class="pt-card" style="text-align:center">
+      <h2 style="font-size:1.3rem">Confirm your email</h2>
+      <p class="pt-lead" style="margin:1rem auto">We&rsquo;ve sent a confirmation link to
+      <b id="pt-confirm-email"></b>. Click it to activate your login, then sign in here.
+      Your application then goes to our reservations team for approval.</p>
+      <p style="font-size:.85rem;color:var(--slate)">Nothing arrived? Check spam, or email
+      <a href="mailto:reservations@flykea.com" style="color:var(--green-ink)">reservations@flykea.com</a>.</p>
+      <button class="pt-btn ghost" data-gateswap="auth" style="margin-top:1.2rem">Go to sign in</button>
     </div>
   </div>
 
