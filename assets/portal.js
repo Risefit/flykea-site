@@ -32,6 +32,61 @@ function toast(msg, bad) {
   setTimeout(function () { t.classList.add("go"); }, 10);
   setTimeout(function () { t.remove(); }, 5000);
 }
+/* ---- transactional mail: browser sends only a record id; the edge function
+       resolves the recipient and content server-side ---- */
+async function mail(type, id) {
+  try {
+    var r = await sb.functions.invoke("send-mail", { body: { type: type, id: id } });
+    if (r.error) { console.warn("mail", type, r.error); return false; }
+    if (r.data && r.data.ok === false) { console.warn("mail", type, r.data.error); return false; }
+    return true;
+  } catch (e) { console.warn("mail failed", e); return false; }
+}
+
+/* ---- map pin picker (Leaflet, loaded on demand) ---- */
+var MAPOBJ = null, MAPMARK = null;
+function loadLeaflet() {
+  return new Promise(function (resolve, reject) {
+    if (window.L) return resolve();
+    var css = document.createElement("link");
+    css.rel = "stylesheet"; css.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+    document.head.appendChild(css);
+    var s = document.createElement("script");
+    s.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+    s.onload = function () { resolve(); };
+    s.onerror = function () { reject(new Error("map failed")); };
+    document.head.appendChild(s);
+  });
+}
+function setPin(lat, lng) {
+  if (!MAPOBJ) return;
+  if (MAPMARK) MAPMARK.setLatLng([lat, lng]);
+  else MAPMARK = window.L.marker([lat, lng], { draggable: true }).addTo(MAPOBJ)
+        .on("dragend", function (e) { var c = e.target.getLatLng(); setPin(c.lat, c.lng); });
+  var v = lat.toFixed(4) + ", " + lng.toFixed(4);
+  var lbl = $("#pt-pin-val"); if (lbl) lbl.textContent = v;
+  var use = $("#pt-pin-use"); if (use) use.dataset.coord = v;
+}
+async function openPinMap() {
+  var box = $("#pt-mapmodal"); if (!box) return;
+  box.hidden = false;
+  try { await loadLeaflet(); }
+  catch (e) { toast("Could not load the map \u2014 check your connection.", true); box.hidden = true; return; }
+  if (!MAPOBJ) {
+    MAPOBJ = window.L.map("pt-map").setView([1.3733, 32.2903], 7);
+    window.L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 18, attribution: "&copy; OpenStreetMap contributors" }).addTo(MAPOBJ);
+    MAPOBJ.on("click", function (e) { setPin(e.latlng.lat, e.latlng.lng); });
+    PORTS.forEach(function (pt) {
+      if (pt.lat == null || pt.lng == null) return;
+      window.L.circleMarker([pt.lat, pt.lng], { radius: 4, color: "#56750F",
+        fillColor: "#90B820", fillOpacity: 0.9, weight: 1 }).addTo(MAPOBJ).bindTooltip(pt.name);
+    });
+  }
+  setTimeout(function () { MAPOBJ.invalidateSize(); }, 60);
+}
+function closePinMap() { var b = $("#pt-mapmodal"); if (b) b.hidden = true; }
+
 function haversineNm(a, b) {
   var R = 6371, r = Math.PI / 180;
   var dLa = (b[0] - a[0]) * r, dLo = (b[1] - a[1]) * r, la1 = a[0] * r, la2 = b[0] * r;
@@ -339,7 +394,6 @@ async function submitBooking(ev) {
   var r = await sb.from("booking_requests").insert(payload).select("ref,id").single();
   busy(false);
   if (r.error) { toast("Could not submit: " + r.error.message, true); return; }
-  mail("booking_submitted", r.data.id);
 
   var who = AGENT || { agency_name: "KEA staff", contact_name: ME.email, email: ME.email };
   var body = [
@@ -822,6 +876,14 @@ document.addEventListener("DOMContentLoaded", function () {
   $("#pt-reset").addEventListener("click", function (e) { e.preventDefault(); doReset(); });
 
   $("#pt-calc").addEventListener("click", calculate);
+  $("#pt-pin") && $("#pt-pin").addEventListener("click", openPinMap);
+  $("#pt-pin-close") && $("#pt-pin-close").addEventListener("click", closePinMap);
+  $("#pt-pin-use") && $("#pt-pin-use").addEventListener("click", function () {
+    var v = this.dataset.coord;
+    if (!v) { toast("Tap the map to drop a pin first.", true); return; }
+    $("#pt-coord").value = v; closePinMap();
+    toast("Coordinates set \u2014 recalculating."); calculate();
+  });
   $("#pt-addleg").addEventListener("click", addLeg);
   $("#pt-swap").addEventListener("click", function () {
     readLegs();
