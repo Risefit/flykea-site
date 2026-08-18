@@ -16,7 +16,7 @@ var BASE         = "Kajjansi (Kampala)";
 var sb = null, ME = null, AGENT = null, IS_STAFF = false, MY_ROLE = "";
 var PORTS = [], TOWNS = [], FLEET = [], LOSS = [], RATES = [];
 var LEGS = [{ from: BASE, to: "" }];
-var LAST = null, QMAP = {};
+var LAST = null, QMAP = {}, SHOWRESULT = false;
 
 function $(s, r) { return (r || document).querySelector(s); }
 function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
@@ -133,6 +133,11 @@ function bookRate(acCode, fromName, toName) {
 function show(view) {
   $$(".pt-view").forEach(function (v) { v.hidden = v.dataset.view !== view; });
   $$(".pt-tab").forEach(function (t) { t.classList.toggle("on", t.dataset.go === view); });
+  if (view === "quote" && !SHOWRESULT) {          // a fresh visit shows no stale figures
+    var res = $("#pt-result"); if (res) res.hidden = true;
+    var bkd = $("#pt-booked");  if (bkd) bkd.hidden = true;
+  }
+  SHOWRESULT = false;
   if (view === "quotes")   loadMyQuotes();
   if (view === "bookings") loadMyBookings();
   if (view === "reports")  loadReports();
@@ -489,28 +494,6 @@ function quoteToLast(row) {
     is_international: row.is_international, lo: row.rack_total, hi: row.rack_total,
     oneWay: (row.block_hours || 1) / 2, method: "saved", hasCoords: row.distance_nm > 0
   };
-}
-
-function bookFromQuote(id) {
-  var row = MYQ.filter(function (r) { return r.id === id; })[0];
-  if (!row) return;
-  quoteToLast(row);
-  show("quote");
-  $("#pt-r-route").textContent = row.from_name + "  →  " + row.to_name;
-  $("#pt-r-ac").textContent = LAST.aircraft.name;
-  $("#pt-r-dist").textContent = row.distance_nm ? Math.round(row.distance_nm) + " nm" : "—";
-  $("#pt-r-time").textContent = fmtHrs((row.block_hours || 1) / 2);
-  $("#pt-r-block").textContent = "Saved quote";
-  $("#pt-r-rack").textContent = money(row.rack_total);
-  $("#pt-r-net").textContent = money(row.net_total);
-  $("#pt-r-margin").textContent = money(row.margin);
-  $("#pt-r-band").textContent = "as quoted";
-  var badge = $("#pt-r-method"); if (badge) { badge.textContent = "SAVED QUOTE"; badge.className = "pt-pill"; }
-  $("#pt-result").hidden = false;
-  setTimeout(function () {
-    var f = $("#pt-book-form"); if (f) f.scrollIntoView({ behavior: "smooth", block: "center" });
-  }, 120);
-  toast("Complete the details and send the booking request.");
 }
 
 function askWhyNotBooked(id) {
@@ -970,6 +953,15 @@ document.addEventListener("DOMContentLoaded", function () {
     var v = this.value.trim().toLowerCase();
     var t = TOWNS.filter(function (x) { return x.name.toLowerCase() === v; })[0];
     if (t) { $("#pt-coord").value = t.lat.toFixed(4) + ", " + t.lng.toFixed(4); if (LAST) calculate(); }
+  });
+
+  // editing the routing makes any displayed result stale
+  function staleResult() {
+    var res = $("#pt-result");
+    if (res && !res.hidden) { res.hidden = true; LAST = null; }
+  }
+  document.addEventListener("input", function (e) {
+    if (e.target.closest(".pt-leg-from, .pt-leg-to, #pt-coord, #pt-town")) staleResult();
   });
 
   ["pt-pax", "pt-mission", "pt-ac", "pt-daystop", "pt-nights", "pt-date"].forEach(function (id) {

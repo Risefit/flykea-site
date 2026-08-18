@@ -1,5 +1,5 @@
 /* KEA Trade Portal service worker — offline shell for the calculator */
-var CACHE = "kea-trade-v5";
+var CACHE = "kea-trade-v6";
 var SHELL = ["/agents/", "/assets/styles.css", "/assets/portal.js", "/agents/manifest.webmanifest"];
 
 self.addEventListener("install", function (e) {
