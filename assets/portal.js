@@ -469,15 +469,16 @@ async function loadMyQuotes() {
       : "<button class='pt-mini' data-nobook='" + r.id + "'>Don&rsquo;t book</button>";
     var del  = r.converted ? ""
       : " <button class='pt-mini pt-del' data-delq='" + r.id + "' title='Delete this quote'>&times;</button>";
+    var pdf  = "<button class='pt-mini' data-pdf='" + r.id + "' title='Branded quote for your client'>Client PDF</button>";
     return "<tr><td>" + r.created_at.slice(0, 10) + "</td>" +
       "<td>" + esc(r.from_name) + " \u2192 " + esc(r.to_name) +
         (r.leg_count > 1 ? " <small>(" + r.leg_count + " legs)</small>" : "") + "</td>" +
       "<td>" + esc(r.aircraft_code || "") + "</td><td>" + r.pax + "</td>" +
       "<td>" + money(r.rack_total) + "</td><td>" + money(r.net_total) + "</td>" +
-      "<td>" + status + "</td><td>" + book + "</td><td>" + dec + del + "</td></tr>";
+      "<td>" + status + "</td><td>" + pdf + "</td><td>" + book + "</td><td>" + dec + del + "</td></tr>";
   }).join("");
   $("#pt-quotes-body").innerHTML = rows ||
-    "<tr><td colspan=9>No quotes yet. Run one on the Quote tab.</td></tr>";
+    "<tr><td colspan=10>No quotes yet. Run one on the Quote tab.</td></tr>";
 }
 
 /* rebuild LAST from a saved quote so the booking form can be reused */
@@ -589,6 +590,7 @@ function fillProfileForm() {
    ["city", "city"], ["country", "country"], ["website", "website"]].forEach(function (p) {
     var n = $("#pf-" + p[0]); if (n) n.value = AGENT[p[1]] || "";
   });
+  var em = $("#pf-email"); if (em) em.value = AGENT.email || ME.email || "";
   var img = $("#pf-logo-prev");
   if (AGENT.logo_url) { img.src = AGENT.logo_url; img.hidden = false; } else img.hidden = true;
 }
@@ -613,6 +615,22 @@ async function saveProfile(ev) {
 }
 
 /* ================= CLIENT QUOTE (rack only) ================= */
+function clientQuoteFor(id) {
+  var q = QMAP[id];
+  if (!q) { toast("Could not find that quote.", true); return; }
+  var keep = LAST;
+  LAST = {
+    id: q.id, from_name: q.from_name, to_name: q.to_name, pax: q.pax,
+    travel_date: q.travel_date, aircraft_code: q.aircraft_code,
+    aircraft: (FLEET.filter(function (a) { return a.code === q.aircraft_code; })[0] || { name: q.aircraft_code, seats: "" }),
+    distance_nm: q.distance_nm, block_hours: q.block_hours, day_stop: q.day_stop,
+    night_stops: q.night_stops, rack_total: q.rack_total, net_total: q.net_total,
+    margin: q.margin, legs: q.legs, oneWay: (q.block_hours || 1) / 2
+  };
+  clientQuote();
+  LAST = keep;
+}
+
 function clientQuote() {
   if (!LAST) { toast("Run a quote first.", true); return; }
   var a = AGENT || {};
@@ -983,6 +1001,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (cn) { carouselGo(cn.dataset.car, +cn.dataset.step, true); return; }
     var cd = t.closest(".pt-dot");
     if (cd) { carouselGo(cd.dataset.car, +cd.dataset.slide, false); return; }
+    var pf = t.closest("[data-pdf]");             if (pf) { clientQuoteFor(pf.dataset.pdf); return; }
     var dq = t.closest("[data-delq]");            if (dq) deleteQuote(dq.dataset.delq);
     var nb = t.closest("[data-nobook]");        if (nb && QMAP[nb.dataset.nobook]) openWhyFor(QMAP[nb.dataset.nobook]);
     var ok = t.closest("[data-accept]");        if (ok) setBooking(ok.dataset.accept, "confirmed");

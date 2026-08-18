@@ -216,7 +216,7 @@ branded client quotations &mdash; built for tour operators and travel agents who
     that feedback is what helps us sharpen pricing and win you more business.</p>
     <div class="pt-tablewrap"><table class="pt-t" id="tbl-quotes"><thead><tr>
       <th>Date</th><th>Route</th><th>Aircraft</th><th>Pax</th><th>Rack</th><th>Net</th><th>Status</th>
-      <th>Book</th><th>Decline</th>
+      <th>Client quote</th><th>Book</th><th>Decline</th>
     </tr></thead><tbody id="pt-quotes-body"></tbody></table></div>
 
     <div class="pt-card pt-whybox" id="pt-whybox" hidden style="margin-top:1.6rem;max-width:560px">
@@ -361,8 +361,11 @@ branded client quotations &mdash; built for tour operators and travel agents who
     <h2>Agency profile &amp; branding</h2>
     <p class="pt-lead">Your logo and details appear on the client quotations you generate. Your net rates and margin never do.</p>
     <div class="pt-card" style="max-width:640px">
+      <div class="pt-note-help">These details were taken from your trade account application and are used on the
+        <b>client quotations</b> you generate &mdash; edit anything that has changed and save.</div>
       <form id="pt-profile-form">
         <div class="pt-fld"><label>Agency name</label><input id="pf-agency" required></div>
+        <div class="pt-fld"><label>Account email (contact us to change)</label><input id="pf-email" readonly></div>
         <div class="pt-2">
           <div class="pt-fld"><label>Contact name</label><input id="pf-contact"></div>
           <div class="pt-fld"><label>Phone</label><input id="pf-phone" type="tel"></div>
@@ -373,6 +376,10 @@ branded client quotations &mdash; built for tour operators and travel agents who
           <div class="pt-fld"><label>Country</label><input id="pf-country"></div>
         </div>
         <div class="pt-fld"><label>Website</label><input id="pf-website" placeholder="https://"></div>
+        <div class="pt-note-help">Your logo appears at the top of every <b>client quotation PDF</b> you generate from the
+          Quote tab or from My quotes, alongside your agency name, address and contact details &mdash; so the document your
+          client receives is branded as yours. KEA&rsquo;s net rates and your margin never appear on it. A landscape PNG or
+          JPG with a transparent or white background works best.</div>
         <div class="pt-fld"><label>Agency logo (PNG or JPG, max 2MB)</label><input id="pf-logo" type="file" accept="image/*">
           <img loading="lazy" decoding="async" id="pf-logo-prev" class="pt-logo-prev" alt="" hidden></div>
         <button class="pt-btn" type="submit">Save profile</button>
