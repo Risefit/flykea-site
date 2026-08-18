@@ -588,3 +588,5 @@ table.pt-t tr:last-child td{border-bottom:0}
 .pt-car-count{position:absolute;top:8px;right:8px;z-index:3;font-family:var(--mono);font-size:.6rem;
   letter-spacing:.06em;color:#fff;background:rgba(8,16,10,.55);padding:.2rem .45rem;border-radius:4px}
 @media(hover:none){.pt-car-nav{opacity:1;background:rgba(255,255,255,.8)}}
+/* single-leg: no number column, From/To share the full width evenly */
+.pt-leg.solo{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 26px}

@@ -218,7 +218,8 @@ function renderLegs() {
   var box = $("#pt-legs"); if (!box) return;
   box.innerHTML = LEGS.map(function (lg, i) {
     var first = i === 0;
-    return '<div class="pt-leg" data-i="' + i + '"><span class="pt-leg-n">' + (i + 1) + '</span>' +
+    return '<div class="pt-leg' + (LEGS.length > 1 ? '' : ' solo') + '" data-i="' + i + '">' +
+      (LEGS.length > 1 ? '<span class="pt-leg-n">' + (i + 1) + '</span>' : '') +
       '<div class="pt-fld"><label>' + (first ? "From" : "Then from") + '</label>' +
       '<input class="pt-leg-from" list="pt-ports" value="' + esc(lg.from) + '"' + (first ? '' : ' readonly') + ' autocomplete="off"></div>' +
       '<div class="pt-fld"><label>To</label>' +

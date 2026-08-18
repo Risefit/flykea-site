@@ -14,7 +14,7 @@
 <meta name="google-site-verification" content="ou8W3kXa1FmRS-AzqZr2GAOS-X2fosybIELGpTrRFSo">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XDV0FH0VK4"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XDV0FH0VK4');</script>
-<link rel="stylesheet" href="/assets/styles.css?v=16a7d36a"></head><body>
+<link rel="stylesheet" href="/assets/styles.css?v=6c63e659"></head><body>
 <a class="skip" href="#main">Skip to content</a>
 <header id="hdr"><div class="wrap nav">
 <a href="/" class="nav-logo"><img src="/assets/img/2018/07/KEA-Logo.png" alt="KEA — Kampala Executive Aviation"></a>
@@ -152,7 +152,10 @@ branded client quotations &mdash; built for tour operators and travel agents who
           <button class="pt-mini" id="pt-swap" type="button">&#8645; Swap</button>
           <button class="pt-mini ok" id="pt-addleg" type="button">+ Add leg</button>
         </div>
-        <div class="pt-fld" style="margin-top:1rem"><label>Ugandan town (fills coordinates)</label>
+        <div class="pt-note-help">For a lodge, camp or any point that is not a listed airfield &mdash; typically a
+          helicopter landing &mdash; either pick the nearest Ugandan town, drop a pin on the map, or paste GPS coordinates.
+          The client must obtain landowner permission in advance, and no dust landings are permitted.</div>
+        <div class="pt-fld"><label>Ugandan town (fills coordinates)</label>
           <input id="pt-town" list="pt-townlist" placeholder="e.g. Mbale" autocomplete="off">
           <datalist id="pt-townlist"></datalist></div>
         <div class="pt-fld"><label>Landing coordinates &mdash; optional (lat, lng)</label>
@@ -254,7 +257,7 @@ branded client quotations &mdash; built for tour operators and travel agents who
   <section class="pt-view pt-wrap" data-view="bookings" hidden>
     <h2>Booking requests</h2><p class="pt-lead">Track everything you&rsquo;ve asked us to fly.</p>
     <div class="pt-tablewrap"><table class="pt-t"><thead><tr>
-      <th>Reference</th><th>Raised</th><th>Client ref</th><th>Value</th><th>Status</th><th>Confirmation</th>
+      <th>Reference</th><th>Raised</th><th>Client ref</th><th>Value</th><th>Status</th><th>Confirmation</th><th>Your commission</th>
     </tr></thead><tbody id="pt-bookings-body"></tbody></table></div>
   </section>
 
@@ -270,35 +273,86 @@ branded client quotations &mdash; built for tour operators and travel agents who
     <h2>Charter terms &amp; conditions</h2>
     <p class="pt-lead">Version 2026.1 &middot; applies to every flight booked through the trade portal.</p>
     <div class="pt-card pt-terms">
-      <h3>1. Quotations</h3>
-      <p>Quotations are indicative and based on the routing, dates and payload supplied. They remain subject to
-      aircraft availability at the time of booking and to final confirmation by KEA. Indicative prices may vary by
-      approximately 10% pending final routing, landing and handling fees.</p>
-      <h3>2. What the charter price includes</h3>
-      <p>Aircraft, crew, fuel and standard third-party and passenger liability insurance for the routing quoted. Charter is
-      priced on return positioning: the aircraft is chartered for the full journey including repositioning to and from its base.</p>
-      <h3>3. What is excluded</h3>
-      <ul><li>Landing, parking, navigation and handling fees</li><li>Government taxes and passenger service charges</li>
-      <li>Catering, ground transfers and accommodation</li><li>Overnight crew costs where the aircraft remains away from base</li>
-      <li>Permits and overflight charges on international routings</li></ul>
-      <h3>4. Payload, baggage and safety</h3>
-      <p>All passenger and baggage weights must be declared accurately before departure. KEA reserves the right to
-      offload baggage or passengers where weight and balance, runway performance or weather require it. The pilot in
-      command has final authority on every flight.</p>
-      <h3>5. Weather, delays and diversion</h3>
-      <p>Flights are subject to weather, air traffic control and airfield serviceability. Where a flight cannot operate
-      safely KEA will offer the next available slot or a refund of the unflown sector. KEA is not liable for
-      consequential losses arising from delay or diversion.</p>
-      <h3>6. Payment</h3>
-      <p>Unless credit terms are agreed in writing, payment is required in cleared funds before departure. Agency net
-      rates are confidential and must not be disclosed to your clients or third parties.</p>
-      <h3>7. Cancellation</h3>
-      <p>Cancellation charges are advised at the time of booking and depend on aircraft type, notice period and any
-      positioning already flown. No-shows are charged in full.</p>
-      <h3>8. Agency obligations</h3>
-      <p>Agents are responsible for the accuracy of passenger information, for ensuring passengers hold valid travel
+      <h3>What the charter price includes</h3>
+      <ul>
+        <li>Landing fees at airports on the quoted routing</li>
+        <li>ATNS / air navigation fees</li>
+        <li>Passenger taxes at airports</li>
+        <li>Pilot fees and per diem</li>
+        <li>Passenger legal liability and insurance</li>
+        <li>Animal clearance where required</li>
+        <li>Transport for crew</li>
+        <li>Fuel at airports</li>
+      </ul>
+
+      <h3>What is excluded</h3>
+      <ul>
+        <li>Pilot rest room, accommodation, meals and transport where the aircraft stays out</li>
+        <li>In-flight catering</li>
+        <li>Passenger land transfers</li>
+        <li>Agent commission</li>
+        <li>Ad-hoc landing fees and off-site landing costs</li>
+        <li>Local authority fees and clearances</li>
+      </ul>
+
+      <h3>Quotations and pricing</h3>
+      <p>Quotations are valid for <b>30 days</b> from issue; quotes issued further in advance are indicative only and
+      subject to revision. Prices are aircraft specific and strictly subject to aircraft serviceability and availability.
+      VAT at 18% is reflected separately where applicable. Kampala Executive Aviation Ltd is withholding-tax exempt, so
+      quoted prices are fully payable. Rates are subject to fuel price fluctuation, and any fuel surcharge above the
+      amount provided for will be billed in addition.</p>
+
+      <h3>Flight time</h3>
+      <p>Quoted flight time is an estimate and may change due to weather, diversion, air traffic control and other
+      operational factors. <b>All flying time exceeding the quoted time is charged additionally.</b> Costs arising from
+      passenger-induced delays or itinerary changes, and from delay or diversion beyond KEA&rsquo;s control, become payable
+      in addition to the quoted price.</p>
+
+      <h3>Passengers and baggage</h3>
+      <p>Passenger names must be provided before the flight for legal and insurance purposes. On helicopter flights only
+      <b>soft luggage, 5&nbsp;kg per passenger</b>, is permitted. All passenger and baggage weights must be declared
+      accurately; KEA may offload where weight and balance, performance or weather require it. The pilot in command has
+      final authority on every flight.</p>
+
+      <h3>Helicopter and off-airfield landings</h3>
+      <ul>
+        <li>The client must obtain GPS coordinates and landowner permission in advance</li>
+        <li><b>No dust landings are permitted</b></li>
+        <li>Off-site landing costs are excluded from the quote</li>
+        <li>Pilot day room, accommodation, transport and meals are for the client&rsquo;s account</li>
+      </ul>
+
+      <h3>Permits</h3>
+      <p>Every quote is subject to landing and overflight permission being granted by all relevant authorities prior to
+      the flight. Permits are only applied for once written confirmation has been received. KEA will do all in its power
+      to secure the necessary permits and slots but cannot be held liable where they are refused or delayed.</p>
+
+      <h3>Confirmation and payment</h3>
+      <p>No booking is confirmed until KEA receives written confirmation. Full payment is required before departure
+      unless other arrangements have been agreed in writing. Payment may be made by bank-guaranteed cheque, direct bank
+      transfer, direct deposit or credit card; <b>card payments attract 5% bank charges</b>. Banking details are provided
+      on the invoice &mdash; always verify them with our reservations team by phone before transferring funds.</p>
+
+      <h3>Cancellation</h3>
+      <ul>
+        <li><b>20%</b> of the quoted amount on confirmation and up to 48 hours in advance</li>
+        <li><b>50%</b> of the quoted amount within 24 hours of departure</li>
+        <li><b>100%</b> of the quoted amount on the scheduled day of departure</li>
+      </ul>
+
+      <h3>Agency obligations</h3>
+      <p>Agency net rates and margins are confidential and must not be disclosed to your clients or any third party.
+      Agents are responsible for the accuracy of passenger information, for ensuring passengers hold valid travel
       documentation, and for passing KEA&rsquo;s safety briefings and conditions to their clients.</p>
-      <p style="margin-top:1.4rem"><b>Kampala Executive Aviation</b> &middot; Ugandan CAA AOC 097 &middot; Gate 1, Kajjansi Airfield, Kampala, Uganda</p>
+
+      <h3>Governing law</h3>
+      <p>These terms are governed by and construed in accordance with the laws of the Republic of Uganda, and disputes
+      are determined in the Ugandan courts of applicable jurisdiction. The full standard terms and conditions of charter
+      form part of every quotation issued.</p>
+
+      <p style="margin-top:1.6rem;font-size:.85rem"><b>Kampala Executive Aviation Ltd</b><br>
+      Ugandan CAA AOC 097 &middot; Company Registration 80010003208761 &middot; TIN 1000434354<br>
+      Gate 1, Kajjansi Airfield, Kampala, Uganda &middot; +256 776 333 114 &middot; reservations@flykea.com</p>
     </div>
   </section>
 
@@ -359,6 +413,12 @@ branded client quotations &mdash; built for tour operators and travel agents who
       <div class="pt-tablewrap"><table class="pt-t" id="rp-agents-t"><thead><tr>
         <th>Agency</th><th>Country</th><th>Quotes</th><th>Requests</th><th>Won</th><th>Quote&rarr;won</th><th>Value</th>
       </tr></thead><tbody id="rp-agents"></tbody></table></div></div>
+
+    <div class="pt-sec"><h3>Aircraft popularity
+      <button class="pt-mini" data-csv="rp-aircraft-t">Export CSV</button></h3>
+      <div class="pt-tablewrap"><table class="pt-t" id="rp-aircraft-t"><thead><tr>
+        <th>Aircraft</th><th>Times quoted</th><th>Requested</th><th>Conversion</th><th>Avg pax</th><th>Avg rack</th>
+      </tr></thead><tbody id="rp-aircraft"></tbody></table></div></div>
 
     <div class="pt-sec"><h3>Route demand
       <button class="pt-mini" data-csv="rp-routes-t">Export CSV</button></h3>
