@@ -355,12 +355,13 @@ async function saveQuote() {
     from_name: LAST.from_name, to_name: LAST.to_name, custom_coords: LAST.custom_coords,
     pax: LAST.pax, travel_date: LAST.travel_date, mission: LAST.mission,
     aircraft_code: LAST.aircraft_code, distance_nm: LAST.distance_nm,
-    block_hours: LAST.block_hours, day_stop: LAST.day_stop, night_stops: LAST.night_stops || 0, night_stops: LAST.night_stops,
+    block_hours: LAST.block_hours, day_stop: LAST.day_stop, night_stops: LAST.night_stops || 0,
     rack_total: LAST.rack_total, net_total: LAST.net_total, margin: LAST.margin,
     is_international: LAST.is_international, source: IS_STAFF ? "staff" : "portal",
     legs: LAST.legs, leg_count: LAST.leg_count
   }).select("id").single();
-  if (!r.error && r.data) LAST.id = r.data.id;
+  if (r.error) { console.warn("saveQuote", r.error); toast("Quote not saved: " + r.error.message, true); return; }
+  if (r.data) { LAST.id = r.data.id; QMAP[r.data.id] = null; }
 }
 
 /* ================= BOOKING ================= */
@@ -452,17 +453,25 @@ async function sendWhy() {
 /* ================= MY QUOTES / BOOKINGS ================= */
 async function loadMyQuotes() {
   var q = await sb.from("quotes").select("*").order("created_at", { ascending: false }).limit(100);
-  MYQ = q.data || [];
-  var rows = MYQ.map(function (r) {
-    var act = r.converted
-      ? "<span class='pt-pill ok'>requested</span>"
-      : "<button class='pt-mini ok' data-book='" + r.id + "'>Book flight</button> " +
-        "<button class='pt-mini' data-nobook='" + r.id + "'>Don&rsquo;t book</button>";
-    return "<tr><td>" + r.created_at.slice(0, 10) + "</td><td>" + esc(r.from_name) + " → " + esc(r.to_name) +
-      "</td><td>" + esc(r.aircraft_code || "") + "</td><td>" + r.pax + "</td><td>" + money(r.rack_total) +
-      "</td><td>" + money(r.net_total) + "</td><td>" + act + "</td></tr>";
+  if (q.error) { toast("Could not load quotes: " + q.error.message, true); return; }
+  QMAP = {};
+  var rows = (q.data || []).map(function (r) {
+    QMAP[r.id] = r;
+    var status = r.converted ? "<span class='pt-pill ok'>requested</span>"
+                             : "<span class='pt-pill'>quote</span>";
+    var book = r.converted ? "\u2014"
+      : "<button class='pt-mini ok' data-book='" + r.id + "'>Book flight</button>";
+    var dec  = r.converted ? "\u2014"
+      : "<button class='pt-mini' data-nobook='" + r.id + "'>Don&rsquo;t book</button>";
+    return "<tr><td>" + r.created_at.slice(0, 10) + "</td>" +
+      "<td>" + esc(r.from_name) + " \u2192 " + esc(r.to_name) +
+        (r.leg_count > 1 ? " <small>(" + r.leg_count + " legs)</small>" : "") + "</td>" +
+      "<td>" + esc(r.aircraft_code || "") + "</td><td>" + r.pax + "</td>" +
+      "<td>" + money(r.rack_total) + "</td><td>" + money(r.net_total) + "</td>" +
+      "<td>" + status + "</td><td>" + book + "</td><td>" + dec + "</td></tr>";
   }).join("");
-  $("#pt-quotes-body").innerHTML = rows || "<tr><td colspan=7>No quotes yet. Run one on the Quote tab.</td></tr>";
+  $("#pt-quotes-body").innerHTML = rows ||
+    "<tr><td colspan=9>No quotes yet. Run one on the Quote tab.</td></tr>";
 }
 
 /* rebuild LAST from a saved quote so the booking form can be reused */
