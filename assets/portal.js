@@ -770,6 +770,16 @@ async function doApply(ev) {
                  "\nWebsite: " + meta.website + "\n\nApprove in the KEA Trade Portal -> Agents tab." })
     });
   } catch (e) {}
+  // Supabase returns a decoy user (empty identities) when the address is already
+  // registered and sends NO email, so don't promise a link that will never arrive.
+  var u = su.data && su.data.user;
+  if (u && Array.isArray(u.identities) && u.identities.length === 0) {
+    var msg = "An account already exists for " + email + ". Please sign in instead \u2014 " +
+              "or use \u201CForgot password\u201D on the sign-in screen if you can\u2019t get in.";
+    if (err) { err.textContent = msg; err.hidden = false; }
+    toast("That email already has an account \u2014 sign in instead.", true);
+    return;
+  }
   if (su.data && su.data.session) { await onSession(su.data.session); return; }
   $("#pt-confirm-email").textContent = email;
   gate("confirm");
