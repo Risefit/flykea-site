@@ -247,7 +247,7 @@ function removeLeg(i) {
   readLegs(); LEGS.splice(i, 1);
   if (!LEGS.length) LEGS = [{ from: BASE, to: "" }];
   for (var k = 1; k < LEGS.length; k++) LEGS[k].from = LEGS[k - 1].to;
-  renderLegs(); calculate();
+  renderLegs(); if (LAST) calculate();
 }
 
 /* ================= CALCULATOR ================= */
@@ -897,7 +897,7 @@ document.addEventListener("DOMContentLoaded", function () {
   $("#pt-swap").addEventListener("click", function () {
     readLegs();
     var a = LEGS[0].from; LEGS[0].from = LEGS[0].to; LEGS[0].to = a;
-    renderLegs(); calculate();
+    renderLegs(); if (LAST) calculate();
   });
   $("#pt-clientquote").addEventListener("click", clientQuote);
   $("#pt-book-form").addEventListener("submit", submitBooking);
@@ -908,7 +908,7 @@ document.addEventListener("DOMContentLoaded", function () {
   $("#pt-town").addEventListener("change", function () {
     var v = this.value.trim().toLowerCase();
     var t = TOWNS.filter(function (x) { return x.name.toLowerCase() === v; })[0];
-    if (t) { $("#pt-coord").value = t.lat.toFixed(4) + ", " + t.lng.toFixed(4); calculate(); }
+    if (t) { $("#pt-coord").value = t.lat.toFixed(4) + ", " + t.lng.toFixed(4); if (LAST) calculate(); }
   });
 
   ["pt-pax", "pt-mission", "pt-ac", "pt-daystop", "pt-nights", "pt-date"].forEach(function (id) {
