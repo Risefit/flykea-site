@@ -14,7 +14,7 @@
 <meta name="google-site-verification" content="ou8W3kXa1FmRS-AzqZr2GAOS-X2fosybIELGpTrRFSo">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XDV0FH0VK4"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XDV0FH0VK4');</script>
-<link rel="stylesheet" href="/assets/styles.css?v=c56490aa"></head><body>
+<link rel="stylesheet" href="/assets/styles.css?v=6babf0fd"></head><body>
 <a class="skip" href="#main">Skip to content</a>
 <header id="hdr"><div class="wrap nav">
 <a href="/" class="nav-logo"><img src="/assets/img/2018/07/KEA-Logo.png" alt="KEA — Kampala Executive Aviation"></a>
@@ -131,6 +131,7 @@ branded client quotations &mdash; built for tour operators and travel agents who
     <button class="pt-tab" data-go="fleet">Aircraft</button>
     <button class="pt-tab" data-go="terms">Terms</button>
     <button class="pt-tab" data-go="profile">Profile</button>
+    <button class="pt-tab pt-staff-only" data-go="queue" hidden>Bookings queue</button>
     <button class="pt-tab pt-staff-only" data-go="reports" hidden>Reports</button>
     <button class="pt-tab pt-staff-only" data-go="admin" hidden>Agents</button>
     <button class="pt-tab pt-staff-only" data-go="rates" hidden>Rate book</button>
@@ -141,15 +142,21 @@ branded client quotations &mdash; built for tour operators and travel agents who
   <!-- ---- QUOTE ---- -->
   <section class="pt-view pt-wrap" data-view="quote">
     <h2>Charter calculator</h2>
-    <p class="pt-lead">Prices are indicative rack rates with your agency net and margin shown. Charter is priced on
-    return positioning &mdash; the aircraft flies out and back to base.</p>
+    <p class="pt-lead">Build a single hop or a multi-airfield itinerary. Prices show the rack rate your client pays,
+    your agency net, and your margin. Charter includes positioning back to base.</p>
     <div class="pt-grid">
       <div class="pt-card">
-        <div class="pt-fld"><label>From</label><input id="pt-from" list="pt-ports" value="Kajjansi (Kampala)" autocomplete="off"></div>
-        <div class="pt-fld"><label>To</label><input id="pt-to" list="pt-ports" placeholder="Destination" autocomplete="off"></div>
+        <div id="pt-legs"></div>
         <datalist id="pt-ports"></datalist>
-        <button class="pt-mini" id="pt-swap" type="button">&#8645; Swap</button>
-        <div class="pt-fld" style="margin-top:.9rem"><label>Landing coordinates &mdash; optional (lat, lng)</label><input id="pt-coord" placeholder="e.g. 1.5740, 30.2200"></div>
+        <div class="pt-legbtns">
+          <button class="pt-mini" id="pt-swap" type="button">&#8645; Swap</button>
+          <button class="pt-mini ok" id="pt-addleg" type="button">+ Add leg</button>
+        </div>
+        <div class="pt-fld" style="margin-top:1rem"><label>Ugandan town (fills coordinates)</label>
+          <input id="pt-town" list="pt-townlist" placeholder="e.g. Mbale" autocomplete="off">
+          <datalist id="pt-townlist"></datalist></div>
+        <div class="pt-fld"><label>Landing coordinates &mdash; optional (lat, lng)</label>
+          <input id="pt-coord" placeholder="e.g. 1.5740, 30.2200"></div>
         <div class="pt-2">
           <div class="pt-fld"><label>Date</label><input id="pt-date" type="date"></div>
           <div class="pt-fld"><label>Passengers</label><input id="pt-pax" type="number" min="1" max="19" value="4"></div>
@@ -159,18 +166,20 @@ branded client quotations &mdash; built for tour operators and travel agents who
           <option value="medevac">Medical evacuation</option><option value="site">Remote site (helicopter)</option>
         </select></div>
         <div class="pt-fld"><label>Aircraft</label><select id="pt-ac"></select></div>
-        <label class="pt-fld" style="display:flex;gap:.5rem;align-items:center;font-size:.85rem;color:var(--slate)">
-          <input type="checkbox" id="pt-daystop" style="width:auto"> Aircraft waits same day (day stop)</label>
+        <label class="pt-check"><input type="checkbox" id="pt-daystop"> Aircraft waits for 2+ hours (day stop)</label>
+        <div class="pt-fld"><label>Night stops (aircraft stays overnight)</label>
+          <input id="pt-nights" type="number" min="0" max="14" value="0"></div>
         <button class="pt-btn" id="pt-calc" type="button">Calculate</button>
       </div>
 
       <div>
         <div class="pt-card pt-res" id="pt-result" hidden>
-          <h3 id="pt-r-route" style="font-size:1.15rem;margin-bottom:.2rem"></h3>
+          <h3 id="pt-r-route" style="font-size:1.1rem;margin-bottom:.35rem"></h3>
           <span class="pt-pill" id="pt-r-method"></span>
-          <p style="color:var(--slate);font-size:.9rem;margin-bottom:1.1rem"><b id="pt-r-ac"></b></p>
+          <p style="color:var(--slate);font-size:.9rem;margin:.6rem 0 1rem"><b id="pt-r-ac"></b></p>
+          <div class="pt-leglist" id="pt-r-legs"></div>
           <div class="pt-metrics">
-            <div class="pt-m"><div class="k">Distance</div><div class="v" id="pt-r-dist"></div></div>
+            <div class="pt-m"><div class="k">Total distance</div><div class="v" id="pt-r-dist"></div></div>
             <div class="pt-m"><div class="k">Flight time</div><div class="v" id="pt-r-time"></div></div>
             <div class="pt-m"><div class="k">Billed</div><div class="v" id="pt-r-block" style="font-size:.85rem"></div></div>
           </div>
@@ -179,35 +188,18 @@ branded client quotations &mdash; built for tour operators and travel agents who
             <div><div class="k">Your net</div><div class="v" id="pt-r-net"></div></div>
             <div class="margin"><div class="k">Your margin</div><div class="v" id="pt-r-margin"></div></div>
           </div>
-          <p class="pt-confid">Indicative range <span id="pt-r-band"></span> &middot; excludes landing, handling &amp; route fees &middot;
-          net and margin are confidential to your agency</p>
-          <div id="pt-r-intl" hidden style="background:var(--tint);padding:.9rem 1.1rem;border-radius:8px;font-size:.86rem;color:var(--green-ink);margin-bottom:1rem">
-            International routing &mdash; permits and fees vary. Submit the request and we&rsquo;ll confirm a firm price fast.</div>
+          <p class="pt-confid">Range <span id="pt-r-band"></span> &middot; excludes landing, handling &amp; route fees
+          &middot; net and margin are confidential to your agency</p>
+          <div id="pt-r-nightwarn" hidden class="pt-warn">Night-stop charges are not yet loaded for this aircraft &mdash;
+          reservations will confirm the overnight cost.</div>
+          <div id="pt-r-intl" hidden class="pt-warn">International routing &mdash; permits and fees vary.
+          Send the request and we&rsquo;ll confirm a firm price fast.</div>
           <div class="pt-actions">
             <button class="pt-btn" id="pt-clientquote" type="button">Client quote PDF</button>
-            <button class="pt-btn ghost" id="pt-wa" type="button">WhatsApp KEA</button>
-            <button class="pt-btn ghost" id="pt-nobook" type="button">Not booking this</button>
+            <a class="pt-btn ghost" href="#" onclick="return false" style="pointer-events:none;opacity:.35">Saved to My quotes</a>
           </div>
-          <div class="pt-why" id="pt-why" hidden>
-            <div class="pt-fld"><label>What stopped this one?</label><select id="pt-why-reason"></select></div>
-            <div class="pt-fld"><label>Notes (optional)</label><input id="pt-why-notes" placeholder="e.g. client chose road transfer"></div>
-            <button class="pt-mini ok" id="pt-why-send" type="button">Send feedback</button>
-          </div>
-        </div>
-
-        <div class="pt-card" style="margin-top:1.3rem">
-          <h3 style="font-size:1.05rem;margin-bottom:.9rem">Request this charter</h3>
-          <form id="pt-book-form">
-            <div class="pt-2">
-              <div class="pt-fld"><label>Your client reference</label><input id="pt-b-ref" placeholder="e.g. SMITH/AUG"></div>
-              <div class="pt-fld"><label>Contact phone</label><input id="pt-b-phone" type="tel"></div>
-            </div>
-            <div class="pt-fld"><label>Passenger details / weights</label><input id="pt-b-pax" placeholder="names, weights, baggage"></div>
-            <div class="pt-fld"><label>Notes for operations</label><textarea id="pt-b-notes" rows="2"></textarea></div>
-            <button class="pt-btn" type="submit">Send booking request</button>
-          </form>
-          <div id="pt-booked" hidden style="margin-top:1rem;background:var(--tint);padding:1rem;border-radius:8px;font-size:.9rem">
-            Request sent &mdash; reference <b id="pt-booked-ref"></b>. Our team will confirm availability and a firm price.</div>
+          <p style="font-size:.82rem;color:var(--slate);margin-top:.9rem">This quote is saved automatically.
+          Go to <b>My quotes</b> to book it or tell us why you didn&rsquo;t.</p>
         </div>
       </div>
     </div>
@@ -215,17 +207,53 @@ branded client quotations &mdash; built for tour operators and travel agents who
 
   <!-- ---- MY QUOTES ---- -->
   <section class="pt-view pt-wrap" data-view="quotes" hidden>
-    <h2>My quotes</h2><p class="pt-lead">Every calculation you run is saved here.</p>
+    <h2>My quotes</h2>
+    <p class="pt-lead">Every quote you run is saved here. Book it, or tell us what stopped it &mdash;
+    that feedback is what helps us sharpen pricing and win you more business.</p>
     <div class="pt-tablewrap"><table class="pt-t" id="tbl-quotes"><thead><tr>
       <th>Date</th><th>Route</th><th>Aircraft</th><th>Pax</th><th>Rack</th><th>Net</th><th>Status</th>
+      <th>Book</th><th>Decline</th>
     </tr></thead><tbody id="pt-quotes-body"></tbody></table></div>
+
+    <div class="pt-card pt-whybox" id="pt-whybox" hidden style="margin-top:1.6rem;max-width:560px">
+      <h3 style="font-size:1.05rem;margin-bottom:.2rem">What stopped this one?</h3>
+      <p style="color:var(--slate);font-size:.88rem;margin-bottom:1rem" id="pt-why-label"></p>
+      <input type="hidden" id="pt-why-quote">
+      <div class="pt-fld"><label>Reason</label><select id="pt-why-reason"></select></div>
+      <div class="pt-fld"><label>Notes (optional)</label><input id="pt-why-notes" placeholder="e.g. client chose road transfer"></div>
+      <div style="display:flex;gap:.6rem">
+        <button class="pt-mini ok" id="pt-why-send" type="button">Send feedback</button>
+        <button class="pt-mini" id="pt-why-cancel" type="button">Cancel</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---- BOOK (reached from My quotes) ---- -->
+  <section class="pt-view pt-wrap" data-view="book" hidden>
+    <h2>Request this charter</h2>
+    <p class="pt-lead">Our reservations desk will confirm availability and a firm price.</p>
+    <div class="pt-card" style="max-width:620px">
+      <div class="pt-booksum" id="pt-book-summary"></div>
+      <form id="pt-book-form">
+        <div class="pt-2">
+          <div class="pt-fld"><label>Your client reference</label><input id="pt-b-ref" placeholder="e.g. SMITH/AUG"></div>
+          <div class="pt-fld"><label>Contact phone</label><input id="pt-b-phone" type="tel"></div>
+        </div>
+        <div class="pt-fld"><label>Passenger details / weights</label><input id="pt-b-pax" placeholder="names, weights, baggage"></div>
+        <div class="pt-fld"><label>Notes for operations</label><textarea id="pt-b-notes" rows="2"></textarea></div>
+        <button class="pt-btn" type="submit">Submit booking request</button>
+      </form>
+      <div id="pt-booked" hidden style="margin-top:1rem;background:var(--tint);padding:1rem;border-radius:8px;font-size:.9rem">
+        Request sent &mdash; reference <b id="pt-booked-ref"></b>. It now appears in your <b>Bookings</b> tab, and our
+        reservations team has been notified by email.</div>
+    </div>
   </section>
 
   <!-- ---- BOOKINGS ---- -->
   <section class="pt-view pt-wrap" data-view="bookings" hidden>
     <h2>Booking requests</h2><p class="pt-lead">Track everything you&rsquo;ve asked us to fly.</p>
     <div class="pt-tablewrap"><table class="pt-t"><thead><tr>
-      <th>Reference</th><th>Raised</th><th>Client ref</th><th>Value</th><th>Status</th>
+      <th>Reference</th><th>Raised</th><th>Client ref</th><th>Value</th><th>Status</th><th>Confirmation</th>
     </tr></thead><tbody id="pt-bookings-body"></tbody></table></div>
   </section>
 
@@ -336,6 +364,17 @@ branded client quotations &mdash; built for tour operators and travel agents who
       <div class="pt-tablewrap"><table class="pt-t" id="rp-routes-t"><thead><tr>
         <th>Route</th><th>Quoted</th><th>Requested</th><th>Avg distance</th><th>Avg rack</th>
       </tr></thead><tbody id="rp-routes"></tbody></table></div></div>
+  </section>
+
+  <!-- ---- STAFF: BOOKINGS QUEUE ---- -->
+  <section class="pt-view pt-wrap" data-view="queue" hidden>
+    <h2>Bookings queue</h2>
+    <p class="pt-lead">Live booking requests from trade agents. Accept a booking to confirm it to the agent, then send
+    them the confirmation email. Declining requires a reason, which feeds the loss reports.</p>
+    <p style="font-family:var(--mono);font-size:.72rem;color:var(--green-ink);margin-bottom:1rem" id="pt-queue-count"></p>
+    <div class="pt-tablewrap"><table class="pt-t"><thead><tr>
+      <th>Reference</th><th>Agency</th><th>Routing</th><th>Value</th><th>Client ref</th><th>Status</th><th>Action</th>
+    </tr></thead><tbody id="pt-queue-body"></tbody></table></div>
   </section>
 
   <!-- ---- STAFF: RATE BOOK ---- -->

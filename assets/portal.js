@@ -1,55 +1,53 @@
 /* ===== KEA Trade Portal =====================================================
-   Agent accounts, charter calculator (rack / net / margin), booking requests,
-   branded client quotes, and reservations/marketing funnel reports.
-   Backend: Supabase (auth + Postgres + storage). Static-site friendly.
+   Agent accounts, multi-leg charter calculator (rack / net / margin),
+   booking workflow, branded client quotes, reservations queue, funnel reports.
    ========================================================================== */
 (function () {
 "use strict";
 
-/* ---------- CONFIG (safe to publish: publishable key + RLS) ---------- */
 var SUPABASE_URL = "https://utlynkvxqdplfrsxxrez.supabase.co";
 var SUPABASE_KEY = "sb_publishable_f28aljVLZ6dEx2NUOdZqEg_bvosgf0d";
 var RESERVATIONS = "reservations@flykea.com";
-var WA_NUMBER    = "256776333114";
 var TC_VERSION   = "2026.1";
-var TAXI_HRS     = 0.5;      // taxi/climb allowance added to block time
-var RANGE_PCT    = 0.10;     // +/- band on indicative pricing
+var TAXI_HRS     = 0.5;
+var RANGE_PCT    = 0.10;
+var BASE         = "Kajjansi (Kampala)";
 
-var sb = null, ME = null, AGENT = null, IS_STAFF = false;
-var PORTS = [], FLEET = [], LOSS = [], RATES = [], LAST = null;
+var sb = null, ME = null, AGENT = null, IS_STAFF = false, MY_ROLE = "";
+var PORTS = [], TOWNS = [], FLEET = [], LOSS = [], RATES = [];
+var LEGS = [{ from: BASE, to: "" }];
+var LAST = null, QMAP = {};
 
-/* ---------- tiny helpers ---------- */
 function $(s, r) { return (r || document).querySelector(s); }
 function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
-function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
 function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]; }); }
-function money(n) { return n == null ? "—" : "$" + Math.round(n).toLocaleString("en-US"); }
+function money(n) { return n == null ? "\u2014" : "$" + Math.round(n).toLocaleString("en-US"); }
 function fmtHrs(h) { var m = Math.round(h * 60); return Math.floor(m / 60) + "h " + ("0" + (m % 60)).slice(-2) + "m"; }
 function today() { return new Date().toISOString().slice(0, 10); }
+function busy(on) { document.body.classList.toggle("pt-busy", !!on); }
 function toast(msg, bad) {
-  var t = el("div", "pt-toast" + (bad ? " bad" : ""), esc(msg));
+  var t = document.createElement("div");
+  t.className = "pt-toast" + (bad ? " bad" : ""); t.textContent = msg;
   document.body.appendChild(t);
   setTimeout(function () { t.classList.add("go"); }, 10);
-  setTimeout(function () { t.remove(); }, 4200);
+  setTimeout(function () { t.remove(); }, 5000);
 }
-function busy(on) { document.body.classList.toggle("pt-busy", !!on); }
-
-/* ---------- pricing (mirrors KEA charter model: return positioning) ---------- */
 function haversineNm(a, b) {
   var R = 6371, r = Math.PI / 180;
   var dLa = (b[0] - a[0]) * r, dLo = (b[1] - a[1]) * r, la1 = a[0] * r, la2 = b[0] * r;
   var x = Math.sin(dLa / 2) * Math.sin(dLa / 2) + Math.cos(la1) * Math.cos(la2) * Math.sin(dLo / 2) * Math.sin(dLo / 2);
   return (R * 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x))) / 1.852;
 }
-function bookRate(acCode, fromName, toName) {
-  var f = (fromName || "").toLowerCase(), t = (toName || "").toLowerCase();
-  if (f.indexOf("kajjansi") < 0) return null;               // book row is Kajjansi return
-  for (var i = 0; i < RATES.length; i++) {
-    var r = RATES[i];
-    if (r.aircraft_code !== acCode || !r.verified) continue;
-    var rt = (r.to_name || "").toLowerCase();
-    if (t === rt || t.indexOf(rt) === 0) return r;
-  }
+
+function findPlace(name) {
+  name = (name || "").trim().toLowerCase();
+  if (!name) return null;
+  var f = PORTS.filter(function (p) { return p.name.toLowerCase() === name; });
+  if (!f.length) f = PORTS.filter(function (p) { return p.name.toLowerCase().indexOf(name) >= 0; });
+  if (f.length) return f[0];
+  var t = TOWNS.filter(function (p) { return p.name.toLowerCase() === name; });
+  if (!t.length) t = TOWNS.filter(function (p) { return p.name.toLowerCase().indexOf(name) >= 0; });
+  if (t.length) return { code: null, name: t[0].name + " (town)", lat: t[0].lat, lng: t[0].lng, country_code: "UG" };
   return null;
 }
 function pickAircraft(distNm, pax, heli) {
@@ -65,16 +63,18 @@ function pickAircraft(distNm, pax, heli) {
   c.sort(function (x, y) { return (x.seats - pax) - (y.seats - pax) || x.hourly_rack - y.hourly_rack; });
   return c[0];
 }
-function price(ac, oneWayHrs, dayStop) {
-  var block = oneWayHrs * 2 + TAXI_HRS;                 // aircraft returns to base
-  var rack  = Math.max(+ac.min_charge || 0, block * +ac.hourly_rack);
-  if (dayStop) rack += (+ac.day_stop || 0);
-  var net    = rack * (+ac.net_factor || 0.9);
-  return { block: block, rack: rack, net: net, margin: rack - net,
-           lo: rack * (1 - RANGE_PCT), hi: rack * (1 + RANGE_PCT) };
+function bookRate(acCode, fromName, toName) {
+  if ((fromName || "").toLowerCase().indexOf("kajjansi") < 0) return null;
+  var t = (toName || "").toLowerCase();
+  for (var i = 0; i < RATES.length; i++) {
+    var r = RATES[i];
+    if (r.aircraft_code !== acCode || !r.verified) continue;
+    var rt = (r.to_name || "").toLowerCase();
+    if (t === rt || t.indexOf(rt) === 0) return r;
+  }
+  return null;
 }
 
-/* ---------- view routing ---------- */
 function show(view) {
   $$(".pt-view").forEach(function (v) { v.hidden = v.dataset.view !== view; });
   $$(".pt-tab").forEach(function (t) { t.classList.toggle("on", t.dataset.go === view); });
@@ -83,12 +83,14 @@ function show(view) {
   if (view === "reports")  loadReports();
   if (view === "admin")    loadApplications();
   if (view === "rates")    loadRates();
+  if (view === "desk")     loadDesk();
+  if (view === "queue")    loadQueue();
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 /* ================= AUTH ================= */
 async function boot() {
-  if (!window.supabase) { console.warn("Supabase SDK missing"); return; }
+  if (!window.supabase) return;
   sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
   var s = await sb.auth.getSession();
   await onSession(s.data.session);
@@ -101,10 +103,10 @@ async function onSession(session) {
   var r = await sb.from("agents").select("*").eq("id", ME.id).maybeSingle();
   AGENT = r.data || null;
   var st = await sb.from("staff").select("user_id,role").eq("user_id", ME.id).maybeSingle();
-  IS_STAFF = !!(st.data);
+  IS_STAFF = !!(st.data); MY_ROLE = st.data ? st.data.role : "";
   if (!AGENT && !IS_STAFF) {
-    var md = (ME.user_metadata || {});
-    if (md.agency_name) {                       // confirmed but record missing - create it now
+    var md = ME.user_metadata || {};
+    if (md.agency_name) {
       var ins = await sb.from("agents").insert({
         id: ME.id, agency_name: md.agency_name, contact_name: md.contact_name || "",
         email: ME.email, phone: md.phone || null, country: md.country || null,
@@ -121,19 +123,18 @@ async function onSession(session) {
 
 function gate(which) {
   $$(".pt-gate").forEach(function (g) { g.hidden = g.dataset.gate !== which; });
-  $("#pt-app").hidden = true;
-  $("#pt-gates").hidden = false;
+  $("#pt-app").hidden = true; $("#pt-gates").hidden = false;
   if (which === "pending" && AGENT) $("#pt-pending-name").textContent = AGENT.agency_name || "";
 }
 
 async function enterPortal() {
-  $("#pt-gates").hidden = true;
-  $("#pt-app").hidden = false;
-  $("#pt-who").textContent = IS_STAFF ? "KEA staff" : (AGENT.agency_name || ME.email);
+  $("#pt-gates").hidden = true; $("#pt-app").hidden = false;
+  $("#pt-who").textContent = IS_STAFF ? ("KEA " + (MY_ROLE || "staff")) : (AGENT.agency_name || ME.email);
   $$(".pt-staff-only").forEach(function (n) { n.hidden = !IS_STAFF; });
   await loadReference();
-  if (!IS_STAFF) fillProfileForm();
-  show(IS_STAFF ? "reports" : "quote");
+  renderLegs();
+  if (!IS_STAFF) { fillProfileForm(); loadNotifications(); }
+  show(IS_STAFF ? "queue" : "quote");
 }
 
 async function loadReference() {
@@ -141,213 +142,355 @@ async function loadReference() {
   FLEET = a.data || [];
   var p = await sb.from("airfields").select("*").eq("active", true).order("sort_order").order("name");
   PORTS = p.data || [];
+  var t = await sb.from("towns").select("*").eq("active", true).order("name");
+  TOWNS = t.data || [];
   var l = await sb.from("loss_reasons").select("*").eq("active", true).order("sort_order");
   LOSS = l.data || [];
   var rr = await sb.from("route_rates").select("*").order("to_name");
   RATES = rr.data || [];
+
   var dl = $("#pt-ports"); dl.innerHTML = "";
   PORTS.forEach(function (x) { var o = document.createElement("option"); o.value = x.name; dl.appendChild(o); });
+  var tl = $("#pt-townlist");
+  if (tl) { tl.innerHTML = ""; TOWNS.forEach(function (x) { var o = document.createElement("option"); o.value = x.name; tl.appendChild(o); }); }
   var ov = $("#pt-ac"); ov.innerHTML = '<option value="">Best match (automatic)</option>';
   FLEET.forEach(function (x) { var o = document.createElement("option"); o.value = x.code; o.textContent = x.name; ov.appendChild(o); });
   renderFleetSpecs();
-  try { localStorage.setItem("kea_ref", JSON.stringify({ FLEET: FLEET, PORTS: PORTS, at: Date.now() })); } catch (e) {}
 }
 
-/* offline fallback for the calculator */
-(function preloadOffline() {
-  try {
-    var c = JSON.parse(localStorage.getItem("kea_ref") || "null");
-    if (c && c.FLEET) { FLEET = c.FLEET; PORTS = c.PORTS; }
-  } catch (e) {}
-})();
+/* ================= MULTI-LEG ROUTE ================= */
+function renderLegs() {
+  var box = $("#pt-legs"); if (!box) return;
+  box.innerHTML = LEGS.map(function (lg, i) {
+    var first = i === 0;
+    return '<div class="pt-leg" data-i="' + i + '"><span class="pt-leg-n">' + (i + 1) + '</span>' +
+      '<div class="pt-fld"><label>' + (first ? "From" : "Then from") + '</label>' +
+      '<input class="pt-leg-from" list="pt-ports" value="' + esc(lg.from) + '"' + (first ? '' : ' readonly') + ' autocomplete="off"></div>' +
+      '<div class="pt-fld"><label>To</label>' +
+      '<input class="pt-leg-to" list="pt-ports" value="' + esc(lg.to) + '" placeholder="Destination" autocomplete="off"></div>' +
+      (LEGS.length > 1 ? '<button class="pt-leg-x" data-rmleg="' + i + '" title="Remove leg" type="button">&times;</button>' : '<span class="pt-leg-x"></span>') +
+      '</div>';
+  }).join("");
+}
+function readLegs() {
+  $$(".pt-leg").forEach(function (row) {
+    var i = +row.dataset.i;
+    LEGS[i].from = $(".pt-leg-from", row).value;
+    LEGS[i].to   = $(".pt-leg-to", row).value;
+  });
+  for (var i = 1; i < LEGS.length; i++) LEGS[i].from = LEGS[i - 1].to;
+}
+function addLeg() {
+  readLegs();
+  var lastTo = LEGS[LEGS.length - 1].to;
+  if (!lastTo) { toast("Fill in this leg's destination first.", true); return; }
+  if (LEGS.length >= 6) { toast("Six legs maximum \u2014 contact reservations for longer itineraries.", true); return; }
+  LEGS.push({ from: lastTo, to: "" });
+  renderLegs();
+}
+function removeLeg(i) {
+  readLegs(); LEGS.splice(i, 1);
+  if (!LEGS.length) LEGS = [{ from: BASE, to: "" }];
+  for (var k = 1; k < LEGS.length; k++) LEGS[k].from = LEGS[k - 1].to;
+  renderLegs(); calculate();
+}
 
 /* ================= CALCULATOR ================= */
-function findPort(name) {
-  name = (name || "").trim().toLowerCase();
-  if (!name) return null;
-  var f = PORTS.filter(function (p) { return p.name.toLowerCase() === name; });
-  if (!f.length) f = PORTS.filter(function (p) { return p.name.toLowerCase().indexOf(name) >= 0; });
-  return f[0] || null;
-}
-
 function calculate() {
-  var A = findPort($("#pt-from").value), B = findPort($("#pt-to").value);
+  readLegs();
   var coordRaw = ($("#pt-coord").value || "").trim();
   var m = coordRaw.match(/(-?\d+\.?\d*)[ ,]+(-?\d+\.?\d*)/);
-  if (m) B = { code: null, name: "Custom site " + (+m[1]).toFixed(3) + ", " + (+m[2]).toFixed(3), lat: +m[1], lng: +m[2], country_code: "XX" };
-  if (!A || !B) { toast("Choose an origin and destination from the list.", true); return; }
+
+  var pts = [], names = [], legRows = [];
+  var home = findPlace(LEGS[0].from);
+  if (!home) { toast("Choose a valid origin.", true); return; }
+  pts.push(home); names.push(home.name);
+
+  for (var i = 0; i < LEGS.length; i++) {
+    var dest = null;
+    if (i === LEGS.length - 1 && m) {
+      dest = { code: null, name: "Custom site " + (+m[1]).toFixed(3) + ", " + (+m[2]).toFixed(3), lat: +m[1], lng: +m[2], country_code: "UG" };
+    } else if (LEGS[i].to) {
+      dest = findPlace(LEGS[i].to);
+    }
+    if (!dest) break;
+    pts.push(dest); names.push(dest.name);
+  }
+  if (pts.length < 2) { toast("Choose a destination from the list, or enter coordinates.", true); return; }
+
   var pax = Math.max(1, +$("#pt-pax").value || 1);
   var mission = $("#pt-mission").value;
   var heli = mission === "site" || !!m;
-  var hasCoords = A.lat != null && A.lng != null && B.lat != null && B.lng != null;
-  var dist = hasCoords ? haversineNm([A.lat, A.lng], [B.lat, B.lng]) : 0;
-  var forced = $("#pt-ac").value;
-  var ac = forced ? FLEET.filter(function (x) { return x.code === forced; })[0] : pickAircraft(dist, pax, heli);
-  if (!ac) { toast("No suitable aircraft found.", true); return; }
-  var oneWay = hasCoords ? dist / (+ac.cruise_kt || 150) : 0;
+  var nights = Math.max(0, +$("#pt-nights").value || 0);
   var dayStop = $("#pt-daystop").checked;
-  var P = price(ac, oneWay, dayStop);
 
-  // exact rate-book price wins over the hourly estimate
-  var book = bookRate(ac.code, A.name, B.name), method = "estimate";
-  if (book) {
-    var rack = +book.rack + (dayStop ? (+ac.day_stop || 0) : 0);
-    P = { block: P.block, rack: rack, net: rack * (+ac.net_factor || 0.9),
-          margin: rack - rack * (+ac.net_factor || 0.9),
-          lo: rack, hi: rack };
-    method = "book";
+  var total = 0, allCoords = true;
+  for (var j = 0; j < pts.length - 1; j++) {
+    var a = pts[j], b = pts[j + 1];
+    if (a.lat == null || b.lat == null) { allCoords = false; legRows.push({ from: a.name, to: b.name, nm: null }); continue; }
+    var d = haversineNm([a.lat, a.lng], [b.lat, b.lng]);
+    total += d; legRows.push({ from: a.name, to: b.name, nm: +d.toFixed(1) });
   }
-  var intl = (A.country_code !== "UG") || (B.country_code !== "UG");
+  var lastPt = pts[pts.length - 1], backNm = 0;
+  if (allCoords && lastPt.lat != null && home.lat != null && lastPt.name !== home.name) {
+    backNm = haversineNm([lastPt.lat, lastPt.lng], [home.lat, home.lng]);
+  }
+
+  var forced = $("#pt-ac").value;
+  var ac = forced ? FLEET.filter(function (x) { return x.code === forced; })[0] : pickAircraft(total, pax, heli);
+  if (!ac) { toast("No suitable aircraft found.", true); return; }
+
+  var flightNm = total + backNm;
+  var flightHrs = allCoords ? flightNm / (+ac.cruise_kt || 150) : 0;
+  var block = flightHrs + TAXI_HRS * Math.max(1, legRows.length);
+
+  var rack, method = "estimate";
+  var single = (legRows.length === 1) && !m;
+  var bk = single ? bookRate(ac.code, home.name, pts[1].name) : null;
+  if (bk) { rack = +bk.rack; method = "book"; }
+  else { rack = Math.max(+ac.min_charge || 0, block * +ac.hourly_rack); }
+
+  if (dayStop) rack += (+ac.day_stop || 0);
+  var nightRate = ac.night_stop == null ? null : +ac.night_stop;
+  var nightUnknown = nights > 0 && nightRate == null;
+  if (nights > 0 && nightRate != null) rack += nights * nightRate;
+  var net = rack * (+ac.net_factor || 0.9);
 
   LAST = {
-    from_code: A.code, to_code: B.code || null, from_name: A.name, to_name: B.name,
+    legs: legRows, leg_count: legRows.length,
+    from_code: home.code, to_code: pts[1] ? pts[1].code : null,
+    from_name: home.name, to_name: lastPt.name,
     custom_coords: m ? coordRaw : null, pax: pax, travel_date: $("#pt-date").value || null,
     mission: mission, aircraft_code: ac.code, aircraft: ac,
-    distance_nm: +dist.toFixed(1), block_hours: +P.block.toFixed(2), day_stop: dayStop,
-    rack_total: +P.rack.toFixed(2), net_total: +P.net.toFixed(2), margin: +P.margin.toFixed(2),
-    is_international: intl, lo: P.lo, hi: P.hi, oneWay: oneWay, id: null,
-    method: method, hasCoords: hasCoords
+    distance_nm: +flightNm.toFixed(1), block_hours: +block.toFixed(2),
+    day_stop: dayStop, night_stops: nights,
+    rack_total: +rack.toFixed(2), net_total: +net.toFixed(2), margin: +(rack - net).toFixed(2),
+    is_international: pts.some(function (p) { return p.country_code && p.country_code !== "UG"; }),
+    method: method, nightUnknown: nightUnknown, allCoords: allCoords, id: null
   };
 
-  $("#pt-r-route").textContent = A.name + "  →  " + B.name;
+  $("#pt-r-route").textContent = names.join("  \u2192  ") + (backNm ? "  \u2192  " + home.name : "");
   $("#pt-r-ac").textContent = ac.name;
-  $("#pt-r-dist").textContent = hasCoords ? Math.round(dist) + " nm" : "—";
-  $("#pt-r-time").textContent = hasCoords ? fmtHrs(oneWay + TAXI_HRS / 2) + " each way" : "on request";
-  $("#pt-r-block").textContent = method === "book" ? "Rate book return price" : fmtHrs(P.block) + " block (return positioning)";
-  $("#pt-r-rack").textContent = money(P.rack);
-  $("#pt-r-net").textContent = money(P.net);
-  $("#pt-r-margin").textContent = money(P.margin);
-  $("#pt-r-band").textContent = method === "book" ? "fixed rate-book price" : money(P.lo) + " – " + money(P.hi);
+  $("#pt-r-dist").textContent = allCoords ? Math.round(flightNm) + " nm" : "\u2014";
+  $("#pt-r-time").textContent = allCoords ? fmtHrs(flightHrs) + " airborne" : "on request";
+  $("#pt-r-block").textContent = method === "book" ? "Rate book return price"
+      : fmtHrs(block) + " block" + (backNm ? " incl. return to base" : "");
+  $("#pt-r-rack").textContent = money(rack);
+  $("#pt-r-net").textContent = money(net);
+  $("#pt-r-margin").textContent = money(rack - net);
+  $("#pt-r-band").textContent = method === "book" ? "fixed rate-book price"
+      : money(rack * (1 - RANGE_PCT)) + " \u2013 " + money(rack * (1 + RANGE_PCT));
   var badge = $("#pt-r-method");
-  if (badge) {
-    badge.textContent = method === "book" ? "RATE BOOK" : "ESTIMATE";
-    badge.className = "pt-pill " + (method === "book" ? "ok" : "");
-  }
-  $("#pt-r-intl").hidden = !intl;
+  badge.textContent = method === "book" ? "RATE BOOK" : "ESTIMATE";
+  badge.className = "pt-pill " + (method === "book" ? "ok" : "");
+  $("#pt-r-legs").innerHTML = legRows.map(function (l, k) {
+    return "<div>" + (k + 1) + ". " + esc(l.from) + " \u2192 " + esc(l.to) + (l.nm != null ? " <b>" + Math.round(l.nm) + " nm</b>" : "") + "</div>";
+  }).join("") + (backNm ? "<div style='color:var(--slate)'>\u21a9 positioning " + esc(lastPt.name) + " \u2192 " + esc(home.name) + " <b>" + Math.round(backNm) + " nm</b></div>" : "");
+  $("#pt-r-nightwarn").hidden = !nightUnknown;
+  $("#pt-r-intl").hidden = !LAST.is_international;
   $("#pt-result").hidden = false;
-  $("#pt-result").scrollIntoView({ behavior: "smooth", block: "nearest" });
   saveQuote();
 }
 
 async function saveQuote() {
-  if (!LAST || IS_STAFF || !navigator.onLine) return;
-  var row = {
-    agent_id: ME.id, from_code: LAST.from_code, to_code: LAST.to_code,
+  if (!LAST) return;
+  var r = await sb.from("quotes").insert({
+    agent_id: IS_STAFF ? null : ME.id,
+    from_code: LAST.from_code, to_code: LAST.to_code,
     from_name: LAST.from_name, to_name: LAST.to_name, custom_coords: LAST.custom_coords,
     pax: LAST.pax, travel_date: LAST.travel_date, mission: LAST.mission,
     aircraft_code: LAST.aircraft_code, distance_nm: LAST.distance_nm,
-    block_hours: LAST.block_hours, day_stop: LAST.day_stop,
+    block_hours: LAST.block_hours, day_stop: LAST.day_stop, night_stops: LAST.night_stops || 0, night_stops: LAST.night_stops,
     rack_total: LAST.rack_total, net_total: LAST.net_total, margin: LAST.margin,
-    is_international: LAST.is_international, source: "portal"
-  };
-  var r = await sb.from("quotes").insert(row).select("id").single();
+    is_international: LAST.is_international, source: IS_STAFF ? "staff" : "portal",
+    legs: LAST.legs, leg_count: LAST.leg_count
+  }).select("id").single();
   if (!r.error && r.data) LAST.id = r.data.id;
 }
 
-/* ================= BOOKING REQUEST ================= */
+/* ================= BOOKING ================= */
+function openBookingFor(q) {
+  LAST = {
+    id: q.id, from_name: q.from_name, to_name: q.to_name, pax: q.pax,
+    travel_date: q.travel_date, aircraft: { name: q.aircraft_code }, aircraft_code: q.aircraft_code,
+    distance_nm: q.distance_nm, block_hours: q.block_hours, day_stop: q.day_stop,
+    night_stops: q.night_stops, rack_total: q.rack_total, net_total: q.net_total,
+    legs: q.legs, allCoords: true, method: "stored"
+  };
+  $("#pt-book-summary").innerHTML = "<b>" + esc(q.from_name) + " \u2192 " + esc(q.to_name) + "</b><br>" +
+    esc(q.travel_date || "date flexible") + " \u00b7 " + q.pax + " pax \u00b7 " + esc(q.aircraft_code || "") +
+    " \u00b7 " + money(q.rack_total);
+  $("#pt-booked").hidden = true;
+  show("book");
+}
+
 async function submitBooking(ev) {
   ev.preventDefault();
-  if (!LAST) { toast("Run a quote first.", true); return; }
+  if (!LAST) { toast("Pick a quote first.", true); return; }
   busy(true);
   var payload = {
-    quote_id: LAST.id, agent_id: ME.id,
+    quote_id: LAST.id, agent_id: IS_STAFF ? null : ME.id,
     client_ref: $("#pt-b-ref").value || null,
     pax_details: $("#pt-b-pax").value || null,
-    contact_phone: $("#pt-b-phone").value || AGENT.phone || null,
+    contact_phone: $("#pt-b-phone").value || (AGENT ? AGENT.phone : null),
     notes: $("#pt-b-notes").value || null,
     requested_date: LAST.travel_date, value_usd: LAST.rack_total
   };
-  var r = await sb.from("booking_requests").insert(payload).select("ref").single();
+  var r = await sb.from("booking_requests").insert(payload).select("ref,id").single();
   busy(false);
   if (r.error) { toast("Could not submit: " + r.error.message, true); return; }
 
-  // mirror to reservations@ so the desk sees it immediately
+  var who = AGENT || { agency_name: "KEA staff", contact_name: ME.email, email: ME.email };
   var body = [
-    "NEW TRADE BOOKING REQUEST — " + (r.data.ref || ""),
-    "Agency: " + AGENT.agency_name, "Contact: " + AGENT.contact_name + " (" + AGENT.email + ")",
-    "Phone: " + (payload.contact_phone || "-"),
-    "", "Route: " + LAST.from_name + " -> " + LAST.to_name,
+    "NEW BOOKING REQUEST \u2014 " + (r.data.ref || ""),
+    "Agency: " + who.agency_name,
+    "Contact: " + (who.contact_name || "") + " (" + who.email + ")",
+    "Phone: " + (payload.contact_phone || "-"), "",
+    "Route: " + LAST.from_name + " -> " + LAST.to_name,
+    (LAST.legs && LAST.legs.length > 1 ? "Legs: " + LAST.legs.map(function (l) { return l.from + ">" + l.to; }).join(", ") : ""),
     "Date: " + (LAST.travel_date || "flexible") + "   Pax: " + LAST.pax,
-    "Aircraft: " + LAST.aircraft.name, "Distance: " + Math.round(LAST.distance_nm) + " nm",
-    "Block: " + fmtHrs(LAST.block_hours) + (LAST.day_stop ? " + day stop" : ""),
-    "Rack: " + money(LAST.rack_total) + "   Agent net: " + money(LAST.net_total),
-    "", "Client ref: " + (payload.client_ref || "-"),
+    "Aircraft: " + (LAST.aircraft.name || LAST.aircraft_code),
+    "Distance: " + Math.round(LAST.distance_nm || 0) + " nm",
+    (LAST.day_stop ? "Day stop: yes" : ""),
+    (LAST.night_stops ? "Night stops: " + LAST.night_stops : ""),
+    "Rack: " + money(LAST.rack_total) + "   Agent net: " + money(LAST.net_total), "",
+    "Client ref: " + (payload.client_ref || "-"),
     "Pax details: " + (payload.pax_details || "-"),
-    "Notes: " + (payload.notes || "-")
-  ].join("\n");
+    "Notes: " + (payload.notes || "-"), "",
+    "Manage in the KEA Trade Portal -> Bookings queue."
+  ].filter(Boolean).join("\n");
   try {
     await fetch("https://formsubmit.co/ajax/" + RESERVATIONS, {
       method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" },
-      body: JSON.stringify({ _subject: "Trade booking request " + (r.data.ref || ""), message: body })
+      body: JSON.stringify({ _subject: "Booking request " + (r.data.ref || ""), message: body })
     });
-  } catch (e) { /* database record is the source of truth */ }
+  } catch (e) {}
 
   $("#pt-book-form").reset();
   $("#pt-booked-ref").textContent = r.data.ref || "";
   $("#pt-booked").hidden = false;
-  toast("Booking request sent — reference " + (r.data.ref || ""));
+  toast("Booking request sent \u2014 " + (r.data.ref || ""));
 }
 
-/* agent tells us why a quote didn't convert */
-async function sendFeedback(code, notes) {
-  if (!LAST || !LAST.id) return;
-  await sb.from("quote_feedback").insert({ quote_id: LAST.id, agent_id: ME.id, reason_code: code, notes: notes || null });
-  toast("Thanks — that helps us price better.");
-  $("#pt-why").hidden = true;
+function openWhyFor(q) {
+  $("#pt-why-quote").value = q.id;
+  $("#pt-why-label").textContent = q.from_name + " \u2192 " + q.to_name;
+  $("#pt-why-reason").innerHTML = LOSS.map(function (l) { return '<option value="' + l.code + '">' + esc(l.label) + "</option>"; }).join("");
+  $("#pt-whybox").hidden = false;
+  $("#pt-whybox").scrollIntoView({ behavior: "smooth", block: "center" });
+}
+async function sendWhy() {
+  var qid = $("#pt-why-quote").value;
+  if (!qid) return;
+  busy(true);
+  var r = await sb.from("quote_feedback").insert({
+    quote_id: qid, agent_id: IS_STAFF ? null : ME.id,
+    reason_code: $("#pt-why-reason").value, notes: $("#pt-why-notes").value || null
+  });
+  busy(false);
+  if (r.error) { toast(r.error.message, true); return; }
+  $("#pt-whybox").hidden = true; $("#pt-why-notes").value = "";
+  toast("Thanks \u2014 that feedback helps us price better.");
 }
 
 /* ================= MY QUOTES / BOOKINGS ================= */
 async function loadMyQuotes() {
   var q = await sb.from("quotes").select("*").order("created_at", { ascending: false }).limit(100);
-  var rows = (q.data || []).map(function (r) {
+  MYQ = q.data || [];
+  var rows = MYQ.map(function (r) {
+    var act = r.converted
+      ? "<span class='pt-pill ok'>requested</span>"
+      : "<button class='pt-mini ok' data-book='" + r.id + "'>Book flight</button> " +
+        "<button class='pt-mini' data-nobook='" + r.id + "'>Don&rsquo;t book</button>";
     return "<tr><td>" + r.created_at.slice(0, 10) + "</td><td>" + esc(r.from_name) + " → " + esc(r.to_name) +
       "</td><td>" + esc(r.aircraft_code || "") + "</td><td>" + r.pax + "</td><td>" + money(r.rack_total) +
-      "</td><td>" + money(r.net_total) + "</td><td>" + (r.converted ? "<span class='pt-pill ok'>requested</span>" : "<span class='pt-pill'>quote</span>") + "</td></tr>";
+      "</td><td>" + money(r.net_total) + "</td><td>" + act + "</td></tr>";
   }).join("");
-  $("#pt-quotes-body").innerHTML = rows || "<tr><td colspan=7>No quotes yet.</td></tr>";
+  $("#pt-quotes-body").innerHTML = rows || "<tr><td colspan=7>No quotes yet. Run one on the Quote tab.</td></tr>";
+}
+
+/* rebuild LAST from a saved quote so the booking form can be reused */
+function quoteToLast(row) {
+  var ac = FLEET.filter(function (a) { return a.code === row.aircraft_code; })[0] || FLEET[0];
+  LAST = {
+    id: row.id, from_code: row.from_code, to_code: row.to_code,
+    from_name: row.from_name, to_name: row.to_name, custom_coords: row.custom_coords,
+    pax: row.pax, travel_date: row.travel_date, mission: row.mission,
+    aircraft_code: row.aircraft_code, aircraft: ac,
+    distance_nm: row.distance_nm, block_hours: row.block_hours,
+    day_stop: row.day_stop, night_stops: row.night_stops || 0,
+    rack_total: row.rack_total, net_total: row.net_total, margin: row.margin,
+    is_international: row.is_international, lo: row.rack_total, hi: row.rack_total,
+    oneWay: (row.block_hours || 1) / 2, method: "saved", hasCoords: row.distance_nm > 0
+  };
+}
+
+function bookFromQuote(id) {
+  var row = MYQ.filter(function (r) { return r.id === id; })[0];
+  if (!row) return;
+  quoteToLast(row);
+  show("quote");
+  $("#pt-r-route").textContent = row.from_name + "  →  " + row.to_name;
+  $("#pt-r-ac").textContent = LAST.aircraft.name;
+  $("#pt-r-dist").textContent = row.distance_nm ? Math.round(row.distance_nm) + " nm" : "—";
+  $("#pt-r-time").textContent = fmtHrs((row.block_hours || 1) / 2);
+  $("#pt-r-block").textContent = "Saved quote";
+  $("#pt-r-rack").textContent = money(row.rack_total);
+  $("#pt-r-net").textContent = money(row.net_total);
+  $("#pt-r-margin").textContent = money(row.margin);
+  $("#pt-r-band").textContent = "as quoted";
+  var badge = $("#pt-r-method"); if (badge) { badge.textContent = "SAVED QUOTE"; badge.className = "pt-pill"; }
+  $("#pt-result").hidden = false;
+  setTimeout(function () {
+    var f = $("#pt-book-form"); if (f) f.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, 120);
+  toast("Complete the details and send the booking request.");
+}
+
+function askWhyNotBooked(id) {
+  var row = MYQ.filter(function (r) { return r.id === id; })[0];
+  if (row) openWhyFor(row);
 }
 
 async function loadMyBookings() {
   var b = await sb.from("booking_requests").select("*").order("created_at", { ascending: false }).limit(100);
   var rows = (b.data || []).map(function (r) {
+    var cls = (r.status === "flown" || r.status === "confirmed") ? "ok"
+            : (r.status === "lost" || r.status === "cancelled") ? "bad" : "";
     return "<tr><td>" + esc(r.ref || "") + "</td><td>" + r.created_at.slice(0, 10) + "</td><td>" +
-      esc(r.client_ref || "-") + "</td><td>" + money(r.value_usd) + "</td><td><span class='pt-pill " +
-      (r.status === "flown" || r.status === "confirmed" ? "ok" : (r.status === "lost" || r.status === "cancelled" ? "bad" : "")) +
-      "'>" + esc(r.status) + "</span></td></tr>";
+      esc(r.client_ref || "-") + "</td><td>" + money(r.value_usd) + "</td>" +
+      "<td><span class='pt-pill " + cls + "'>" + esc(r.status) + "</span></td>" +
+      "<td>" + (r.confirmed_at ? "Confirmed " + r.confirmed_at.slice(0, 10) + (r.confirmation_ref ? " \u00b7 " + esc(r.confirmation_ref) : "") : "") +
+      (r.ops_notes ? "<br><small>" + esc(r.ops_notes) + "</small>" : "") + "</td></tr>";
   }).join("");
-  $("#pt-bookings-body").innerHTML = rows || "<tr><td colspan=5>No booking requests yet.</td></tr>";
+  $("#pt-bookings-body").innerHTML = rows || "<tr><td colspan=6>No booking requests yet.</td></tr>";
 }
 
-/* ================= AIRCRAFT SPECS ================= */
+/* ================= AIRCRAFT ================= */
 function renderFleetSpecs() {
   var wrap = $("#pt-specs"); if (!wrap) return;
   wrap.innerHTML = FLEET.map(function (a) {
     return '<div class="pt-spec">' +
-      (a.image_url ? '<img src="' + esc(a.image_url) + '" alt="' + esc(a.name) + '" loading="lazy">' : '<div class="pt-spec-noimg">' + esc(a.name) + '</div>') +
+      (a.image_url ? '<img src="' + esc(a.image_url) + '" alt="' + esc(a.name) + '" loading="lazy">'
+                   : '<div class="pt-spec-noimg"><span>' + esc(a.name) + '</span><small>photo coming soon</small></div>') +
       '<div class="pt-spec-b"><h3>' + esc(a.name) + '</h3><dl>' +
-      '<dt>Seats</dt><dd>' + a.seats + '</dd>' +
-      '<dt>Cruise</dt><dd>' + a.cruise_kt + ' kt</dd>' +
-      '<dt>Range</dt><dd>' + a.range_nm + ' nm</dd>' +
-      '<dt>Baggage</dt><dd>' + esc(a.baggage || "—") + '</dd>' +
-      '<dt>Strip</dt><dd>' + esc(a.strip_requirement || "—") + '</dd>' +
-      '</dl><p>' + esc(a.spec_notes || "") + '</p></div></div>';
+      '<dt>Seats</dt><dd>' + a.seats + '</dd><dt>Cruise</dt><dd>' + a.cruise_kt + ' kt</dd>' +
+      '<dt>Range</dt><dd>' + a.range_nm + ' nm</dd><dt>Baggage</dt><dd>' + esc(a.baggage || "\u2014") + '</dd>' +
+      '<dt>Strip</dt><dd>' + esc(a.strip_requirement || "\u2014") + '</dd></dl>' +
+      '<p>' + esc(a.spec_notes || "") + '</p></div></div>';
   }).join("");
 }
 
-/* ================= PROFILE (branding for client quotes) ================= */
+/* ================= PROFILE ================= */
 function fillProfileForm() {
   if (!AGENT) return;
-  $("#pf-agency").value  = AGENT.agency_name || "";
-  $("#pf-contact").value = AGENT.contact_name || "";
-  $("#pf-phone").value   = AGENT.phone || "";
-  $("#pf-address").value = AGENT.address || "";
-  $("#pf-city").value    = AGENT.city || "";
-  $("#pf-country").value = AGENT.country || "";
-  $("#pf-website").value = AGENT.website || "";
-  if (AGENT.logo_url) $("#pf-logo-prev").src = AGENT.logo_url;
-  $("#pf-logo-prev").hidden = !AGENT.logo_url;
+  [["agency", "agency_name"], ["contact", "contact_name"], ["phone", "phone"], ["address", "address"],
+   ["city", "city"], ["country", "country"], ["website", "website"]].forEach(function (p) {
+    var n = $("#pf-" + p[0]); if (n) n.value = AGENT[p[1]] || "";
+  });
+  var img = $("#pf-logo-prev");
+  if (AGENT.logo_url) { img.src = AGENT.logo_url; img.hidden = false; } else img.hidden = true;
 }
-
 async function saveProfile(ev) {
   ev.preventDefault(); busy(true);
   var patch = {
@@ -368,82 +511,149 @@ async function saveProfile(ev) {
   AGENT = r.data; fillProfileForm(); toast("Profile saved.");
 }
 
-/* ================= BRANDED CLIENT QUOTE (print / save as PDF) =================
-   Deliberately shows the CLIENT price (rack) only — never net or margin.        */
+/* ================= CLIENT QUOTE (rack only) ================= */
 function clientQuote() {
   if (!LAST) { toast("Run a quote first.", true); return; }
   var a = AGENT || {};
   var w = window.open("", "_blank");
   if (!w) { toast("Allow pop-ups to generate the quote.", true); return; }
-  var ref = "Q-" + new Date().toISOString().slice(0, 10).replace(/-/g, "") + "-" + Math.floor(Math.random() * 900 + 100);
+  var ref = "Q-" + today().replace(/-/g, "") + "-" + Math.floor(Math.random() * 900 + 100);
   var validTo = new Date(Date.now() + 14 * 864e5).toISOString().slice(0, 10);
-  w.document.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>Charter Quote ' + ref + '</title>' +
-  '<style>' +
+  var legHtml = (LAST.legs || []).map(function (l, i) {
+    return '<tr><td>Leg ' + (i + 1) + '</td><td><b>' + esc(l.from) + ' &rarr; ' + esc(l.to) + '</b></td></tr>';
+  }).join("");
+  w.document.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>Charter Quote ' + ref + '</title><style>' +
   'body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#1C2118;margin:0;padding:40px;max-width:800px}' +
   '.hd{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;border-bottom:3px solid #90B820;padding-bottom:18px}' +
-  '.hd img{max-height:74px;max-width:230px;object-fit:contain}' +
-  '.ag{font-size:12px;line-height:1.6;text-align:right;color:#566058}' +
-  '.ag b{color:#1C2118;font-size:15px;display:block;margin-bottom:3px}' +
-  'h1{font-size:23px;margin:26px 0 4px}.sub{color:#566058;font-size:13px;margin:0 0 22px}' +
-  'table{width:100%;border-collapse:collapse;margin:18px 0}' +
-  'td{padding:9px 0;border-bottom:1px solid #e6ebe1;font-size:14px}' +
-  'td:first-child{color:#566058;width:38%}' +
+  '.hd img{max-height:74px;max-width:230px;object-fit:contain}.ag{font-size:12px;line-height:1.6;text-align:right;color:#566058}' +
+  '.ag b{color:#1C2118;font-size:15px;display:block;margin-bottom:3px}h1{font-size:23px;margin:26px 0 4px}' +
+  '.sub{color:#566058;font-size:13px;margin:0 0 22px}table{width:100%;border-collapse:collapse;margin:18px 0}' +
+  'td{padding:9px 0;border-bottom:1px solid #e6ebe1;font-size:14px}td:first-child{color:#566058;width:38%}' +
   '.tot{margin-top:26px;background:#F5F8EE;border-left:4px solid #90B820;padding:18px 22px}' +
-  '.tot .lbl{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#56750F}' +
-  '.tot .amt{font-size:31px;font-weight:700;margin-top:4px}' +
+  '.tot .lbl{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#56750F}.tot .amt{font-size:31px;font-weight:700;margin-top:4px}' +
   '.note{font-size:11.5px;color:#566058;line-height:1.65;margin-top:26px;border-top:1px solid #e6ebe1;padding-top:16px}' +
-  '.ft{margin-top:30px;font-size:11px;color:#8a938a;text-align:center}' +
-  '@media print{body{padding:16px}.no-print{display:none}}' +
-  'button{background:#90B820;border:0;padding:11px 20px;border-radius:6px;font-weight:600;cursor:pointer;font-size:14px}' +
-  '</style></head><body>' +
-  '<div class="no-print" style="margin-bottom:18px"><button onclick="window.print()">Print / Save as PDF</button></div>' +
-  '<div class="hd">' +
-    (a.logo_url ? '<img src="' + esc(a.logo_url) + '" alt="">' : '<div style="font-size:20px;font-weight:700">' + esc(a.agency_name || "") + '</div>') +
-    '<div class="ag"><b>' + esc(a.agency_name || "") + '</b>' +
-      (a.address ? esc(a.address) + '<br>' : '') + (a.city ? esc(a.city) + '<br>' : '') +
-      (a.country ? esc(a.country) + '<br>' : '') + (a.phone ? esc(a.phone) + '<br>' : '') +
-      (a.email ? esc(a.email) + '<br>' : '') + (a.website ? esc(a.website) : '') +
-    '</div></div>' +
-  '<h1>Private Charter Quotation</h1>' +
-  '<p class="sub">Reference ' + ref + ' &nbsp;·&nbsp; Issued ' + today() + ' &nbsp;·&nbsp; Valid until ' + validTo + '</p>' +
-  '<table>' +
-  '<tr><td>Route</td><td><b>' + esc(LAST.from_name) + ' &rarr; ' + esc(LAST.to_name) + '</b></td></tr>' +
+  '.ft{margin-top:30px;font-size:11px;color:#8a938a;text-align:center}@media print{body{padding:16px}.no-print{display:none}}' +
+  'button{background:#90B820;border:0;padding:11px 20px;border-radius:6px;font-weight:600;cursor:pointer;font-size:14px}</style></head><body>' +
+  '<div class="no-print" style="margin-bottom:18px"><button onclick="window.print()">Print / Save as PDF</button></div><div class="hd">' +
+  (a.logo_url ? '<img src="' + esc(a.logo_url) + '" alt="">' : '<div style="font-size:20px;font-weight:700">' + esc(a.agency_name || "") + '</div>') +
+  '<div class="ag"><b>' + esc(a.agency_name || "") + '</b>' + (a.address ? esc(a.address) + '<br>' : '') +
+  (a.city ? esc(a.city) + '<br>' : '') + (a.country ? esc(a.country) + '<br>' : '') +
+  (a.phone ? esc(a.phone) + '<br>' : '') + (a.email ? esc(a.email) + '<br>' : '') + (a.website ? esc(a.website) : '') + '</div></div>' +
+  '<h1>Private Charter Quotation</h1><p class="sub">Reference ' + ref + ' &nbsp;&middot;&nbsp; Issued ' + today() + ' &nbsp;&middot;&nbsp; Valid until ' + validTo + '</p><table>' + legHtml +
   '<tr><td>Date of travel</td><td>' + esc(LAST.travel_date || "To be confirmed") + '</td></tr>' +
   '<tr><td>Passengers</td><td>' + LAST.pax + '</td></tr>' +
-  '<tr><td>Aircraft</td><td>' + esc(LAST.aircraft.name) + ' &nbsp;(' + LAST.aircraft.seats + ' seats)</td></tr>' +
-  '<tr><td>Flight time</td><td>' + fmtHrs(LAST.oneWay + TAXI_HRS / 2) + ' each way</td></tr>' +
-  '<tr><td>Distance</td><td>' + Math.round(LAST.distance_nm) + ' nautical miles</td></tr>' +
-  (LAST.day_stop ? '<tr><td>Aircraft waiting time</td><td>Same-day wait included</td></tr>' : '') +
-  '</table>' +
-  '<div class="tot"><div class="lbl">Total charter price</div><div class="amt">' + money(LAST.rack_total) + ' USD</div></div>' +
-  '<div class="note"><b>Included:</b> aircraft, crew, fuel and standard insurance for the routing shown. ' +
-  'The aircraft is chartered for the whole journey including positioning to and from base.<br>' +
-  '<b>Not included:</b> landing, parking and handling fees, navigation charges, government taxes, ' +
-  'passenger service charges, catering, ground transfers and any overnight crew costs, unless stated.<br>' +
-  '<b>Terms:</b> quotation subject to aircraft availability at time of booking and to final confirmation of ' +
-  'routing, timings and payload. Weather, air traffic control and operational requirements may affect timings. ' +
-  'Prices are indicative and may vary by approximately 10% pending final routing and fees.</div>' +
-  '<div class="ft">Flight operated by Kampala Executive Aviation — Ugandan CAA AOC 097 · Gate 1, Kajjansi Airfield, Kampala</div>' +
-  '</body></html>');
+  '<tr><td>Aircraft</td><td>' + esc(LAST.aircraft.name || LAST.aircraft_code) + '</td></tr>' +
+  (LAST.allCoords ? '<tr><td>Total distance</td><td>' + Math.round(LAST.distance_nm) + ' nautical miles</td></tr>' : '') +
+  (LAST.day_stop ? '<tr><td>Aircraft waiting time</td><td>Included (day stop)</td></tr>' : '') +
+  (LAST.night_stops ? '<tr><td>Night stops</td><td>' + LAST.night_stops + '</td></tr>' : '') +
+  '</table><div class="tot"><div class="lbl">Total charter price</div><div class="amt">' + money(LAST.rack_total) + ' USD</div></div>' +
+  '<div class="note"><b>Included:</b> aircraft, crew, fuel and standard insurance for the routing shown, including positioning to and from base.<br>' +
+  '<b>Not included:</b> landing, parking and handling fees, navigation charges, government taxes, passenger service charges, catering, ground transfers and overnight crew costs unless stated.<br>' +
+  '<b>Terms:</b> subject to aircraft availability at time of booking and final confirmation of routing, timings and payload. Weather and air traffic control may affect timings. Prices may vary by approximately 10% pending final routing and fees.</div>' +
+  '<div class="ft">Flight operated by Kampala Executive Aviation \u2014 Ugandan CAA AOC 097 \u00b7 Gate 1, Kajjansi Airfield, Kampala</div></body></html>');
   w.document.close();
+}
+
+/* ================= STAFF: bookings queue ================= */
+async function loadQueue() {
+  if (!IS_STAFF) return;
+  var r = await sb.from("v_booking_queue").select("*").limit(200);
+  var rows = (r.data || []).map(function (b) {
+    var cls = (b.status === "confirmed" || b.status === "flown") ? "ok"
+            : (b.status === "lost" || b.status === "cancelled") ? "bad" : "";
+    var acts = "";
+    if (b.status === "requested" || b.status === "quoted") {
+      acts = "<button class='pt-mini ok' data-accept='" + b.id + "'>Accept booking</button>" +
+             " <button class='pt-mini bad' data-decline='" + b.id + "'>Not proceeding</button>";
+    } else if (b.status === "confirmed") {
+      acts = "<button class='pt-mini' data-flown='" + b.id + "'>Mark flown</button>";
+    }
+    if (b.agent_email) acts += " <a class='pt-mini' target='_blank' href='" + mailtoConfirm(b) + "'>Email agent</a>";
+    return "<tr><td><b>" + esc(b.ref || "") + "</b><br><small>" + b.created_at.slice(0, 10) + "</small></td>" +
+      "<td>" + esc(b.agency_name || "KEA staff") + "<br><small>" + esc(b.agent_email || "") + " \u00b7 " + esc(b.agent_phone || b.contact_phone || "") + "</small></td>" +
+      "<td>" + esc(b.from_name || "") + " \u2192 " + esc(b.to_name || "") + "<br><small>" + esc(b.requested_date || "flexible") +
+      " \u00b7 " + (b.pax || "?") + " pax \u00b7 " + esc(b.aircraft_code || "") + "</small></td>" +
+      "<td>" + money(b.value_usd) + "<br><small>net " + money(b.net_total) + "</small></td>" +
+      "<td><small>" + esc(b.client_ref || "-") + "</small></td>" +
+      "<td><span class='pt-pill " + cls + "'>" + esc(b.status) + "</span></td><td>" + acts + "</td></tr>";
+  }).join("");
+  $("#pt-queue-body").innerHTML = rows || "<tr><td colspan=7>No booking requests yet.</td></tr>";
+  var open = (r.data || []).filter(function (b) { return b.status === "requested" || b.status === "quoted"; }).length;
+  $("#pt-queue-count").textContent = open ? open + " request(s) awaiting action." : "Nothing outstanding.";
+}
+
+function mailtoConfirm(b) {
+  var sub = "KEA booking " + (b.ref || "") + (b.status === "confirmed" ? " \u2014 confirmed" : " \u2014 update");
+  var body = "Dear " + (b.contact_name || "colleague") + ",\n\n" +
+    (b.status === "confirmed"
+      ? "We are pleased to confirm your charter booking with Kampala Executive Aviation.\n\n"
+      : "Thank you for your booking request. Details below.\n\n") +
+    "Reference: " + (b.ref || "") + "\n" +
+    "Route: " + (b.from_name || "") + " to " + (b.to_name || "") + "\n" +
+    "Date: " + (b.requested_date || "to be confirmed") + "\n" +
+    "Passengers: " + (b.pax || "") + "\n" +
+    "Aircraft: " + (b.aircraft_code || "") + "\n" +
+    "Price: " + money(b.value_usd) + " USD\n" +
+    (b.ops_notes ? "Notes: " + b.ops_notes + "\n" : "") +
+    "\nYou can view this booking any time in the KEA Trade Portal:\nhttps://www.flykea.com/agents/\n\n" +
+    "Kind regards,\nReservations\nKampala Executive Aviation\n+256 776 333 114 \u00b7 reservations@flykea.com";
+  return "mailto:" + encodeURIComponent(b.agent_email) + "?subject=" + encodeURIComponent(sub) + "&body=" + encodeURIComponent(body);
+}
+
+async function setBooking(id, status) {
+  var patch = { status: status };
+  if (status === "confirmed") {
+    patch.confirmed_at = new Date().toISOString();
+    patch.confirmation_ref = "KEA-CONF-" + Math.floor(Math.random() * 9000 + 1000);
+    var n = prompt("Note for the agent? (aircraft reg, timings \u2014 optional)");
+    if (n) patch.ops_notes = n;
+  }
+  if (status === "lost") {
+    var c = prompt("Reason code \u2014 one of: " + LOSS.map(function (l) { return l.code; }).join(", "));
+    if (!c) return;
+    patch.loss_reason_code = c.trim();
+    patch.loss_notes = prompt("Notes (optional)") || null;
+  }
+  busy(true);
+  var r = await sb.from("booking_requests").update(patch).eq("id", id);
+  busy(false);
+  if (r.error) { toast(r.error.message, true); return; }
+  toast("Booking marked " + status + " \u2014 now email the agent.");
+  loadQueue();
 }
 
 /* ================= STAFF: applications ================= */
 async function loadApplications() {
   if (!IS_STAFF) return;
   var r = await sb.from("agents").select("*").order("applied_at", { ascending: false });
-  var rows = (r.data || []).map(function (a) {
+  $("#pt-apps-body").innerHTML = (r.data || []).map(function (a) {
     var act = a.status === "pending"
-      ? '<button class="pt-mini ok" data-approve="' + a.id + '">Approve</button> <button class="pt-mini bad" data-reject="' + a.id + '">Reject</button>'
-      : (a.status === "approved" ? '<button class="pt-mini" data-suspend="' + a.id + '">Suspend</button>'
-                                 : '<button class="pt-mini ok" data-approve="' + a.id + '">Approve</button>');
-    return "<tr><td>" + esc(a.agency_name) + "<br><small>" + esc(a.contact_name) + " · " + esc(a.email) + "</small></td>" +
-      "<td>" + esc([a.city, a.country].filter(Boolean).join(", ")) + "</td>" +
-      "<td>" + a.applied_at.slice(0, 10) + "</td>" +
+      ? "<button class='pt-mini ok' data-approve='" + a.id + "'>Approve</button> <button class='pt-mini bad' data-reject='" + a.id + "'>Reject</button>"
+      : (a.status === "approved" ? "<button class='pt-mini' data-suspend='" + a.id + "'>Suspend</button>"
+                                 : "<button class='pt-mini ok' data-approve='" + a.id + "'>Approve</button>");
+    act += " <a class='pt-mini' target='_blank' href='" + mailtoWelcome(a) + "'>Email agent</a>";
+    return "<tr><td>" + esc(a.agency_name) + "<br><small>" + esc(a.contact_name) + " \u00b7 " + esc(a.email) + "</small></td>" +
+      "<td>" + esc([a.city, a.country].filter(Boolean).join(", ")) + "</td><td>" + a.applied_at.slice(0, 10) + "</td>" +
       "<td><span class='pt-pill " + (a.status === "approved" ? "ok" : a.status === "pending" ? "" : "bad") + "'>" + esc(a.status) + "</span></td>" +
       "<td>" + act + "</td></tr>";
-  }).join("");
-  $("#pt-apps-body").innerHTML = rows || "<tr><td colspan=5>No applications yet.</td></tr>";
+  }).join("") || "<tr><td colspan=5>No applications yet.</td></tr>";
+}
+
+function mailtoWelcome(a) {
+  var body = "Dear " + (a.contact_name || "colleague") + ",\n\n" +
+    "Good news \u2014 your trade account for " + (a.agency_name || "your agency") + " has been approved.\n\n" +
+    "Sign in to the KEA Trade Portal here:\nhttps://www.flykea.com/agents/\n\n" +
+    "Your username is: " + a.email + "\n(use the password you chose when you applied)\n\n" +
+    "Inside the portal you can:\n" +
+    "  \u2022 Run instant charter quotes showing your agency net rate and margin\n" +
+    "  \u2022 Build multi-leg itineraries across several airfields\n" +
+    "  \u2022 Produce branded quotations for your own clients\n" +
+    "  \u2022 Send booking requests straight to our reservations desk\n" +
+    "  \u2022 View aircraft specifications and our charter terms\n\n" +
+    "Tip: add your agency logo and address under Profile \u2014 they appear on the client quotations you generate.\n\n" +
+    "Any questions, reply to this email or call +256 776 333 114.\n\n" +
+    "Kind regards,\nKampala Executive Aviation\nGate 1, Kajjansi Airfield, Kampala\nreservations@flykea.com";
+  return "mailto:" + encodeURIComponent(a.email) + "?subject=" + encodeURIComponent("Your KEA trade account is approved") + "&body=" + encodeURIComponent(body);
 }
 
 async function setAgentStatus(id, status) {
@@ -453,27 +663,26 @@ async function setAgentStatus(id, status) {
   var r = await sb.from("agents").update(patch).eq("id", id);
   busy(false);
   if (r.error) { toast(r.error.message, true); return; }
-  toast("Agent " + status + ".");
+  toast(status === "approved" ? "Approved \u2014 now send the welcome email." : "Agent " + status + ".");
   loadApplications();
 }
 
-/* ================= STAFF: rate-book verification ================= */
+/* ================= STAFF: rate book ================= */
 async function loadRates() {
   if (!IS_STAFF) return;
   var r = await sb.from("route_rates").select("*").order("aircraft_code").order("to_name");
-  var rows = (r.data || []).map(function (x) {
+  $("#pt-rates-body").innerHTML = (r.data || []).map(function (x) {
     return "<tr><td>" + esc(x.aircraft_code) + "</td><td>" + esc(x.to_name) + "</td>" +
-      "<td><input class='pt-rate-in' data-id='" + x.id + "' type='number' step='1' value='" + (+x.rack) + "' style='width:110px;padding:.35rem;border:1px solid var(--line-dark);border-radius:5px'></td>" +
+      "<td><input class='pt-rate-in' data-id='" + x.id + "' type='number' step='1' value='" + (+x.rack) + "'></td>" +
       "<td>" + (x.verified ? "<span class='pt-pill ok'>verified</span>" : "<span class='pt-pill bad'>unverified</span>") + "</td>" +
       "<td><small>" + esc(x.note || "") + "</small></td>" +
       "<td><button class='pt-mini ok' data-rate-save='" + x.id + "'>Save &amp; verify</button>" +
       (x.verified ? " <button class='pt-mini' data-rate-unverify='" + x.id + "'>Unverify</button>" : "") + "</td></tr>";
-  }).join("");
-  $("#pt-rates-body").innerHTML = rows || "<tr><td colspan=6>No route rates loaded.</td></tr>";
+  }).join("") || "<tr><td colspan=6>No route rates loaded.</td></tr>";
   var n = (r.data || []).filter(function (x) { return !x.verified; }).length;
-  $("#pt-rates-count").textContent = n ? n + " rate(s) still need verifying — agents cannot see these yet." : "All rates verified and live to agents.";
+  $("#pt-rates-count").textContent = n ? n + " rate(s) still need verifying \u2014 agents cannot see these yet."
+                                       : "All rates verified and live to agents.";
 }
-
 async function saveRate(id, verify) {
   var inp = document.querySelector(".pt-rate-in[data-id='" + id + "']");
   var patch = { verified: verify };
@@ -483,11 +692,11 @@ async function saveRate(id, verify) {
   var r = await sb.from("route_rates").update(patch).eq("id", id);
   busy(false);
   if (r.error) { toast(r.error.message, true); return; }
-  toast(verify ? "Rate verified — now live to agents." : "Rate hidden from agents.");
+  toast(verify ? "Rate verified \u2014 now live to agents." : "Rate hidden from agents.");
   loadRates(); loadReference();
 }
 
-/* ================= STAFF: funnel reports ================= */
+/* ================= STAFF: reports ================= */
 async function loadReports() {
   if (!IS_STAFF) return;
   var f  = await sb.from("v_funnel_monthly").select("*").limit(12);
@@ -499,18 +708,17 @@ async function loadReports() {
 
   $("#rp-funnel").innerHTML = (f.data || []).map(function (r) {
     return "<tr><td>" + r.month + "</td><td>" + r.quotes + "</td><td>" + r.requests + "</td><td><b>" +
-      (r.quote_to_request_pct == null ? "—" : r.quote_to_request_pct + "%") + "</b></td><td>" + money(r.quoted_value) + "</td></tr>";
+      (r.quote_to_request_pct == null ? "\u2014" : r.quote_to_request_pct + "%") + "</b></td><td>" + money(r.quoted_value) + "</td></tr>";
   }).join("") || "<tr><td colspan=5>No quote data yet.</td></tr>";
 
   $("#rp-bookings").innerHTML = (bf.data || []).map(function (r) {
     return "<tr><td>" + r.month + "</td><td>" + r.requests + "</td><td>" + r.confirmed + "</td><td>" + r.flown +
-      "</td><td>" + r.lost + "</td><td><b>" + (r.request_to_confirmed_pct == null ? "—" : r.request_to_confirmed_pct + "%") +
+      "</td><td>" + r.lost + "</td><td><b>" + (r.request_to_confirmed_pct == null ? "\u2014" : r.request_to_confirmed_pct + "%") +
       "</b></td><td>" + money(r.won_value) + "</td></tr>";
   }).join("") || "<tr><td colspan=7>No booking data yet.</td></tr>";
 
   $("#rp-loss").innerHTML = (lr.data || []).map(function (r) {
-    return "<tr><td>" + esc(r.reason) + "</td><td>" + r.lost_count + "</td><td>" + money(r.lost_value) +
-      "</td><td>" + (r.pct_of_losses || 0) + "%</td></tr>";
+    return "<tr><td>" + esc(r.reason) + "</td><td>" + r.lost_count + "</td><td>" + money(r.lost_value) + "</td><td>" + (r.pct_of_losses || 0) + "%</td></tr>";
   }).join("") || "<tr><td colspan=4>No losses recorded.</td></tr>";
 
   $("#rp-abandon").innerHTML = (qa.data || []).map(function (r) {
@@ -520,7 +728,7 @@ async function loadReports() {
   $("#rp-agents").innerHTML = (ap.data || []).map(function (r) {
     return "<tr><td>" + esc(r.agency_name) + "</td><td>" + esc(r.country || "") + "</td><td>" + (r.quotes || 0) +
       "</td><td>" + (r.requests || 0) + "</td><td>" + (r.won || 0) + "</td><td><b>" +
-      (r.quote_to_won_pct == null ? "—" : r.quote_to_won_pct + "%") + "</b></td><td>" + money(r.won_value) + "</td></tr>";
+      (r.quote_to_won_pct == null ? "\u2014" : r.quote_to_won_pct + "%") + "</b></td><td>" + money(r.won_value) + "</td></tr>";
   }).join("") || "<tr><td colspan=7>No agent activity yet.</td></tr>";
 
   $("#rp-routes").innerHTML = (rd.data || []).map(function (r) {
@@ -538,7 +746,7 @@ function exportCSV(tableId, filename) {
   a.download = filename; a.click();
 }
 
-/* ================= FORMS: apply / login ================= */
+/* ================= APPLY / LOGIN ================= */
 async function doApply(ev) {
   ev.preventDefault();
   var err = $("#pt-apply-err"); if (err) { err.hidden = true; err.textContent = ""; }
@@ -547,34 +755,23 @@ async function doApply(ev) {
   var meta = {
     agency_name: $("#ap-agency").value.trim(), contact_name: $("#ap-contact").value.trim(),
     phone: $("#ap-phone").value.trim(), country: $("#ap-country").value.trim(),
-    city: $("#ap-city").value.trim(), website: $("#ap-website").value.trim(),
-    tc_version: TC_VERSION
+    city: $("#ap-city").value.trim(), website: $("#ap-website").value.trim(), tc_version: TC_VERSION
   };
-  var su = await sb.auth.signUp({
-    email: email, password: pw,
-    options: { data: meta, emailRedirectTo: location.origin + "/agents/" }
-  });
+  var su = await sb.auth.signUp({ email: email, password: pw,
+    options: { data: meta, emailRedirectTo: location.origin + "/agents/" } });
   busy(false);
-  if (su.error) {
-    if (err) { err.textContent = su.error.message; err.hidden = false; }
-    toast(su.error.message, true);
-    return;
-  }
-  // let reservations know an application has landed
+  if (su.error) { if (err) { err.textContent = su.error.message; err.hidden = false; } toast(su.error.message, true); return; }
   try {
     await fetch("https://formsubmit.co/ajax/" + RESERVATIONS, {
       method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" },
-      body: JSON.stringify({ _subject: "New trade agent application — " + meta.agency_name,
-        message: "Agency: " + meta.agency_name + "\nContact: " + meta.contact_name +
-                 "\nEmail: " + email + "\nPhone: " + meta.phone +
-                 "\nCity: " + meta.city + "\nCountry: " + meta.country +
-                 "\nWebsite: " + meta.website +
-                 "\n\nApprove in the KEA Trade Portal -> Agents tab." })
+      body: JSON.stringify({ _subject: "New trade agent application \u2014 " + meta.agency_name,
+        message: "Agency: " + meta.agency_name + "\nContact: " + meta.contact_name + "\nEmail: " + email +
+                 "\nPhone: " + meta.phone + "\nCity: " + meta.city + "\nCountry: " + meta.country +
+                 "\nWebsite: " + meta.website + "\n\nApprove in the KEA Trade Portal -> Agents tab." })
     });
   } catch (e) {}
-
-  if (su.data && su.data.session) { await onSession(su.data.session); return; }  // confirmation off
-  var em = $("#pt-confirm-email"); if (em) em.textContent = email;
+  if (su.data && su.data.session) { await onSession(su.data.session); return; }
+  $("#pt-confirm-email").textContent = email;
   gate("confirm");
 }
 
@@ -584,7 +781,6 @@ async function doLogin(ev) {
   busy(false);
   if (r.error) toast(r.error.message, true);
 }
-
 async function doReset() {
   var em = ($("#li-email").value || "").trim();
   if (!em) { toast("Enter your email first.", true); return; }
@@ -592,63 +788,63 @@ async function doReset() {
   toast("Password reset link sent.");
 }
 
-/* ================= wire up ================= */
+/* ================= WIRE UP ================= */
 document.addEventListener("DOMContentLoaded", function () {
   if (!$("#pt-root")) return;
-
-  $("#pt-date") && ($("#pt-date").value = new Date(Date.now() + 3 * 864e5).toISOString().slice(0, 10));
+  var d = $("#pt-date"); if (d) d.value = new Date(Date.now() + 3 * 864e5).toISOString().slice(0, 10);
 
   $$(".pt-tab").forEach(function (t) { t.addEventListener("click", function () { show(t.dataset.go); }); });
   $$("[data-gateswap]").forEach(function (b) { b.addEventListener("click", function (e) { e.preventDefault(); gate(b.dataset.gateswap); }); });
-
-  $("#pt-apply-form") && $("#pt-apply-form").addEventListener("submit", doApply);
-  $("#pt-login-form") && $("#pt-login-form").addEventListener("submit", doLogin);
-  $("#pt-reset") && $("#pt-reset").addEventListener("click", function (e) { e.preventDefault(); doReset(); });
   $$(".pt-signout").forEach(function (b) { b.addEventListener("click", async function () { await sb.auth.signOut(); location.reload(); }); });
 
-  $("#pt-calc") && $("#pt-calc").addEventListener("click", calculate);
-  $("#pt-swap") && $("#pt-swap").addEventListener("click", function () {
-    var f = $("#pt-from"), t = $("#pt-to"), x = f.value; f.value = t.value; t.value = x; calculate();
+  $("#pt-apply-form").addEventListener("submit", doApply);
+  $("#pt-login-form").addEventListener("submit", doLogin);
+  $("#pt-reset").addEventListener("click", function (e) { e.preventDefault(); doReset(); });
+
+  $("#pt-calc").addEventListener("click", calculate);
+  $("#pt-addleg").addEventListener("click", addLeg);
+  $("#pt-swap").addEventListener("click", function () {
+    readLegs();
+    var a = LEGS[0].from; LEGS[0].from = LEGS[0].to; LEGS[0].to = a;
+    renderLegs(); calculate();
   });
-  ["pt-from", "pt-to", "pt-coord"].forEach(function (id) {
-    var n = $("#" + id); n && n.addEventListener("keydown", function (e) { if (e.key === "Enter") calculate(); });
-  });
-  ["pt-ac", "pt-daystop", "pt-pax", "pt-mission"].forEach(function (id) {
-    var n = $("#" + id); n && n.addEventListener("change", function () { if (LAST) calculate(); });
+  $("#pt-clientquote").addEventListener("click", clientQuote);
+  $("#pt-book-form").addEventListener("submit", submitBooking);
+  $("#pt-profile-form").addEventListener("submit", saveProfile);
+  $("#pt-why-send").addEventListener("click", sendWhy);
+  $("#pt-why-cancel").addEventListener("click", function () { $("#pt-whybox").hidden = true; });
+
+  $("#pt-town").addEventListener("change", function () {
+    var v = this.value.trim().toLowerCase();
+    var t = TOWNS.filter(function (x) { return x.name.toLowerCase() === v; })[0];
+    if (t) { $("#pt-coord").value = t.lat.toFixed(4) + ", " + t.lng.toFixed(4); calculate(); }
   });
 
-  $("#pt-clientquote") && $("#pt-clientquote").addEventListener("click", clientQuote);
-  $("#pt-book-form") && $("#pt-book-form").addEventListener("submit", submitBooking);
-  $("#pt-profile-form") && $("#pt-profile-form").addEventListener("submit", saveProfile);
-
-  $("#pt-nobook") && $("#pt-nobook").addEventListener("click", function () {
-    var sel = $("#pt-why-reason");
-    sel.innerHTML = LOSS.map(function (l) { return '<option value="' + l.code + '">' + esc(l.label) + "</option>"; }).join("");
-    $("#pt-why").hidden = false;
-  });
-  $("#pt-why-send") && $("#pt-why-send").addEventListener("click", function () {
-    sendFeedback($("#pt-why-reason").value, $("#pt-why-notes").value);
+  ["pt-pax", "pt-mission", "pt-ac", "pt-daystop", "pt-nights", "pt-date"].forEach(function (id) {
+    var n = $("#" + id); if (n) n.addEventListener("change", function () { if (LAST) calculate(); });
   });
 
-  $("#pt-wa") && $("#pt-wa").addEventListener("click", function () {
-    if (!LAST) { toast("Run a quote first.", true); return; }
-    var msg = "KEA trade enquiry\nAgency: " + (AGENT ? AGENT.agency_name : "") +
-      "\nRoute: " + LAST.from_name + " -> " + LAST.to_name +
-      "\nDate: " + (LAST.travel_date || "flexible") + "\nPax: " + LAST.pax +
-      "\nAircraft: " + LAST.aircraft.name;
-    window.open("https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(msg), "_blank");
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Enter" || !e.target.classList) return;
+    if (e.target.classList.contains("pt-leg-to") || e.target.classList.contains("pt-leg-from") || e.target.id === "pt-coord") {
+      e.preventDefault(); calculate();
+    }
   });
 
   document.addEventListener("click", function (e) {
-    var a = e.target.closest("[data-approve]"), r = e.target.closest("[data-reject]"), s = e.target.closest("[data-suspend]");
-    if (a) setAgentStatus(a.dataset.approve, "approved");
-    if (r) setAgentStatus(r.dataset.reject, "rejected");
-    if (s) setAgentStatus(s.dataset.suspend, "suspended");
-    var rs = e.target.closest("[data-rate-save]"), ru = e.target.closest("[data-rate-unverify]");
-    if (rs) saveRate(rs.dataset.rateSave, true);
-    if (ru) saveRate(ru.dataset.rateUnverify, false);
-    var x = e.target.closest("[data-csv]");
-    if (x) exportCSV(x.dataset.csv, x.dataset.csv + ".csv");
+    var t = e.target;
+    var rm = t.closest("[data-rmleg]");         if (rm) removeLeg(+rm.dataset.rmleg);
+    var bk = t.closest("[data-book]");          if (bk && QMAP[bk.dataset.book]) openBookingFor(QMAP[bk.dataset.book]);
+    var nb = t.closest("[data-nobook]");        if (nb && QMAP[nb.dataset.nobook]) openWhyFor(QMAP[nb.dataset.nobook]);
+    var ok = t.closest("[data-accept]");        if (ok) setBooking(ok.dataset.accept, "confirmed");
+    var dc = t.closest("[data-decline]");       if (dc) setBooking(dc.dataset.decline, "lost");
+    var fl = t.closest("[data-flown]");         if (fl) setBooking(fl.dataset.flown, "flown");
+    var ap = t.closest("[data-approve]");       if (ap) setAgentStatus(ap.dataset.approve, "approved");
+    var rj = t.closest("[data-reject]");        if (rj) setAgentStatus(rj.dataset.reject, "rejected");
+    var sp = t.closest("[data-suspend]");       if (sp) setAgentStatus(sp.dataset.suspend, "suspended");
+    var rs = t.closest("[data-rate-save]");     if (rs) saveRate(rs.dataset.rateSave, true);
+    var ru = t.closest("[data-rate-unverify]"); if (ru) saveRate(ru.dataset.rateUnverify, false);
+    var cs = t.closest("[data-csv]");           if (cs) exportCSV(cs.dataset.csv, cs.dataset.csv + ".csv");
   });
 
   boot();
