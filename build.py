@@ -1138,7 +1138,8 @@ branded client quotations &mdash; built for tour operators and travel agents who
           <input id="pt-town" list="pt-townlist" placeholder="e.g. Mbale" autocomplete="off">
           <datalist id="pt-townlist"></datalist></div>
         <div class="pt-fld"><label>Landing coordinates &mdash; optional (lat, lng)</label>
-          <input id="pt-coord" placeholder="e.g. 1.5740, 30.2200"></div>
+          <input id="pt-coord" placeholder="e.g. 1.5740, 30.2200">
+          <button class="pt-mini" id="pt-pin" type="button" style="margin-top:.45rem">&#128205; Drop a pin on the map</button></div>
         <div class="pt-2">
           <div class="pt-fld"><label>Date</label><input id="pt-date" type="date"></div>
           <div class="pt-fld"><label>Passengers</label><input id="pt-pax" type="number" min="1" max="19" value="4"></div>
@@ -1380,6 +1381,21 @@ branded client quotations &mdash; built for tour operators and travel agents who
     </tr></thead><tbody id="pt-apps-body"></tbody></table></div>
   </section>
 
+</div>
+
+<div class="pt-mapmodal" id="pt-mapmodal" hidden>
+  <div class="pt-mapbox">
+    <div class="pt-maphd">
+      <div><b>Tap the map to place your landing point</b>
+      <div style="font-size:.8rem;color:var(--slate)">Green dots are known airfields. Drag the pin to fine-tune.</div></div>
+      <button class="pt-mini" id="pt-pin-close" type="button">Close</button>
+    </div>
+    <div id="pt-map"></div>
+    <div class="pt-mapft">
+      <span>Selected: <b id="pt-pin-val">none yet</b></span>
+      <button class="pt-mini ok" id="pt-pin-use" type="button">Use these coordinates</button>
+    </div>
+  </div>
 </div>
 </div>
 <link rel="manifest" href="/agents/manifest.webmanifest">

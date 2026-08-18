@@ -339,6 +339,7 @@ async function submitBooking(ev) {
   var r = await sb.from("booking_requests").insert(payload).select("ref,id").single();
   busy(false);
   if (r.error) { toast("Could not submit: " + r.error.message, true); return; }
+  mail("booking_submitted", r.data.id);
 
   var who = AGENT || { agency_name: "KEA staff", contact_name: ME.email, email: ME.email };
   var body = [
@@ -369,6 +370,7 @@ async function submitBooking(ev) {
   $("#pt-book-form").reset();
   $("#pt-booked-ref").textContent = r.data.ref || "";
   $("#pt-booked").hidden = false;
+  mail("booking_submitted", r.data.id);
   toast("Booking request sent \u2014 " + (r.data.ref || ""));
 }
 
@@ -618,7 +620,11 @@ async function setBooking(id, status) {
   var r = await sb.from("booking_requests").update(patch).eq("id", id);
   busy(false);
   if (r.error) { toast(r.error.message, true); return; }
-  toast("Booking marked " + status + " \u2014 now email the agent.");
+  if (status === "confirmed" || status === "flown") {
+    var ok = await mail("booking_status", id);
+    toast(ok ? "Booking " + status + " \u2014 the agent has been emailed."
+             : "Booking " + status + ", but the email did not send (check RESEND_API_KEY).", !ok);
+  } else { toast("Booking marked " + status + "."); }
   loadQueue();
 }
 
@@ -663,7 +669,11 @@ async function setAgentStatus(id, status) {
   var r = await sb.from("agents").update(patch).eq("id", id);
   busy(false);
   if (r.error) { toast(r.error.message, true); return; }
-  toast(status === "approved" ? "Approved \u2014 now send the welcome email." : "Agent " + status + ".");
+  if (status === "approved") {
+    var sent = await mail("agent_approved", id);
+    toast(sent ? "Approved \u2014 the agency has been emailed."
+               : "Approved, but the email did not send (check RESEND_API_KEY).", !sent);
+  } else { toast("Agent " + status + "."); }
   loadApplications();
 }
 
