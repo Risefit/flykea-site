@@ -237,10 +237,8 @@ function readLegs() {
 }
 function addLeg() {
   readLegs();
-  var lastTo = LEGS[LEGS.length - 1].to;
-  if (!lastTo) { toast("Fill in this leg's destination first.", true); return; }
   if (LEGS.length >= 6) { toast("Six legs maximum \u2014 contact reservations for longer itineraries.", true); return; }
-  LEGS.push({ from: lastTo, to: "" });
+  LEGS.push({ from: LEGS[LEGS.length - 1].to || "", to: "" });
   renderLegs();
 }
 function removeLeg(i) {
@@ -463,12 +461,14 @@ async function loadMyQuotes() {
       : "<button class='pt-mini ok' data-book='" + r.id + "'>Book flight</button>";
     var dec  = r.converted ? "\u2014"
       : "<button class='pt-mini' data-nobook='" + r.id + "'>Don&rsquo;t book</button>";
+    var del  = r.converted ? ""
+      : " <button class='pt-mini pt-del' data-delq='" + r.id + "' title='Delete this quote'>&times;</button>";
     return "<tr><td>" + r.created_at.slice(0, 10) + "</td>" +
       "<td>" + esc(r.from_name) + " \u2192 " + esc(r.to_name) +
         (r.leg_count > 1 ? " <small>(" + r.leg_count + " legs)</small>" : "") + "</td>" +
       "<td>" + esc(r.aircraft_code || "") + "</td><td>" + r.pax + "</td>" +
       "<td>" + money(r.rack_total) + "</td><td>" + money(r.net_total) + "</td>" +
-      "<td>" + status + "</td><td>" + book + "</td><td>" + dec + "</td></tr>";
+      "<td>" + status + "</td><td>" + book + "</td><td>" + dec + del + "</td></tr>";
   }).join("");
   $("#pt-quotes-body").innerHTML = rows ||
     "<tr><td colspan=9>No quotes yet. Run one on the Quote tab.</td></tr>";
@@ -517,6 +517,17 @@ function askWhyNotBooked(id) {
   if (row) openWhyFor(row);
 }
 
+async function deleteQuote(id) {
+  var q = QMAP[id];
+  if (!confirm("Delete this quote?" + (q ? "\n\n" + q.from_name + " \u2192 " + q.to_name : ""))) return;
+  busy(true);
+  var r = await sb.from("quotes").delete().eq("id", id);
+  busy(false);
+  if (r.error) { toast(r.error.message, true); return; }
+  toast("Quote deleted.");
+  loadMyQuotes();
+}
+
 async function loadMyBookings() {
   var b = await sb.from("booking_requests").select("*").order("created_at", { ascending: false }).limit(100);
   var rows = (b.data || []).map(function (r) {
@@ -526,24 +537,65 @@ async function loadMyBookings() {
       esc(r.client_ref || "-") + "</td><td>" + money(r.value_usd) + "</td>" +
       "<td><span class='pt-pill " + cls + "'>" + esc(r.status) + "</span></td>" +
       "<td>" + (r.confirmed_at ? "Confirmed " + r.confirmed_at.slice(0, 10) + (r.confirmation_ref ? " \u00b7 " + esc(r.confirmation_ref) : "") : "") +
-      (r.ops_notes ? "<br><small>" + esc(r.ops_notes) + "</small>" : "") + "</td></tr>";
+      (r.ops_notes ? "<br><small>" + esc(r.ops_notes) + "</small>" : "") + "</td>" +
+      "<td>" + (r.commission_usd == null ? "\u2014"
+        : r.status === "flown"     ? "<b style='color:var(--green-ink)'>" + money(r.commission_usd) + "</b><br><small>earned</small>"
+        : r.status === "confirmed" ? money(r.commission_usd) + "<br><small>on completion</small>"
+        : (r.status === "lost" || r.status === "cancelled") ? "\u2014"
+        : "<span style='color:var(--slate)'>" + money(r.commission_usd) + "</span><br><small>if booked</small>") +
+      "</td></tr>";
   }).join("");
-  $("#pt-bookings-body").innerHTML = rows || "<tr><td colspan=6>No booking requests yet.</td></tr>";
+  $("#pt-bookings-body").innerHTML = rows || "<tr><td colspan=7>No booking requests yet.</td></tr>";
 }
 
 /* ================= AIRCRAFT ================= */
 function renderFleetSpecs() {
   var wrap = $("#pt-specs"); if (!wrap) return;
-  wrap.innerHTML = FLEET.map(function (a) {
-    return '<div class="pt-spec">' +
-      (a.image_url ? '<img src="' + esc(a.image_url) + '" alt="' + esc(a.name) + '" loading="lazy">'
-                   : '<div class="pt-spec-noimg"><span>' + esc(a.name) + '</span><small>photo coming soon</small></div>') +
+  wrap.innerHTML = FLEET.map(function (a, ix) {
+    var gal = Array.isArray(a.gallery) ? a.gallery : [];
+    if (!gal.length && a.image_url) gal = [{ url: a.image_url, caption: "" }];
+
+    var media;
+    if (!gal.length) {
+      media = '<div class="pt-spec-noimg"><span>' + esc(a.name) + '</span><small>photo coming soon</small></div>';
+    } else if (gal.length === 1) {
+      media = '<div class="pt-carousel"><div class="pt-track"><figure><img src="' + esc(gal[0].url) +
+              '" alt="' + esc(a.name) + '" loading="lazy"></figure></div></div>';
+    } else {
+      var slides = gal.map(function (g, i) {
+        return '<figure' + (i === 0 ? ' class="on"' : '') + '><img src="' + esc(g.url) + '" alt="' +
+               esc(a.name + (g.caption ? " \u2014 " + g.caption : "")) + '" loading="lazy">' +
+               (g.caption ? '<figcaption>' + esc(g.caption) + '</figcaption>' : '') + '</figure>';
+      }).join("");
+      var dots = gal.map(function (_, i) {
+        return '<button class="pt-dot' + (i === 0 ? ' on' : '') + '" data-car="' + ix + '" data-slide="' + i +
+               '" aria-label="Photo ' + (i + 1) + '"></button>';
+      }).join("");
+      media = '<div class="pt-carousel" data-carousel="' + ix + '" data-n="' + gal.length + '" data-i="0">' +
+              '<div class="pt-track">' + slides + '</div>' +
+              '<button class="pt-car-nav prev" data-car="' + ix + '" data-step="-1" aria-label="Previous photo">&#8249;</button>' +
+              '<button class="pt-car-nav next" data-car="' + ix + '" data-step="1" aria-label="Next photo">&#8250;</button>' +
+              '<div class="pt-dots">' + dots + '</div>' +
+              '<span class="pt-car-count">' + gal.length + ' photos</span></div>';
+    }
+
+    return '<div class="pt-spec">' + media +
       '<div class="pt-spec-b"><h3>' + esc(a.name) + '</h3><dl>' +
       '<dt>Seats</dt><dd>' + a.seats + '</dd><dt>Cruise</dt><dd>' + a.cruise_kt + ' kt</dd>' +
       '<dt>Range</dt><dd>' + a.range_nm + ' nm</dd><dt>Baggage</dt><dd>' + esc(a.baggage || "\u2014") + '</dd>' +
       '<dt>Strip</dt><dd>' + esc(a.strip_requirement || "\u2014") + '</dd></dl>' +
       '<p>' + esc(a.spec_notes || "") + '</p></div></div>';
   }).join("");
+}
+
+function carouselGo(ix, target, isStep) {
+  var car = document.querySelector('[data-carousel="' + ix + '"]');
+  if (!car) return;
+  var n = +car.dataset.n, cur = +car.dataset.i;
+  var next = isStep ? (cur + target + n) % n : target;
+  car.dataset.i = next;
+  $$("figure", car).forEach(function (f, i) { f.classList.toggle("on", i === next); });
+  $$(".pt-dot[data-car='" + ix + "']", car).forEach(function (d, i) { d.classList.toggle("on", i === next); });
 }
 
 /* ================= PROFILE ================= */
@@ -583,7 +635,7 @@ function clientQuote() {
   var w = window.open("", "_blank");
   if (!w) { toast("Allow pop-ups to generate the quote.", true); return; }
   var ref = "Q-" + today().replace(/-/g, "") + "-" + Math.floor(Math.random() * 900 + 100);
-  var validTo = new Date(Date.now() + 14 * 864e5).toISOString().slice(0, 10);
+  var validTo = new Date(Date.now() + 30 * 864e5).toISOString().slice(0, 10);
   var legHtml = (LAST.legs || []).map(function (l, i) {
     return '<tr><td>Leg ' + (i + 1) + '</td><td><b>' + esc(l.from) + ' &rarr; ' + esc(l.to) + '</b></td></tr>';
   }).join("");
@@ -612,9 +664,10 @@ function clientQuote() {
   (LAST.day_stop ? '<tr><td>Aircraft waiting time</td><td>Included (day stop)</td></tr>' : '') +
   (LAST.night_stops ? '<tr><td>Night stops</td><td>' + LAST.night_stops + '</td></tr>' : '') +
   '</table><div class="tot"><div class="lbl">Total charter price</div><div class="amt">' + money(LAST.rack_total) + ' USD</div></div>' +
-  '<div class="note"><b>Included:</b> aircraft, crew, fuel and standard insurance for the routing shown, including positioning to and from base.<br>' +
-  '<b>Not included:</b> landing, parking and handling fees, navigation charges, government taxes, passenger service charges, catering, ground transfers and overnight crew costs unless stated.<br>' +
-  '<b>Terms:</b> subject to aircraft availability at time of booking and final confirmation of routing, timings and payload. Weather and air traffic control may affect timings. Prices may vary by approximately 10% pending final routing and fees.</div>' +
+  '<div class="note"><b>Included:</b> aircraft, crew and fuel for the routing shown including positioning to and from base, landing fees, air navigation (ATNS) fees, passenger taxes, pilot fees and per diem, passenger legal liability and insurance, animal clearance where required, and crew transport.<br>' +
+  '<b>Not included:</b> in-flight catering, passenger land transfers, ad-hoc and off-site landing costs, local authority fees and clearances, and pilot accommodation, meals and transport where the aircraft remains away from base.<br>' +
+  '<b>Please note:</b> quoted flight time is an estimate and may change due to weather, diversion or air traffic control; flying time beyond the quoted time is charged additionally. Passenger names are required before the flight for legal and insurance purposes. On helicopter flights only soft luggage of 5kg per passenger is permitted, GPS coordinates and landowner permission must be obtained in advance, and no dust landings are permitted.<br>' +
+  '<b>Terms:</b> valid 30 days. Subject to aircraft availability at time of booking, to final confirmation of routing, timings and payload, and to landing and overflight permissions being granted. Rates are subject to fuel price fluctuation.</div>' +
   '<div class="ft">Flight operated by Kampala Executive Aviation \u2014 Ugandan CAA AOC 097 \u00b7 Gate 1, Kajjansi Airfield, Kampala</div></body></html>');
   w.document.close();
 }
@@ -777,6 +830,13 @@ async function loadReports() {
   var lr = await sb.from("v_loss_reasons").select("*");
   var ap = await sb.from("v_agent_performance").select("*").limit(25);
   var rd = await sb.from("v_route_demand").select("*").limit(20);
+  var ap2 = await sb.from("v_aircraft_popularity").select("*");
+  var acBody = $("#rp-aircraft");
+  if (acBody) acBody.innerHTML = (ap2.data || []).map(function (r) {
+    return "<tr><td>" + esc(r.aircraft) + "</td><td>" + r.times_quoted + "</td><td>" + r.times_requested +
+      "</td><td><b>" + (r.conversion_pct == null ? "\u2014" : r.conversion_pct + "%") + "</b></td>" +
+      "<td>" + (r.avg_pax || "\u2014") + "</td><td>" + money(r.avg_rack) + "</td></tr>";
+  }).join("") || "<tr><td colspan=6>No aircraft data yet.</td></tr>";
   var qa = await sb.from("v_quote_abandon_reasons").select("*");
 
   $("#rp-funnel").innerHTML = (f.data || []).map(function (r) {
@@ -926,6 +986,11 @@ document.addEventListener("DOMContentLoaded", function () {
     var t = e.target;
     var rm = t.closest("[data-rmleg]");         if (rm) removeLeg(+rm.dataset.rmleg);
     var bk = t.closest("[data-book]");          if (bk && QMAP[bk.dataset.book]) openBookingFor(QMAP[bk.dataset.book]);
+    var cn = t.closest(".pt-car-nav");
+    if (cn) { carouselGo(cn.dataset.car, +cn.dataset.step, true); return; }
+    var cd = t.closest(".pt-dot");
+    if (cd) { carouselGo(cd.dataset.car, +cd.dataset.slide, false); return; }
+    var dq = t.closest("[data-delq]");            if (dq) deleteQuote(dq.dataset.delq);
     var nb = t.closest("[data-nobook]");        if (nb && QMAP[nb.dataset.nobook]) openWhyFor(QMAP[nb.dataset.nobook]);
     var ok = t.closest("[data-accept]");        if (ok) setBooking(ok.dataset.accept, "confirmed");
     var dc = t.closest("[data-decline]");       if (dc) setBooking(dc.dataset.decline, "lost");
