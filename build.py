@@ -693,7 +693,8 @@ FLEET_GALLERIES={
  "Bell 206 Jet Ranger":["2019/02/Fleet-B206.jpg"],
  "Pilatus PC-12":["2019/02/Fleet-PC12.jpg","2019/04/PC12-Interior.jpg"],
  "Beechcraft 1900D":["2019/02/Fleet-B1900.jpg","2019/04/B1900_Interior.jpg","2019/04/B1900_Interior2.jpg","2019/04/B1900_Cockpit.jpg"],
- "Cessna Caravan C208EX":["2026/06/Cessna-C208EX-5X-SIG-KEA.jpg","2019/02/Fleet-C208B.jpg","2019/04/C208B-Interior.jpg"],
+ "Cessna Caravan C208EX":["2026/08/Cessna-C208EX-Caravans-KEA.jpg","2026/06/Cessna-C208EX-5X-SIG-KEA.jpg","2019/04/C208B-Interior.jpg","2021/08/Caravan-in-Kidepo.jpg"],
+ "Cessna 206":["2026/08/Cessna-206-5X-BUG-KEA.jpg"],
  "Cessna 210":["2019/02/Fleet-C210.jpg","2019/04/C210-MLW2.jpg","2019/04/210_Interior.jpg"],
  "Diamond DA42 MPP Guardian":["2019/02/Fleet-Diamond.jpg","2019/04/DA42-Camera.jpg","2019/04/DA42-Cockpit.jpg","2019/04/DA42-Interior.jpg","2019/04/DA42-Back.jpg"],
 }
