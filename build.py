@@ -383,6 +383,7 @@ def render_post(n, is_blog=True):
     if len(title)>62: title=n["title"]+" | KEA"
     desc=n.get("desc") or (n["summary"][:150]+" Call +256 776 333 114.")
     bodyhtml=n.get("body","")
+    if isinstance(bodyhtml,(list,tuple)): bodyhtml="\n".join(bodyhtml)
     body=f'''<section class="svc-hero" style="min-height:46vh"><div class="bg" style="background-image:url('{img_src(n["img"])}')"></div>
 <div class="inner reveal">{crumbs_inline(trail)}<span class="eyebrow on-dark">{n["date"]}</span><h1 style="max-width:26ch">{html.escape(n["title"])}</h1></div></section>
 <section style="padding-top:60px"><div class="wrap"><div class="prose reveal" style="max-width:74ch;margin:0 auto">{bodyhtml}
