@@ -437,6 +437,7 @@ NEWS_NEW = [
   "<p><b>DJI Academy training.</b> Structured pilot and operator training aligned to DJI Academy requirements and Ugandan regulatory provisions, so crews are both competent on type and compliant to fly.</p>",
   "<h3>Why it matters for Ugandan operators</h3>",
   "<p>Agriculture, surveying, construction, conservation, energy and security are all adopting unmanned aircraft faster than the local support base has grown. An aircraft grounded by a damaged arm or a failed ESC has too often meant weeks out of service. With DJI parts, trained technicians and a warranty channel held in-country, that downtime shortens considerably.</p>",
+  "<p>The appointment was led by <b>Joseph Mbabazi</b>, Head of KEA&rsquo;s UAV Department, who skilfully navigated the dealership process through DJI and RC Corner&rsquo;s accreditation requirements to secure the authorisation for Uganda.</p>",
   "<p>Dealership training with DJI and RC Corner is underway, with sales and technical teams being brought onto type ahead of a full service launch.</p>",
   "<p>To discuss an aircraft, a repair or training, contact KEA&rsquo;s UAS team on <a href='tel:+256750980683'>+256 750 980 683</a> or email <a href='mailto:UASOPS@flykea.com'>UASOPS@flykea.com</a>. Full details of the dealership are on our <a href='/services/dji-drone-sales-service/'>DJI drone sales and service page</a>.</p>"
  ]
