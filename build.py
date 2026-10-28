@@ -87,6 +87,9 @@ def nav(active=""):
       '<a href="/services/disaster-response/">Disaster Response</a>'
       '<a href="/services/aerial-survey-geophysical/">Aerial Survey</a>'
       '<a href="/services/external-load-helicopter/">External Load</a>'
+      '<div class="grp">UAV &amp; Drones</div>'
+      '<a href="/services/uav-drone-operations/">UAV Survey &amp; Mapping</a>'
+      '<a href="/services/dji-drone-sales-service/">DJI Sales, Service &amp; Training</a>'
       '<div class="grp">MRO</div>'
       '<a href="/services/aircraft-maintenance-mro/">Aircraft Maintenance &amp; MRO</a>'
       '<a class="all" href="/services/">All services →</a>'
@@ -99,7 +102,7 @@ def nav(active=""):
 <li><a href="/services/uav-drone-operations/"{cls('uav')}>UAV</a></li>
 <li><a href="/fleet.html"{cls('fleet')}>Fleet</a></li>
 <li><a href="/about.html"{cls('about')}>About</a></li>
-<li><a href="/blog/"{cls('blog')}>Blog</a></li>
+<li><a href="/blog/"{cls('blog')}>News</a></li>
 <li><a href="/contact.html"{cls('contact')}>Contact</a></li>
 </ul></nav>
 <a class="nav-agentbtn" href="/agents/">Agent Login</a>
@@ -107,7 +110,7 @@ def nav(active=""):
 <button class="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobilemenu"><span></span><span></span><span></span></button>
 </div>
 <div class="mobile-menu" id="mobilemenu">
-<a href="/services/">Services</a><a href="/services/aircraft-leasing/">Aircraft Leasing</a><a href="/services/uav-drone-operations/">UAV Operations</a><a href="/fleet.html">Fleet</a><a href="/about.html">About</a><a href="/blog/">Blog</a><a href="/contact.html">Contact</a><a href="/agents/">Agent Login</a><a href="/quote/">Get a Quote</a>
+<a href="/services/">Services</a><a href="/services/aircraft-leasing/">Aircraft Leasing</a><a href="/services/uav-drone-operations/">UAV Operations</a><a href="/services/dji-drone-sales-service/">DJI Drone Sales &amp; Service</a><a href="/fleet.html">Fleet</a><a href="/about.html">About</a><a href="/blog/">News</a><a href="/contact.html">Contact</a><a href="/agents/">Agent Login</a><a href="/quote/">Get a Quote</a>
 </div></header>'''
 
 FOOT=f'''<footer><div class="wrap">
@@ -122,7 +125,7 @@ FOOT=f'''<footer><div class="wrap">
 <a href="https://www.instagram.com/kampalaexecutiveaviation/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.8.3 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.3 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.3-2.2-.4a3.8 3.8 0 0 1-1.4-.9 3.8 3.8 0 0 1-.9-1.4c-.2-.4-.4-1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c.1-1.2.3-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4 1.3-.1 1.7-.1 4.9-.1zm0 1.8c-3.1 0-3.5 0-4.7.1-1.1.1-1.7.2-2.1.4-.5.2-.9.4-1.3.8-.4.4-.6.8-.8 1.3-.2.4-.3 1-.4 2.1-.1 1.2-.1 1.6-.1 4.7s0 3.5.1 4.7c.1 1.1.2 1.7.4 2.1.2.5.4.9.8 1.3.4.4.8.6 1.3.8.4.2 1 .3 2.1.4 1.2.1 1.6.1 4.7.1s3.5 0 4.7-.1c1.1-.1 1.7-.2 2.1-.4.5-.2.9-.4 1.3-.8.4-.4.6-.8.8-1.3.2-.4.3-1 .4-2.1.1-1.2.1-1.6.1-4.7s0-3.5-.1-4.7c-.1-1.1-.2-1.7-.4-2.1a3.5 3.5 0 0 0-.8-1.3 3.5 3.5 0 0 0-1.3-.8c-.4-.2-1-.3-2.1-.4-1.2-.1-1.6-.1-4.7-.1zm0 3.1a4.9 4.9 0 1 1 0 9.8 4.9 4.9 0 0 1 0-9.8zm0 8a3.1 3.1 0 1 0 0-6.2 3.1 3.1 0 0 0 0 6.2zm6.3-8.2a1.1 1.1 0 1 1-2.3 0 1.1 1.1 0 0 1 2.3 0z"/></svg></a>
 </div></div>
 <div class="foot-col"><h4>Services</h4><a href="/services/oil-gas-aviation/">Oil &amp; Gas Aviation</a><a href="/services/medical-evacuation/">Medical Evacuation</a><a href="/helicopter-charter-kampala/">Helicopter Charter</a><a href="/services/ngo-humanitarian-charter/">NGO &amp; Humanitarian</a><a href="/services/cargo-charter/">Cargo Charter</a><a href="/services/uav-drone-operations/">UAV Operations</a><a href="/services/aircraft-leasing/">Aircraft Leasing</a><a href="/services/">All services →</a></div>
-<div class="foot-col"><h4>Company</h4><a href="/agents/">Trade &amp; Agent Portal</a><a href="/privacy.html">Privacy</a><a href="/fleet.html">Fleet</a><a href="/about.html">About</a><a href="/certifications/">Certifications</a><a href="/blog/">Blog</a><a href="/contact.html">Contact</a>
+<div class="foot-col"><h4>Company</h4><a href="/agents/">Trade &amp; Agent Portal</a><a href="/privacy.html">Privacy</a><a href="/fleet.html">Fleet</a><a href="/about.html">About</a><a href="/certifications/">Certifications</a><a href="/blog/">News</a><a href="/contact.html">Contact</a>
 <div class="foot-pay"><a class="btn btn-primary" style="padding:.7rem 1.2rem" href="{PAY}" target="_blank" rel="noopener">Make a Payment →</a></div></div>
 </div>
 <div class="foot-bottom"><span class="mono">© 2026 KEA — Kampala Executive Aviation</span><span class="mono">Specialist Aviation Solutions · Kajjansi, Uganda</span></div>
@@ -364,17 +367,17 @@ def render_blog_index(items):
     for n in items:
         cards+=f'''<a class="news-card reveal" href="/blog/{n["slug"]}/"><div class="nc-img"><img src="{img_src(n["img"])}" alt="{html.escape(n["title"])}" loading="lazy"></div>
 <div class="nc-body"><span class="nc-date">{n["date"]}</span><h3>{html.escape(n["title"])}</h3><p>{html.escape(n["summary"])}</p></div></a>'''
-    body=f'''{page_hero("Insights &amp; updates","KEA Aviation Blog &amp; News","News, contract awards and guides from Kampala Executive Aviation.",U+"2020/03/Helicopter-Services-In-Uganda-KEA.jpg")}
+    body=f'''{page_hero("Insights &amp; updates","KEA Aviation News","News, contract awards and guides from Kampala Executive Aviation.",U+"2020/03/Helicopter-Services-In-Uganda-KEA.jpg")}
 <section><div class="wrap"><div class="news-grid">{cards}</div>
 <div class="sec-head reveal" style="margin-top:5rem"><span class="eyebrow">From the archive</span><h2 style="font-size:clamp(1.5rem,3vw,2rem)">Earlier milestones</h2></div>
-<div class="news-grid" style="margin-top:2rem">{ARCHIVE_CARDS}</div></div></section>{quote_form("Blog")}'''
-    page("blog/index.html","Aviation Blog &amp; News | KEA Aviation",
+<div class="news-grid" style="margin-top:2rem">{ARCHIVE_CARDS}</div></div></section>{quote_form("News")}'''
+    page("blog/index.html","Aviation News &amp; Insights | KEA Aviation",
          "News, contract awards and guides from Kampala Executive Aviation — charter, humanitarian, oil & gas and UAV operations. Call +256 776 333 114.",
-         body, active="blog", extra_jsonld=crumb_ld([("Home",""),("Blog","blog/")]))
+         body, active="blog", extra_jsonld=crumb_ld([("Home",""),("News","blog/")]))
 
 def render_post(n, is_blog=True):
     url=f'blog/{n["slug"]}/'
-    trail=[("Home",""),("Blog","blog/"),(n["title"],url)]
+    trail=[("Home",""),("News","blog/"),(n["title"],url)]
     kw=n.get("kw","")
     title=n["title"]+" | KEA Aviation"
     if len(title)>62: title=n["title"]+" | KEA"
@@ -384,7 +387,7 @@ def render_post(n, is_blog=True):
 <div class="inner reveal">{crumbs_inline(trail)}<span class="eyebrow on-dark">{n["date"]}</span><h1 style="max-width:26ch">{html.escape(n["title"])}</h1></div></section>
 <section style="padding-top:60px"><div class="wrap"><div class="prose reveal" style="max-width:74ch;margin:0 auto">{bodyhtml}
 <div style="margin-top:2.5rem"><a class="btn btn-primary" href="/quote/">Get a quote <span class="arr">→</span></a>
-<a class="btn btn-outline" href="/blog/" style="margin-left:.6rem">← All posts</a></div></div></div></section>
+<a class="btn btn-outline" href="/blog/" style="margin-left:.6rem">← All news</a></div></div></div></section>
 <div class="call-band"><div class="wrap"><h2>Talk to KEA</h2><p>{PHONE} · {PHONE2} · <a href="mailto:{EMAIL}">{EMAIL}</a></p></div></div>'''
     schema=article_ld(n["title"],desc,url,n["img"],n["date"])+"\n"+crumb_ld(trail)
     if n.get("faqs"): schema+="\n"+faq_ld(n["faqs"])
@@ -490,7 +493,7 @@ home_body=f'''
 </div></div></section>
 
 <section class="services" style="background:var(--tint)"><div class="wrap"><div class="sol-top"><div class="sec-head reveal"><span class="eyebrow">From the field</span><h2>Latest News</h2></div>
-<a class="btn btn-outline reveal" href="/blog/">View all posts <span class="arr">→</span></a></div>
+<a class="btn btn-outline reveal" href="/blog/">View all news <span class="arr">→</span></a></div>
 <div class="news-grid" id="latest-news"></div></div></section>
 
 {banner("Have questions?","Our aviation experts are ready.","Tell us about your requirement and we’ll help find the solution best suited to your need.",U+"2021/08/Mi8-Helicopter-Kajjansi-KEA-1.jpg",("Get answers","mailto:reservations@flykea.com"))}

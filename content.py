@@ -392,6 +392,31 @@ SERVICES = [
  "related":[("Aerial Survey","services/aerial-survey-geophysical"),("Pipeline Patrol","services/pipeline-patrol"),("Oil & Gas Aviation","services/oil-gas-aviation")],
  "gallery":["2026/06/Matrice-400-RTK-KEA.jpg"],
 },
+{
+ "slug":"services/dji-drone-sales-service","kw":"DJI dealer Uganda drone repair DJI Academy training",
+ "title":"DJI Dealer Uganda — Drone Sales &amp; Repair | KEA",
+ "desc":"Authorised DJI dealer in Uganda. Agras T70P and Matrice drone sales, warranty repair, servicing and DJI Academy training in Kampala. Call KEA +256 750 980 683.",
+ "h1":"Authorised DJI Dealer in Uganda — Sales, Service &amp; Training","eyebrow":"DJI Dealership","stype":"DJI drone sales, service and training",
+ "hero":"2026/10/DJI-Agras-T70P-KEA.jpg","og":"2026/10/DJI-Agras-T70P-KEA.jpg",
+ "lead":"Kampala Executive Aviation is an <b>authorised DJI dealer in Uganda</b>, working with UAE Master Distributor <b>RC Corner</b>. We sell DJI agricultural and enterprise drones, carry out <b>warranty-backed repair and servicing in Kampala</b>, and deliver <b>DJI Academy training</b> — so your aircraft is bought, supported and maintained in-country.",
+ "secs":[
+  ("DJI drone sales in Uganda","<p>We supply the DJI range to enterprise, agricultural and other approved segments. For agriculture, the <b>DJI Agras T70P</b> handles spraying, spreading and precision crop work at field scale. For survey, inspection, security and emergency response, the <b>Matrice enterprise series</b> carries LiDAR, RGB and thermal payloads — the same platform family KEA flies commercially. We specify the right aircraft, payload and battery configuration for the job rather than selling from a catalogue.</p>"),
+  ("Drone repair and servicing in Kampala","<p>KEA is a Ugandan CAA-approved maintenance organisation, and we apply the same documented discipline to unmanned aircraft. Every job is booked in, inspected, diagnosed, repaired, function-tested, quality-inspected and formally released. We carry out technical inspection, fault diagnosis, scheduled maintenance, component replacement and repair &mdash; under warranty or as chargeable work. Drones bought elsewhere are welcome.</p>"),
+  ("DJI Academy training","<p>Structured pilot and operator training aligned to <b>DJI Academy</b> requirements and Ugandan regulatory provisions. Training covers type competence, mission planning, safety and the airspace rules your crews must satisfy to fly legally in Uganda — delivered by an operator that flies under a CAA UAV Operating Certificate itself.</p>"),
+  ("After-sales support and warranty","<p>Product guidance and set-up, operational troubleshooting, warranty enquiries and ongoing technical support from a team you can reach in Kampala &mdash; not a ticket queue in another time zone. Holding DJI parts and the warranty channel in-country turns weeks of downtime into days.</p>"),
+  ("Talk to the UAS team","<p>For a quotation, a repair booking or training dates, email <a href='mailto:UASOPS@flykea.com'>UASOPS@flykea.com</a> or call <a href='tel:+256750980683'>+256 750 980 683</a>. We are at Gate 1, Kajjansi Airfield, on the Kampala&ndash;Entebbe road.</p>"),
+ ],
+ "faqs":[
+  ("Is KEA an authorised DJI dealer in Uganda?","Yes. KEA is an authorised DJI dealer in Uganda, appointed through UAE-based Master Distributor RC Corner."),
+  ("Where can I get a DJI drone repaired in Uganda?","At KEA, Gate 1 Kajjansi Airfield. We carry out inspection, fault diagnosis, component replacement, repair, post-repair testing and release &mdash; under warranty or chargeable. Drones bought elsewhere are accepted."),
+  ("Which DJI agricultural drone do you supply?","The DJI Agras T70P for spraying, spreading and precision crop work, alongside the Matrice enterprise series for survey, inspection and security."),
+  ("Do you provide DJI Academy training in Uganda?","Yes &mdash; structured pilot and operator training aligned to DJI Academy requirements and Ugandan regulatory provisions."),
+  ("Do you handle DJI warranty claims locally?","Yes. As an authorised dealer we process warranty enquiries and warranty-covered repairs in Uganda rather than shipping aircraft overseas."),
+  ("How do I get a quote?","Email UASOPS@flykea.com or call +256 750 980 683 with the application, field or site size and any payload requirements."),
+ ],
+ "related":[("UAV / Drone Operations","services/uav-drone-operations"),("Aerial Survey","services/aerial-survey-geophysical"),("Aircraft Maintenance &amp; MRO","services/aircraft-maintenance-mro")],
+ "gallery":["2026/10/DJI-Agras-T70P-KEA.jpg","2026/06/Matrice-400-RTK-KEA.jpg"],
+},
 ]
 
 # ============================ NEWS / BLOG ============================
@@ -400,7 +425,7 @@ NEWS_NEW = [
 {
  "date":"2026-10-28","slug":"kea-authorised-dji-dealer-uganda",
  "title":"KEA appointed an authorised DJI dealer in Uganda",
- "img":"2026/06/Matrice-400-RTK-KEA.jpg",
+ "img":"2026/10/DJI-Agras-T70P-KEA.jpg",
  "summary":"Kampala Executive Aviation has been appointed an authorised DJI dealer in Uganda, working with UAE-based Master Distributor RC Corner — bringing DJI agricultural and enterprise drones, warranty-backed servicing and DJI Academy training to the Ugandan market.",
  "body":[
   "<p>Kampala Executive Aviation has been appointed an <b>authorised DJI dealer in Uganda</b>, working with <b>RC Corner</b> of the United Arab Emirates as Master Distributor. The appointment brings DJI&rsquo;s agricultural and enterprise drone range to Ugandan operators with local sales, local technical support and local warranty-backed servicing &mdash; rather than the overseas shipping and long turnarounds that have characterised the market until now.</p>",
@@ -413,7 +438,7 @@ NEWS_NEW = [
   "<h3>Why it matters for Ugandan operators</h3>",
   "<p>Agriculture, surveying, construction, conservation, energy and security are all adopting unmanned aircraft faster than the local support base has grown. An aircraft grounded by a damaged arm or a failed ESC has too often meant weeks out of service. With DJI parts, trained technicians and a warranty channel held in-country, that downtime shortens considerably.</p>",
   "<p>Dealership training with DJI and RC Corner is underway, with sales and technical teams being brought onto type ahead of a full service launch.</p>",
-  "<p>To discuss an aircraft, a repair or training, contact KEA on <a href='tel:+256776333114'>+256 776 333 114</a> or email <a href='mailto:reservations@flykea.com'>reservations@flykea.com</a>.</p>"
+  "<p>To discuss an aircraft, a repair or training, contact KEA&rsquo;s UAS team on <a href='tel:+256750980683'>+256 750 980 683</a> or email <a href='mailto:UASOPS@flykea.com'>UASOPS@flykea.com</a>. Full details of the dealership are on our <a href='/services/dji-drone-sales-service/'>DJI drone sales and service page</a>.</p>"
  ]
 },
 {
