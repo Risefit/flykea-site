@@ -398,6 +398,25 @@ SERVICES = [
 # NEWS items (newest first). keys: date, slug, title, img, summary, body(html)
 NEWS_NEW = [
 {
+ "date":"2026-10-28","slug":"kea-authorised-dji-dealer-uganda",
+ "title":"KEA appointed an authorised DJI dealer in Uganda",
+ "img":"2026/06/Matrice-400-RTK-KEA.jpg",
+ "summary":"Kampala Executive Aviation has been appointed an authorised DJI dealer in Uganda, working with UAE-based Master Distributor RC Corner — bringing DJI agricultural and enterprise drones, warranty-backed servicing and DJI Academy training to the Ugandan market.",
+ "body":[
+  "<p>Kampala Executive Aviation has been appointed an <b>authorised DJI dealer in Uganda</b>, working with <b>RC Corner</b> of the United Arab Emirates as Master Distributor. The appointment brings DJI&rsquo;s agricultural and enterprise drone range to Ugandan operators with local sales, local technical support and local warranty-backed servicing &mdash; rather than the overseas shipping and long turnarounds that have characterised the market until now.</p>",
+  "<p>The dealership sits naturally alongside KEA&rsquo;s existing unmanned capability. The company holds a <a href='/blog/uganda-caa-uav-operating-certificate/'>UAV Operating Certificate</a> from the Uganda Civil Aviation Authority and already flies the <b>DJI Matrice 400 RTK</b> on survey, LiDAR mapping and asset inspection work. Supporting other operators&rsquo; aircraft is an extension of engineering and airworthiness disciplines KEA has applied to crewed aircraft for more than two decades.</p>",
+  "<h3>What we now offer</h3>",
+  "<p><b>DJI drone sales.</b> Supply of DJI aircraft to enterprise, agricultural and other approved segments &mdash; including the <b>DJI Agras T70P</b> for spraying, spreading and precision crop work, and the Matrice enterprise series for survey, inspection, security and emergency response. We advise on the right platform, payload and configuration for the job rather than selling from a catalogue.</p>",
+  "<p><b>After-sales customer support.</b> Product guidance and set-up, operational troubleshooting, warranty enquiries and ongoing technical support &mdash; from people you can reach in Kampala.</p>",
+  "<p><b>Maintenance and repair.</b> Technical inspection, fault diagnosis, scheduled maintenance, component replacement and repair, followed by post-repair testing and quality inspection before release. Work is carried out under both warranty and chargeable arrangements, with each aircraft booked in, tracked through the shop and formally released &mdash; the same documented flow KEA applies to aircraft maintenance.</p>",
+  "<p><b>DJI Academy training.</b> Structured pilot and operator training aligned to DJI Academy requirements and Ugandan regulatory provisions, so crews are both competent on type and compliant to fly.</p>",
+  "<h3>Why it matters for Ugandan operators</h3>",
+  "<p>Agriculture, surveying, construction, conservation, energy and security are all adopting unmanned aircraft faster than the local support base has grown. An aircraft grounded by a damaged arm or a failed ESC has too often meant weeks out of service. With DJI parts, trained technicians and a warranty channel held in-country, that downtime shortens considerably.</p>",
+  "<p>Dealership training with DJI and RC Corner is underway, with sales and technical teams being brought onto type ahead of a full service launch.</p>",
+  "<p>To discuss an aircraft, a repair or training, contact KEA on <a href='tel:+256776333114'>+256 776 333 114</a> or email <a href='mailto:reservations@flykea.com'>reservations@flykea.com</a>.</p>"
+ ]
+},
+{
  "date":"2025-12-10","slug":"elevate-luxury-helicopter-safaris-uganda",
  "title":"KEA and Nile Safari Lodge launch Elevate — luxury helicopter safaris in Uganda",
  "img":"https://elevate-safaris.com/wp-content/uploads/2025/08/elevate-Uganda5.jpg",
