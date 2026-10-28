@@ -371,7 +371,7 @@ def render_blog_index(items):
 <section><div class="wrap"><div class="news-grid">{cards}</div>
 <div class="sec-head reveal" style="margin-top:5rem"><span class="eyebrow">From the archive</span><h2 style="font-size:clamp(1.5rem,3vw,2rem)">Earlier milestones</h2></div>
 <div class="news-grid" style="margin-top:2rem">{ARCHIVE_CARDS}</div></div></section>{quote_form("News")}'''
-    page("blog/index.html","Aviation News &amp; Insights | KEA Aviation",
+    page("blog/index.html","Aviation News & Insights | KEA Aviation",
          "News, contract awards and guides from Kampala Executive Aviation — charter, humanitarian, oil & gas and UAV operations. Call +256 776 333 114.",
          body, active="blog", extra_jsonld=crumb_ld([("Home",""),("News","blog/")]))
 

@@ -394,9 +394,9 @@ SERVICES = [
 },
 {
  "slug":"services/dji-drone-sales-service","kw":"DJI dealer Uganda drone repair DJI Academy training",
- "title":"DJI Dealer Uganda — Drone Sales &amp; Repair | KEA",
+ "title":"DJI Dealer Uganda — Drone Sales & Repair | KEA",
  "desc":"Authorised DJI dealer in Uganda. Agras T70P and Matrice drone sales, warranty repair, servicing and DJI Academy training in Kampala. Call KEA +256 750 980 683.",
- "h1":"Authorised DJI Dealer in Uganda — Sales, Service &amp; Training","eyebrow":"DJI Dealership","stype":"DJI drone sales, service and training",
+ "h1":"Authorised DJI Dealer in Uganda — Sales, Service & Training","eyebrow":"DJI Dealership","stype":"DJI drone sales, service and training",
  "hero":"2026/10/DJI-Agras-T70P-KEA.jpg","og":"2026/10/DJI-Agras-T70P-KEA.jpg",
  "lead":"Kampala Executive Aviation is an <b>authorised DJI dealer in Uganda</b>, working with UAE Master Distributor <b>RC Corner</b>. We sell DJI agricultural and enterprise drones, carry out <b>warranty-backed repair and servicing in Kampala</b>, and deliver <b>DJI Academy training</b> — so your aircraft is bought, supported and maintained in-country.",
  "secs":[
@@ -414,7 +414,7 @@ SERVICES = [
   ("Do you handle DJI warranty claims locally?","Yes. As an authorised dealer we process warranty enquiries and warranty-covered repairs in Uganda rather than shipping aircraft overseas."),
   ("How do I get a quote?","Email UASOPS@flykea.com or call +256 750 980 683 with the application, field or site size and any payload requirements."),
  ],
- "related":[("UAV / Drone Operations","services/uav-drone-operations"),("Aerial Survey","services/aerial-survey-geophysical"),("Aircraft Maintenance &amp; MRO","services/aircraft-maintenance-mro")],
+ "related":[("UAV / Drone Operations","services/uav-drone-operations"),("Aerial Survey","services/aerial-survey-geophysical"),("Aircraft Maintenance & MRO","services/aircraft-maintenance-mro")],
  "gallery":["2026/10/DJI-Agras-T70P-KEA.jpg","2026/06/Matrice-400-RTK-KEA.jpg"],
 },
 ]
